@@ -1,0 +1,106 @@
+{
+    "name": "Zaid",
+    "description": "Zaid crops are summer season crops. They grow for a short time period between kharif and rabi crops, mainly from March to June. These crops are mainly grown in the summer season during a period called the zaid crop season. They require warm dry weather as major growth period and longer day length for flowering. Some summer months and rainy season is required. These crops also mature early",
+    "category": [
+        {
+            "name": "Watermelon",
+            "image": "/Images/watermelon.webp",
+            "crops": [
+                {
+                    "name": "Watermelon (Citrullus lanatus) is a flowering plant species of the Cucurbitaceae family and the name of its edible fruit. A scrambling and trailing vine-like plant, it is a highly cultivated fruit worldwide, with more than 1,000 varieties",
+                    "link": "https://en.wikipedia.org/wiki/Watermelon"
+                }
+            ]
+        },
+        {
+            "name": "Muskmelon",
+            "image": "/Images/muskmelon.jpg",
+            "crops": [
+                {
+                    "name": "Cucumis melo, also known as melon, is a species of Cucumis that has been developed into many cultivated varieties. The fruit is a pepo. The flesh is either sweet or bland, with or without a musky aroma, and the rind can be smooth (such as honeydew), ribbed (such as European cantaloupe), wrinkled (such as casaba melon), or netted (such as muskmelon).",
+                    "link": "https://en.wikipedia.org/wiki/Cucumis_melo"
+                }
+            ]
+        },
+        {
+            "name": "Cucumber",
+            "image": "/Images/cucumber.jpg",
+            "crops": [
+                {
+                    "name": "The cucumber (Cucumis sativus) is a widely-cultivated creeping vine plant in the family Cucurbitaceae that bears cylindrical to spherical fruits, which are used as culinary vegetables. Considered an annual plant, there are three main types of cucumber—slicing, pickling, and seedless—within which several cultivars have been created",
+                    "link": "https://en.wikipedia.org/wiki/Cucumber"
+                }
+            ]
+        },
+        {
+            "name": "Momordica charantia (karela)",
+            "image": "/Images/bitter-gourd.jpg",
+            "crops": [
+                {
+                    "name": "Momordica charantia (commonly called bitter melon; Goya; bitter apple; bitter gourd; bitter squash; balsam-pear is a tropical and subtropical vine of the family Cucurbitaceae, widely grown in Asia, Africa, and the Caribbean for its edible fruit. Its many varieties differ substantially in the shape and bitterness of the fruit",
+                    "link": "https://en.wikipedia.org/wiki/Momordica_charantia"
+                }
+            ]
+        },
+        {
+            "name": "Fodder",
+            "image": "/Images/fodder.jpg",
+            "crops": [
+                {
+                    "name": "Fodder, also called provender, is any agricultural foodstuff used specifically to feed domesticated livestock, such as cattle, rabbits, sheep, horses, chickens and pigs. ",
+                    "link": "https://en.wikipedia.org/wiki/Fodder"
+                }
+            ]
+        },
+        {
+            "name": "Pumpkin",
+            "image": "/Images/pumpkin.jpg",
+            "crops": [
+                {
+                    "name": "A pumpkin is a vernacular term for mature winter squash of species and varieties in the genus Cucurbita that has culinary and cultural significance but no agreed upon botanical or scientific meaning.",
+                    "link": "https://en.wikipedia.org/wiki/Pumpkin"
+                }
+            ]
+        },
+        {
+            "name": "Guar",
+            "image": "/Images/gaur.jpg",
+            "crops": [
+                {
+                    "name": "The guar or cluster bean, with the botanical name Cyamopsis tetragonoloba, is an annual legume and the source of guar gum. It is also known as gavar, gawar, or guvar bean.",
+                    "link": "https://en.wikipedia.org/wiki/Guar"
+                }
+            ]
+        },
+        {
+            "name": "Strawberry",
+            "image": "/Images/strawberry.jpg",
+            "crops": [
+                {
+                    "name": "The garden strawberry (or simply strawberry; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria, collectively known as the strawberries, which are cultivated worldwide for their fruit.",
+                    "link": "https://en.wikipedia.org/wiki/Strawberry"
+                }
+            ]
+        },
+        {
+            "name": "Pigeon pea",
+            "image": "/Images/arhar.jpg",
+            "crops": [
+                {
+                    "name": "The pigeon pea(Cajanus cajan) is a perennial legume from the family Fabaceae native to the Old World.The pigeon pea is widely cultivated in tropical and semitropical regions around the world, being commonly consumed in South Asia, Southeast Asia, Africa, Latin America and the Caribbean.",
+                    "link": "https://en.wikipedia.org/wiki/Pigeon_pea"
+                }
+            ]
+        },
+        {
+            "name": "Sugarcane",
+            "image": "/Images/sugarcane.jpg",
+            "crops": [
+                {
+                    "name": "Sugarcane or sugar cane is a species of (often hybrid) tall, perennial grass (in the genus Saccharum, tribe Andropogoneae) that is used for sugar production. The plants are 2–6 m (6–20 ft) tall with stout, jointed, fibrous stalks that are rich in sucrose,which accumulates in the stalk internodes",
+                    "link": "https://en.wikipedia.org/wiki/Sugarcane"
+                }
+            ]
+        }
+    ]
+}

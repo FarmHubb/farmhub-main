@@ -1,0 +1,242 @@
+{
+  "name": "Kharif",
+  "description": "Kharif crops, also known as monsoon crops or autumn crops, are domesticated plants that are cultivated and harvested in India, Pakistan and Bangladesh during the Indian subcontinent's monsoon season, which lasts from June to November depending on the area. Monsoon rains may begin as early as May in some parts of the Indian subcontinent, and crops are generally harvested from the third week of September to October. Rice, maize, and cotton are some of the major Kharif crops in India. Unlike the Rabi crops, which are grown in the winter, the kharif crops require good rainfall.",
+  "category": [
+    {
+      "name": "Cereals",
+      "image": "/Images/rice.jpg",
+      "crops": [
+        {
+          "name": "Rice",
+          "link": "https://en.wikipedia.org/wiki/Rice"
+        },
+        {
+          "name": "Jowar",
+          "link": "https://en.wikipedia.org/wiki/Sorghum_bicolor"
+        },
+        {
+          "name": "Maize (corn)",
+          "link": "https://en.wikipedia.org/wiki/Maize"
+        },
+        {
+          "name": "Millet",
+          "link": "https://en.wikipedia.org/wiki/Millet"
+        }
+      ]
+    },
+    {
+      "name": "Fruits",
+      "image": "/Images/guava.jpg",
+      "crops": [
+        {
+          "name": "Almonds",
+          "link": "https://en.wikipedia.org/wiki/Almond"
+        },
+        {
+          "name": "Apples",
+          "link": "https://en.wikipedia.org/wiki/Apple"
+        },
+        {
+          "name": "Apricots",
+          "link": "https://en.wikipedia.org/wiki/Apricot"
+        },
+        {
+          "name": "Bananas",
+          "link": "https://en.wikipedia.org/wiki/Banana"
+        },
+        {
+          "name": "Cantaloupe",
+          "link": "https://en.wikipedia.org/wiki/Cantaloupe"
+        },
+        {
+          "name": "Chikoo",
+          "link": "https://en.wikipedia.org/wiki/Manilkara_zapota"
+        },
+        {
+          "name": "Coconut",
+          "link": "https://en.wikipedia.org/wiki/Coconut"
+        },
+        {
+          "name": "Dates",
+          "link": "https://en.wikipedia.org/wiki/Date_palm#Fruits"
+        },
+        {
+          "name": "Figs",
+          "link": "https://en.wikipedia.org/wiki/Fig"
+        },
+        {
+          "name": "Guava",
+          "link": "https://en.wikipedia.org/wiki/Guava"
+        },
+        {
+          "name": "Jaman",
+          "link": "https://en.wikipedia.org/wiki/Jaman"
+        },
+        {
+          "name": "Litchi",
+          "link": "https://en.wikipedia.org/wiki/Lychee"
+        },
+        {
+          "name": "Luffa",
+          "link": "https://en.wikipedia.org/wiki/Luffa"
+        },
+        {
+          "name": "Mango",
+          "link": "https://en.wikipedia.org/wiki/Mango"
+        },
+        {
+          "name": "Muskmelon",
+          "link": "https://en.wikipedia.org/wiki/Cucumis_melo"
+        },
+        {
+          "name": "Orange",
+          "link": "https://en.wikipedia.org/wiki/Orange_(fruit)"
+        },
+        {
+          "name": "Pomegrante",
+          "link": "https://en.wikipedia.org/wiki/Pomegranate"
+        },
+        {
+          "name": "Plum",
+          "link": "https://en.wikipedia.org/wiki/Plum"
+        },
+        {
+          "name": "Pears",
+          "link": "https://en.wikipedia.org/wiki/Pear"
+        },
+        {
+          "name": "Phalsa",
+          "link": "https://en.wikipedia.org/wiki/Grewia_asiatica"
+        },
+        {
+          "name": "Papaya",
+          "link": "https://en.wikipedia.org/wiki/Papaya"
+        },
+        {
+          "name": "Peaches",
+          "link": "https://en.wikipedia.org/wiki/Peach"
+        },
+        {
+          "name": "Sugarcane",
+          "link": "https://en.wikipedia.org/wiki/Sugarcane"
+        },
+        {
+          "name": "Walnut",
+          "link": "https://en.wikipedia.org/wiki/Walnut"
+        },
+        {
+          "name": "Watermelon",
+          "link": "https://en.wikipedia.org/wiki/Watermelon"
+        }
+      ]
+    },
+    {
+      "name": "Seed plants",
+      "image": "/Images/moong.jpg",
+      "crops": [
+        {
+          "name": "Arhar (tur)",
+          "link": "https://en.wikipedia.org/wiki/Pigeon_pea"
+        },
+        {
+          "name": "Black gram (urad)",
+          "link": "https://en.wikipedia.org/wiki/Vigna_mungo"
+        },
+        {
+          "name": "Cotton",
+          "link": "https://en.wikipedia.org/wiki/Cotton"
+        },
+        {
+          "name": "Cowpea (chavala)",
+          "link": "https://en.wikipedia.org/wiki/Cowpea"
+        },
+        {
+          "name": "Green gram (moong)",
+          "link": "https://en.wikipedia.org/wiki/Mung_bean"
+        },
+        {
+          "name": "Groundnut",
+          "link": "https://en.wikipedia.org/wiki/Peanut"
+        },
+        {
+          "name": "Guar",
+          "link": "https://en.wikipedia.org/wiki/Guar"
+        },
+        {
+          "name": "Moth bean",
+          "link": "https://en.wikipedia.org/wiki/Vigna_aconitifolia"
+        },
+        {
+          "name": "Mung bean",
+          "link": "https://en.wikipedia.org/wiki/Mung_bean"
+        },
+        {
+          "name": "Sesame (til)",
+          "link": "https://en.wikipedia.org/wiki/Sesame"
+        },
+        {
+          "name": "Soybean",
+          "link": "https://en.wikipedia.org/wiki/Soybean"
+        },
+        {
+          "name": "Urad bean",
+          "link": "https://en.wikipedia.org/wiki/Vigna_mungo"
+        },
+        {
+          "name": "Red gram (Pegion pea)",
+          "link": "https://en.wikipedia.org/wiki/Pigeon_pea"
+        },
+        {
+          "name": "Fennel (Saunf)",
+          "link": "https://en.wikipedia.org/wiki/Fennel"
+        }
+      ]
+    },
+    {
+      "name": "Vegetables",
+      "image": "/Images/tomato.jpg",
+      "crops": [
+        {
+          "name": "Bitter gourd",
+          "link": "https://en.wikipedia.org/wiki/Momordica_charantia"
+        },
+        {
+          "name": "Bottle gourd",
+          "link": "https://en.wikipedia.org/wiki/Calabash"
+        },
+        {
+          "name": "Brinjal",
+          "link": "https://en.wikipedia.org/wiki/Eggplant"
+        },
+        {
+          "name": "Chili",
+          "link": "https://en.wikipedia.org/wiki/Chili_pepper"
+        },
+        {
+          "name": "Green bean",
+          "link": "https://en.wikipedia.org/wiki/Green_bean"
+        },
+        {
+          "name": "Ladies fingers",
+          "link": "https://en.wikipedia.org/wiki/Okra"
+        },
+        {
+          "name": "Sponge gourd",
+          "link": "https://en.wikipedia.org/wiki/Luffa"
+        },
+        {
+          "name": "Tinda",
+          "link": "https://en.wikipedia.org/wiki/Tinda"
+        },
+        {
+          "name": "Tomato",
+          "link": "https://en.wikipedia.org/wiki/Tomato"
+        },
+        {
+          "name": "Turmeric",
+          "link": "https://en.wikipedia.org/wiki/Turmeric"
+        }
+      ]
+    }
+  ]
+}

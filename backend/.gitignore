@@ -1,0 +1,5 @@
+/node_modules
+/build
+.env
+/uploads
+farmhub-agro-548edd47dc96.json

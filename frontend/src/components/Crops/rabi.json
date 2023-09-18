@@ -1,0 +1,288 @@
+ {
+    "name": "Rabi",
+    "description": "Rabi crops or rabi harvest, also known as winter crops, are agricultural crops that are sown in winter and harvested in the spring in India, Pakistan and Bangladesh. The rabi crops are sown around mid-November, preferably after the monsoon rains are over, and harvesting begins in April / May. The crops are grown either with rainwater that has percolated into the ground or using irrigation",
+    "category": [
+        {
+            "name": "Cereals",
+            "image": "/Images/wheat.jpg",
+            "crops": [
+                {
+                    "name": "Barley",
+                    "link": "https://en.wikipedia.org/wiki/Barley"
+                },
+                {
+                    "name": "Chickpea",
+                    "link": "https://en.wikipedia.org/wiki/Chickpea"
+                },
+                {
+                    "name": "Rapeseed",
+                    "link": "https://en.wikipedia.org/wiki/Rapeseed"
+                },
+                {
+                    "name": "Mustard",
+                    "link": "https://en.wikipedia.org/wiki/Mustard_plant"
+                },
+                {
+                    "name": "Oat",
+                    "link": "https://en.wikipedia.org/wiki/Oat"
+                },
+                {
+                    "name": "Wheat",
+                    "link": "https://en.wikipedia.org/wiki/Wheat"
+                },
+                {
+                    "name": "Linseed",
+                    "link": "https://en.wikipedia.org/wiki/Flax"
+                }
+            ]
+        },
+        {
+            "name": "Fruits",
+            "image": "/Images/mango-main.jpg",
+            "crops": [
+                {
+                    "name": "Banana",
+                    "link": "https://en.wikipedia.org/wiki/Banana"
+                },
+                {
+                    "name": "Mangoes",
+                    "link": "https://en.wikipedia.org/wiki/Mango"
+                },
+                {
+                    "name": "Ber",
+                    "link": "https://en.wikipedia.org/wiki/Ziziphus_mauritiana"
+                },
+                {
+                    "name": "Date",
+                    "link": "https://en.wikipedia.org/wiki/Date_palm"
+                },
+                {
+                    "name": "Grape",
+                    "link": "https://en.wikipedia.org/wiki/Grape"
+                },
+                {
+                    "name": "Grape fruit",
+                    "link": "https://en.wikipedia.org/wiki/Grapefruit"
+                },
+                {
+                    "name": "Kinnow",
+                    "link": "https://en.wikipedia.org/wiki/Kinnow"
+                },
+                {
+                    "name": "Guava",
+                    "link": "https://en.wikipedia.org/wiki/Guava"
+                },
+                {
+                    "name": "Lime",
+                    "link": "https://en.wikipedia.org/wiki/Lime_(fruit)"
+                },
+                {
+                    "name": "Lemon",
+                    "link": "https://en.wikipedia.org/wiki/Lemon"
+                },
+                {
+                    "name": "Mandarin orange",
+                    "link": "https://en.wikipedia.org/wiki/Mandarin_orange"
+                },
+                {
+                    "name": "Orange",
+                    "link": "https://en.wikipedia.org/wiki/Orange_(fruit)"
+                },
+                {
+                    "name": "Mulberries",
+                    "link": "https://en.wikipedia.org/wiki/Morus_(plant)"
+                }
+            ]
+        },
+        {
+            "name": "Legumes",
+            "image": "/Images/chickpea-main.jpg",
+            "crops": [
+                {
+                    "name": "Chickpea",
+                    "link": "https://en.wikipedia.org/wiki/Chickpea"
+                },
+                {
+                    "name": "Kulthi (horse gram)",
+                    "link": "https://en.wikipedia.org/wiki/Macrotyloma_uniflorum"
+                },
+                {
+                    "name": "Lobias",
+                    "link": "https://en.wikipedia.org/wiki/Black-eyed_pea"
+                },
+                {
+                    "name": "Mung bean",
+                    "link": "https://en.wikipedia.org/wiki/Mung_bean"
+                },
+                {
+                    "name": "Pigeon pea",
+                    "link": "https://en.wikipedia.org/wiki/Pigeon_pea"
+                },
+                {
+                    "name": "Toria",
+                    "link": "https://en.wikipedia.org/wiki/Brassica"
+                },
+                {
+                    "name": "Urad bean",
+                    "link": "https://en.wikipedia.org/wiki/Vigna_mungo"
+                },
+                {
+                    
+                    "name": "Masoor",
+                    "link": "https://en.wikipedia.org/wiki/Lentil"
+                
+                }
+            ]
+        },
+        {
+            "name": "Seed plants",
+            "image": "/Images/sunflower-main.jpg",
+            "crops": [
+                {
+                    "name": "Alfalfa",
+                    "link": "https://en.wikipedia.org/wiki/Alfalfa"
+                },
+                {
+                    "name": "Cumin",
+                    "link": "https://en.wikipedia.org/wiki/Cumin"
+                },
+                {
+                    "name": "Coriander",
+                    "link": "https://en.wikipedia.org/wiki/Coriander"
+                },
+                {
+                    "name": "Linseed",
+                    "link": "https://en.wikipedia.org/wiki/Flax"
+                },
+                {
+                    "name": "Fenugreek",
+                    "link": "https://en.wikipedia.org/wiki/Fenugreek"
+                },
+                {
+                    "name": "Isabgol",
+                    "link": "https://en.wikipedia.org/wiki/Plantago_ovata"
+                },
+                {
+                    "name": "Mustard",
+                    "link": "https://en.wikipedia.org/wiki/Mustard_plant"
+                },
+                {
+                    "name": "Bengal gram",
+                    "link": "https://en.wikipedia.org/wiki/Chickpea"
+                },
+                {
+                    "name": "Sunflower",
+                    "link": "https://en.wikipedia.org/wiki/Common_sunflower"
+                },
+                {
+                    "name": "Black pepper",
+                    "link": "https://en.wikipedia.org/wiki/Black_pepper"
+                },
+                {
+                    "name": "Red gram",
+                    "link": "https://en.wikipedia.org/wiki/Pigeon_pea"
+                }
+            ]
+        },
+        {
+            "name": "Vegetables",
+            "image": "/Images/potato-main.jpg",
+            "crops": [
+                {
+                    "name": "Bean",
+                    "link": "https://en.wikipedia.org/wiki/Bean"
+                },
+                {
+                    "name": "Beetroot",
+                    "link": "https://en.wikipedia.org/wiki/Beetroot"
+                },
+                {
+                    "name": "Brinjal",
+                    "link": "https://en.wikipedia.org/wiki/Eggplant"
+                },
+                {
+                    "name": "Broccoli",
+                    "link": "https://en.wikipedia.org/wiki/Broccoli"
+                },
+                {
+                    "name": "Cabbage",
+                    "link": "https://en.wikipedia.org/wiki/Cabbage"
+                },
+                {
+                    "name": "Capsicum",
+                    "link": "https://en.wikipedia.org/wiki/Capsicum"
+                },
+                {
+                    "name": "Carrot",
+                    "link": "https://en.wikipedia.org/wiki/Carrot"
+                },
+                {
+                    "name": "Cauliflowers",
+                    "link": "https://en.wikipedia.org/wiki/Cauliflower"
+                },
+                {
+                    "name": "Chickpea",
+                    "link": "https://en.wikipedia.org/wiki/Chickpea"
+                },
+                {
+                    "name": "Fenugreek",
+                    "link": "https://en.wikipedia.org/wiki/Fenugreek"
+                },
+                {
+                    "name": "Garlic",
+                    "link": "https://en.wikipedia.org/wiki/Garlic"
+                },
+                {
+                    "name": "Lady finger",
+                    "link": "https://en.wikipedia.org/wiki/Okra"
+                },
+                {
+                    "name": "Lettuce",
+                    "link": "https://en.wikipedia.org/wiki/Lettuce"
+                },
+                {
+                    "name": "Pea",
+                    "link": "https://en.wikipedia.org/wiki/Pea"
+                },
+                {
+                    "name": "Onion",
+                    "link": "https://en.wikipedia.org/wiki/Onion"
+                },
+                {
+                    "name": "Potato",
+                    "link": "https://en.wikipedia.org/wiki/Potato"
+                },
+                {
+                    "name": "Radish",
+                    "link": "https://en.wikipedia.org/wiki/Radish"
+                },
+                {
+                    "name": "Spinach",
+                    "link": "https://en.wikipedia.org/wiki/Spinach"
+                },
+                {
+                    "name": "Sweet potato",
+                    "link": "https://en.wikipedia.org/wiki/Sweet_potato"
+                },
+                {
+                    "name": "Tomato",
+                    "link": "https://en.wikipedia.org/wiki/Tomato"
+                },
+                {
+                    "name": "Turnip",
+                    "link": "https://en.wikipedia.org/wiki/Turnip"
+                }
+            ]
+        },
+        {
+            "name": "Others",
+            "image": "/Images/tobacco.jpg",
+            "crops": [
+                {
+                    "name": "Tabacco",
+                    "link": "https://en.wikipedia.org/wiki/Tobacco"
+                }
+            ]
+        }
+    ]
+}
