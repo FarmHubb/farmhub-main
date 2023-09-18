@@ -1,5 +1,7 @@
 
 <h1 align="center"><b>FarmHub</b></h1>
+<h2 align="center"><b>Accepting for Hacktoberfest 2023</b></h2>
+
 <!-- <div align="center">
 <img src="frontend/public/Images/main-logo.png"/>
 </div>
@@ -9,18 +11,15 @@
 
 
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
-![GitHub forks](https://img.shields.io/github/forks/FarmHubb/FarmHub)
-![GitHub Repo stars](https://img.shields.io/github/stars/FarmHubb/FarmHub)
-![GitHub contributors](https://img.shields.io/github/contributors/FarmHubb/FarmHub)
-![GitHub last commit](https://img.shields.io/github/last-commit/FarmHubb/FarmHub)
-  
-![GitHub repo size](https://img.shields.io/github/repo-size/FarmHubb/FarmHub)
-
-![Github](https://img.shields.io/github/license/FarmHubb/FarmHub)
-![GitHub issues](https://img.shields.io/github/issues/FarmHubb/FarmHub)
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/FarmHubb/FarmHub)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/FarmHubb/FarmHub)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/FarmHubb/FarmHub)
+![GitHub forks](https://img.shields.io/github/forks/marshadkhn/Farmhub)
+![GitHub Repo stars](https://img.shields.io/github/stars/marshadkhn/FarmHub)
+![GitHub contributors](https://img.shields.io/github/contributors/marshadkhn/FarmHub)
+![GitHub last commit](https://img.shields.io/github/last-commit/marshadkhn/FarmHub)
+![Github](https://img.shields.io/github/license/marshadkhn/FarmHub)
+![GitHub issues](https://img.shields.io/github/issues/marshadkhn/FarmHub)
+![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/marshadkhn/FarmHub)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/marshadkhn/FarmHub)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/marshadkhn/FarmHub)
  </p>
 </div>
  
@@ -62,7 +61,7 @@ You can refer to the following articles on **_basics of Git and Github and also 
 
 
 
-<h2 align=center>Project Admins</h2> 
+<h2 align=center>Project Maintainers</h2> 
 <table align="center">
 	<tr >
     <td align="center">
@@ -91,5 +90,6 @@ You can refer to the following articles on **_basics of Git and Github and also 
 
 <h1 align=center>Happy Coding 👨‍💻</h1>
 
-Show some ❤️&nbsp; by giving the star to this repo
+<h3><b>Show some ❤️&nbsp; by giving the star to this repo
+</b></h3>
 <p align="right"><a href="https://github.com/FarmHubb/FarmHub">Back to top</a></p>
