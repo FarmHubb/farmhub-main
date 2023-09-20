@@ -82,6 +82,12 @@ You can refer to the following articles on **_basics of Git and Github and also 
               <sub><b>Abdul-365 </b></sub>
             </a>
    </td>
+   <td align="center">
+            <a href="https://github.com/Shriansh2002">
+              <img src="https://avatars.githubusercontent.com/u/41548480?v=4" width="100px" alt=""/><br />
+              <sub><b>Shriansh2002</b></sub>
+            </a>
+   </td>
   </tr>
 </table>
 
