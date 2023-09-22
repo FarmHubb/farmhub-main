@@ -7,7 +7,7 @@ In the project directory, you can run:
 ### `npm install`
 Install all the packages
 
-### `npm run devstart`
+### `npm run dev`
 
 Runs the app in the development mode for backend
 
