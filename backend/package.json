@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^3.2.4",
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
@@ -20,21 +20,19 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "fast-two-sms": "^3.0.0",
-    "fast2sms": "^1.0.3",
-    "mongoose": "^7.3.1",
+    "mongoose": "^7.5.2",
     "multer": "^1.4.5-lts.1",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "stripe": "^12.10.0",
-    "twilio": "^4.12.0",
-    "validator": "^13.9.0"
+    "stripe": "^13.7.0",
+    "twilio": "^4.18.0",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.5",
-    "@babel/core": "^7.22.5",
-    "@babel/node": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
-    "nodemon": "^2.0.22"
+    "@babel/cli": "^7.22.15",
+    "@babel/core": "^7.22.20",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.22.20",
+    "nodemon": "^3.0.1"
   }
 }
