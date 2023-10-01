@@ -9,21 +9,17 @@ import Card from "@mui/material/Card";
 
 const Weather = ({ weatherDetails, setWeatherDetails, place, setPlace, weather }) => {
 
-
-
-    if (!weatherDetails) return null;
     return (
         <Container sx={{
             mt: { xs: 6, sm: 8 },
             textAlign: 'center',
             padding: "5vmax",
-            // background:"red",
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center'
         }}>
-            <Box display="flex" alignItems='center' justifyContent='center' m={2} mx='auto' 
+            <Box display='flex' alignItems='center' justifyContent='center' m={4} mx='auto' 
                 sx={{ width: { xs: '100%', md: "50%" } }}>
                 <TextField
                     type="text"
@@ -47,17 +43,17 @@ const Weather = ({ weatherDetails, setWeatherDetails, place, setPlace, weather }
                 </Button>
             </Box>
             <Card sx={{
+                display: weatherDetails === "" ? 'none' : 'block',
                 width: { xs: '100%', md: "50%" },
                 padding:"2rem",
                 boxSizing: "border-box",
                 whiteSpace: 'wrap',
-                // overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 backgroundImage: "linear-gradient( rgb(87, 200, 77) rgb(131, 212, 117) rgb(171, 224, 152))",
-                boxShadow: "9px 16px 21px ",
+                boxShadow: "0 0 40px 5px rgba(0, 0, 0, 0.5)",
             }}>
                 <Typography variant="h2" color="tertiary.main" fontFamily="Roboto" fontWeight="bold" >
-                    Weather in {weatherDetails.city}
+                    {weatherDetails.city}
                 </Typography>
                 <Typography variant="h3" color="tertiary.main" fontFamily="Roboto" fontWeight="bold" >
                     {weatherDetails.temp}
