@@ -71,9 +71,9 @@ You can refer to the following articles on **_basics of Git and Github and also 
             </a>
    </td>
     <td align="center">
-            <a href="https://github.com/Adityamishra9719">
+            <a href="https://github.com/adityakmrmishra">
               <img src="https://avatars.githubusercontent.com/u/105539123?v=4" width="100px" alt=""/><br />
-              <sub><b>Adityamishra9719</b></sub>
+              <sub><b>Adityamishra</b></sub>
             </a>
    </td>
     <td align="center">
