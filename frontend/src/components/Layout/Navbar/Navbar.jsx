@@ -57,7 +57,7 @@ const NavButton = styled(Button)(({ theme }) => ({
 
 const scrollToTop = () => {
     window.scrollTo(0, 0);
-  }
+}
 
 const shopPages = [
     {
@@ -286,10 +286,7 @@ function NavBar({
                             aria-controls={openServices ? 'basic-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={openServices ? 'true' : undefined}
-                            onClick={() => {
-                                handleOpenServicesMenu();
-                                scrollToTop();
-                            }}
+                            onClick={handleOpenServicesMenu}
                         >
                             Services
                         </NavButton>
@@ -316,10 +313,7 @@ function NavBar({
                             aria-controls={open ? 'basic-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
-                            onClick={() => {
-                                handleClick();
-                                scrollToTop();
-                            }}
+                            onClick={handleClick}
                         >
                             Categories
                         </NavButton>
