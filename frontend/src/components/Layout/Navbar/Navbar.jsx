@@ -31,6 +31,10 @@ const NavButton = styled(Button)(({ theme }) => ({
     display: 'block'
 }));
 
+const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  }
+
 const shopPages = [
     {
         name: 'Fertilizers',
@@ -244,11 +248,11 @@ function NavBar({
                             display: { xs: 'none', md: 'flex' },
                             justifyContent: 'center'
                         }}>
-                        <NavButton component={Link} to='/'>
+                        <NavButton component={Link} onClick={scrollToTop} to='/'>
                             Home
                         </NavButton>
 
-                        <NavButton component={Link} to='/crops'>
+                        <NavButton component={Link} onClick={scrollToTop} to='/crops'>
                             Crops
                         </NavButton>
 
@@ -257,7 +261,10 @@ function NavBar({
                             aria-controls={openServices ? 'basic-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={openServices ? 'true' : undefined}
-                            onClick={handleOpenServicesMenu}
+                            onClick={() => {
+                                handleOpenServicesMenu();
+                                scrollToTop();
+                            }}
                         >
                             Services
                         </NavButton>
@@ -275,7 +282,7 @@ function NavBar({
                             <MenuItem component={Link} to='/doseCalculator' onClick={handleCloseServiceMenu}>Dose Caluculator</MenuItem>
                         </Menu>
 
-                        <NavButton component={Link} to='/shop'>
+                        <NavButton component={Link} onClick={scrollToTop} to='/shop'>
                             Shop
                         </NavButton>
 
@@ -284,7 +291,10 @@ function NavBar({
                             aria-controls={open ? 'basic-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
-                            onClick={handleClick}
+                            onClick={() => {
+                                handleClick();
+                                scrollToTop();
+                            }}
                         >
                             Categories
                         </NavButton>
