@@ -1,7 +1,0 @@
-{
-"scripts": 
-{
-        "git": "git add . && git commit -m",
-        "postgit": "git push --all"
-}
-}
