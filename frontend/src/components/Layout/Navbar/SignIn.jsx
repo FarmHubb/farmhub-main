@@ -162,7 +162,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                         {signInStatus === 'authenticating' &&
                             <CircularProgress sx={{ ml: 3 }} color='tertiary' size='2rem' />
                         }
-                        <Button color='tertiary' type='submit'>
+                        <Button color='tertiary' type='submit' disabled={loginInfo.phoneNumber.trim() === '' || loginInfo.password.trim() === ''}>
                             Sign In
                         </Button>
                         <Button color='tertiary' onClick={() => setOpen(false)}>Cancel</Button>
