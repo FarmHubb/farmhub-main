@@ -35,7 +35,25 @@ const StyledBox = styled(Box)({
         backgroundSize: 'cover'
     }
 });
-
+const styles = {
+    link: {
+      color: 'primary',
+      textDecoration: 'none',
+      transition: 'color 0.3s ease', // Smooth transition for the color change
+     
+    },
+    instagram:{
+        '&:hover': {
+            color: '#d62976',
+           
+          },
+    },
+    linkedin:{
+        '&:hover': {
+            color: '#0072b1', // Change this to the desired hover color
+          },
+    }
+  };
 // const LanguageSelect = styled(Select)({
 //     '& .MuiOutlinedInput-notchedOutline': {
 //         borderColor: 'white',
@@ -113,8 +131,8 @@ export default function BasicGrid() {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <Typography variant='h6' gutterBottom>SOCIAL LINKS</Typography>
-                            <Link component={RouterLink} to='https://www.linkedin.com/in/farm-hub-6843a1272/'><LinkedInIcon fontSize="large" color="primary" /></Link>
-                            <Link component={RouterLink} to='https://www.instagram.com/farm.hub4/'><InstagramIcon sx={{ ml: 1 }} fontSize="large" color="primary" /></Link>
+                            <Link component={RouterLink} to='https://www.linkedin.com/in/farm-hub-6843a1272/'  sx={{ ...styles.link, ...styles.linkedin }}><LinkedInIcon fontSize="large"/></Link>
+                            <Link component={RouterLink} to='https://www.instagram.com/farm.hub4/' sx={{ ...styles.link, ...styles.instagram}}><InstagramIcon sx={{ ml: 1 }} fontSize="large"  /></Link>
                             <Box id ="google_translate_element"></Box>
                             {/* <Box mt={5}>
                                 <FormControl sx={{ minWidth: '8em' }}>
