@@ -55,6 +55,10 @@ const NavButton = styled(Button)(({ theme }) => ({
 },
 }));
 
+const scrollToTop = () => {
+    window.scrollTo(0, 0);
+}
+
 const shopPages = [
     {
         name: 'Fertilizers',
@@ -269,11 +273,11 @@ function NavBar({
                             display: { xs: 'none', md: 'flex' },
                             justifyContent: 'center'
                         }}>
-                        <NavButton component={Link} to='/'>
+                        <NavButton component={Link} onClick={scrollToTop} to='/'>
                             Home
                         </NavButton>
 
-                        <NavButton component={Link} to='/crops'>
+                        <NavButton component={Link} onClick={scrollToTop} to='/crops'>
                             Crops
                         </NavButton>
 
@@ -300,7 +304,7 @@ function NavBar({
                             <MenuItem component={Link} to='/doseCalculator' onClick={handleCloseServiceMenu}>Dose Caluculator</MenuItem>
                         </Menu>
 
-                        <NavButton component={Link} to='/shop'>
+                        <NavButton component={Link} onClick={scrollToTop} to='/shop'>
                             Shop
                         </NavButton>
 
