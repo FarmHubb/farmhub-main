@@ -1,4 +1,3 @@
-
 <h1 align="center"><b>FarmHub</b></h1>
 <h2 align="center"><b>Accepting for Hacktoberfest 2023</b></h2>
 
@@ -8,7 +7,6 @@
  -->
 <div align="center">
  <p>
-
 
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
 ![GitHub forks](https://img.shields.io/github/forks/marshadkhn/Farmhub)
@@ -20,22 +18,22 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/marshadkhn/FarmHub)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/marshadkhn/FarmHub)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/marshadkhn/FarmHub)
+
  </p>
 </div>
- 
 
 <h2 align= center> Tech Stacks used ✨ </h2>
 
 <p align="center">
   <img src="https://static.javatpoint.com/blog/images/mern-stack.png" alt="JS"/>
 </p>
-<h2 align=center>Prerequisites for this projects</h2> 
+<h2 align=center>Prerequisites for this projects</h2>
 
 - Node.js
-- MongoDB 
+- MongoDB
 - React
-  
-<h2 align=center> 👨🏻‍💻 How to get started? </h2> 
+
+<h2 align=center> 👨🏻‍💻 How to get started? </h2>
 
 You can refer to the following articles on **_basics of Git and Github and also contact the Project Mentors, in case you are stuck_**:
 
@@ -44,8 +42,11 @@ You can refer to the following articles on **_basics of Git and Github and also 
 - [How to create a Pull Request](https://opensource.com/article/19/7/create-pull-request-github)
 - [Getting started with Git and GitHub](https://towardsdatascience.com/getting-started-with-git-and-github-6fcd0f2d4ac6)
 
+<h2 align=center>🛠️ How to Setup</h2>
 
-<h2 align=center> 📝 How to Contribute? </h2>  
+- See [`project_setup.md`](project_setup.md) for more information on setting up FARMHUB.
+
+<h2 align=center> 📝 How to Contribute? </h2>
 
 - Take a look at the Existing Issues or create your own Issues!
 - Wait for the Issue to be assigned to you after which you can start working on it.
@@ -58,8 +59,6 @@ You can refer to the following articles on **_basics of Git and Github and also 
 		Contributing Guidelines
 	</a>
 </h2>
-
-
 
 <h2 align=center>Project Maintainers</h2> 
 <table align="center">
@@ -90,7 +89,6 @@ You can refer to the following articles on **_basics of Git and Github and also 
    </td>
   </tr>
 </table>
-
 
 <hr>
 
