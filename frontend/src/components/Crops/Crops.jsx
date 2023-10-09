@@ -65,18 +65,31 @@ function Crops() {
                         display="flex"
                         justifyContent="center"
                         sx={{ textDecoration: "none" }}
+                        
                     >
-                        <Card sx={{ maxWidth: 345, borderRadius: "1em" }} key={crop.name}>
+                        <Card 
+                        sx={{ 
+                        maxWidth: 345, 
+                        borderRadius: "1em" , 
+                        transition: 'transform 0.4s ease-in-out',
+                        boxShadow: '0px 7px 10px rgba(0, 0, 0, 0.5)',
+                        '&:hover': {
+                        transform: 'translateY(20px)',
+                        boxShadow: '0px 7px 10px rgba(0, 0, 0, 0.5)',
+                  },
+                  }} key={crop.name}>
                             <CardMedia
                                 component="img"
                                 image={crop.image}
                                 alt={crop.name}
                                 width={250}
+                               
                                 height={380}
                                 sx={{ objectFit: "cover" }}
                             />
                             <CardContent sx={{
-                                backgroundColor: "primary.main",
+                                
+                               backgroundColor:"primary main",
                                 p: 2,
                                 "&:last-child": {
                                     pb: 2,
