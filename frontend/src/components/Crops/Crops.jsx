@@ -74,7 +74,7 @@ function Crops() {
                         transition: 'transform 0.4s ease-in-out',
                         boxShadow: '0px 7px 10px rgba(0, 0, 0, 0.5)',
                         '&:hover': {
-                        transform: 'translateY(20px)',
+                        transform: 'translateY(-20px)',
                         boxShadow: '0px 7px 10px rgba(0, 0, 0, 0.5)',
                   },
                   }} key={crop.name}>
