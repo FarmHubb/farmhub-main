@@ -1,10 +1,11 @@
-import passport from "passport";
+import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import User from '../models/userModel';
 
-passport.use(new LocalStrategy({ usernameField: 'phoneNumber' }, async (username, password, done) => {
+// Local strategy for phone number and password authentication
+passport.use(new LocalStrategy({ usernameField: 'phoneNumber' }, async (phoneNumber, password, done) => {
     try {
-        const user = await User.findOne({ phoneNumber: username }).exec();
+        const user = await User.findOne({ phoneNumber }).exec();
         if (!user) {
             return done(null, false, { message: 'Invalid Phone Number' });
         }
@@ -18,8 +19,10 @@ passport.use(new LocalStrategy({ usernameField: 'phoneNumber' }, async (username
     }
 }));
 
+// Serialize user to store user ID in the session
 passport.serializeUser((user, done) => done(null, user._id));
 
+// Deserialize user to retrieve user from ID in the session
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findById(id).populate('cart.product');
@@ -29,6 +32,7 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
+// Export passport initialization, session, and setUser middleware
 module.exports = {
     initialize: passport.initialize(),
     session: passport.session(),

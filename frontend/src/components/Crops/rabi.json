@@ -186,7 +186,7 @@
         },
         {
             "name": "Vegetables",
-            "image": "/Images/potato-main.jpg",
+            "image": "/Images/carrot.jpg",
             "crops": [
                 {
                     "name": "Bean",
