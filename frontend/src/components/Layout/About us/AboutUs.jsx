@@ -12,80 +12,88 @@ import Box from "@mui/material/Box";
 
 //Content array for cards
 const profiles = [
-  {
-    name: "MOHAMMAD ARSHAD KHAN",
-    image: "/Images/arshad.jpg",
-    twitter: "https://twitter.com/marshadkhn ",
-  },
-  {
-    name: "ADITYA KUMAR MISHRA",
-    image: "/Images/aditya.jpeg",
-    twitter: "https://twitter.com/Aditya_m037",
-  },
-  {
-    name: "ABDUL MANNAN",
-    image: "/Images/abdul.jpg",
-    twitter: "https://twitter.com/Abdul_365m",
-  },
-  {
-    name: "ANKIT KUMAR SHARMA",
-    image: "/Images/ankit.jpeg",
-    twitter: "https://twitter.com/AnkitKumar30461",
-  },
+    {
+        name: "MOHAMMAD ARSHAD KHAN",
+        image: "/Images/arshad.jpg",
+        twitter: "https://twitter.com/marshadkhn ",
+    },
+    {
+        name: "ADITYA KUMAR MISHRA",
+        image: "/Images/aditya.jpeg",
+        twitter: "https://twitter.com/Aditya_m037",
+    },
+    {
+        name: "ABDUL MANNAN",
+        image: "/Images/abdul.jpg",
+        twitter: "https://twitter.com/Abdul_365m",
+    },
+    {
+        name: "ANKIT KUMAR SHARMA",
+        image: "/Images/ankit.jpeg",
+        twitter: "https://twitter.com/AnkitKumar30461",
+    },
 ];
 
 const AboutUs = () => {
     return (
         <Container sx={{ mt: { xs: 6, sm: 8 } }}>
-            <Typography
-                pt={7}
-                variant="h4"
-                fontWeight="500"
-                fontFamily="Roboto"
-                color="cropHeading.main"
-                gutterBottom
-            >
-                ABOUT US
-            </Typography>
-            <Typography
-                paddingBottom={3}
-                color="primary"
-                gutterBottom
-                fontFamily="Roboto"
-                fontWeight="bold"
-            >
-                Welcome to FarmHub, your one-stop-shop for fresh, locally available products. At FarmHub, we are passionate about sustainable agriculture and committed to quality. We use sustainable and organic farming practices to grow a wide variety of fruits and vegetables. In addition to our farm stand, we also participate in local farmers' markets and offer a range of alternative pesticides and other agriculture methods to enhance your crop. We also provide help for new customers that are new on our website. We are proud of being able to contribute a little the vast domain like agricultural.
-            </Typography>
+            <div>
+                <Typography
+                    mt={20}
+                    variant="h5"
+                    fontWeight="500"
+                    fontFamily="Roboto"
+                    color="cropHeading.main"
+                    gutterBottom
+                >
+                    ABOUT US
+                </Typography>
+                <Typography
+                    paddingBottom={3}
+                    color="primary"
+                    gutterBottom
+                    fontFamily="Roboto"
+                    fontWeight="normal"
+                >
+                    Welcome to FarmHub, your one-stop-shop for fresh, locally available products. At FarmHub, we are passionate about sustainable agriculture and committed to quality. We use sustainable and organic farming practices to grow a wide variety of fruits and vegetables. In addition to our farm stand, we also participate in local farmers' markets and offer a range of alternative pesticides and other agriculture methods to enhance your crop. We also provide help for new customers that are new on our website. We are proud of being able to contribute a little the vast domain like agricultural.
+                </Typography>
+            </div>
 
             {/* Mission section start */}
             <Typography
                 variant="h5"
+                mt={10}
+                b
                 fontWeight="500"
                 color="cropHeading.main"
                 gutterBottom
+
             >
                 OUR MISSION
             </Typography>
-            <Grid container spacing={1}>
+            <Grid container spacing={5} bgcolor={783888}>
                 <Grid item xs={12} sm={9} sx={{ display: "flex", flexDirection: "column", width: "85%" }}>
-                    <Typography color="primary" fontFamily="Roboto" fontWeight="bold">
+                    <Typography color="primary" fontFamily="Roboto" fontWeight="normal">
                         Our mission at FarmHub is to empower farmers and agricultural communities by providing them with the tools and resources they need to thrive. We aim to connect farmers with the latest technology, research, and best practices in sustainable agriculture, while also fostering a strong community of like-minded individuals who are passionate about building a better future for our planet. Through our platform, we hope to create a more resilient and sustainable food system that benefits everyone.
                     </Typography>
                     <br />
-                    <Typography color="primary" fontFamily="Roboto" fontWeight="bold">
+                    <Typography color="primary" fontFamily="Roboto" fontWeight="normal">
                         Farmhub aims is to revolutionize the way the world thinks about agriculture. We believe that by harnessing the power of technology and innovation, we can create a more sustainable and equitable food system for all. Our platform connects farmers with the resources they need to succeed, from cutting-edge research and best practices to a supportive community of peers. By working together, we can build a brighter future for our planet and its people
                     </Typography>
                 </Grid>
-                <Grid item xs={12} sm={3}>
-                    <Box
-                        sx={{
-                            borderRadius: "1rem",
-                            objectFit: "cover",
-                            width: "100%",
-                        }}
-                        component="img"
-                        src="/Images/about-us-image.jpg"
-                    />
+                <Grid item xs={12} sm={3} display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+                    <div style={{ height: "300px", width: "300px" }}>
+                        <Box
+                            sx={{
+                                borderRadius: "1rem",
+                                objectFit: "cover",
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            component="img"
+                            src="/Images/about-us-image.jpg"
+                        />
+                    </div>
                 </Grid>
             </Grid>
             {/* Mission section end */}
@@ -96,64 +104,104 @@ const AboutUs = () => {
                 fontWeight="500"
                 color="cropHeading.main"
                 gutterBottom
+                mt={10}
             >
                 SERVICES
             </Typography>
-            <Grid container spacing={1} sx={{ display: "flex" }}>
-                <Grid item xs={12} sm={3}>
-                    <Box
-                        sx={{
-                            borderRadius: "1rem",
-                            objectFit: "cover",
-                            width: "100%",
-                            height: "100%",
-                        }}
-                        component="img"
-                        src="/Images/serice-about-us.jpg"
-                    />
-                </Grid>
-                <Grid
-                    item xs={12} sm={9}
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "85%",
-                        paddingLeft: "2%",
-                        paddingTop: "5%"
-                    }}
-                >
-                    <Typography color="primary" fontFamily="Roboto" fontWeight="bold">
-                        1. Agricultral products
-                    </Typography>
-                    <br />
-                    <Typography color="primary" fontFamily="Roboto" fontWeight="bold">
-                        2. Place of Information
-                    </Typography>
-                    <br />
-
-                    <Typography color="primary" fontFamily="Roboto" fontWeight="bold">
-                        3. Place for relaiters
-                    </Typography>
-                    <br />
-
-                    <Typography color="primary" fontFamily="Roboto" fontWeight="bold">
-                        4. Friend of a new farmer
-                    </Typography>
-                </Grid>
+            {/* <Grid spacing={1} sx={{ display: "flex" }}> */}
+            <Grid
+                item xs={12} sm={9} spacing={30}
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                }}
+            >
+                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                    <CardActionArea>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image="/Images/service1.jpg"
+                            alt="green iguana"
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Agricultral products
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Explore a vast selection of high-quality agricultural supplies and equipment for all your farming needs.
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                    <CardActionArea>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image="/Images/service2.jpg"
+                            alt="green iguana"
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Place of Information
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Access a comprehensive knowledge base and stay informed with the latest agricultural news and guidance.
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                    <CardActionArea>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image="/Images/service3.jpg"
+                            alt="green iguana"
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div" >
+                                Place for retailers
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Connect with trusted retailers and suppliers, making it easy to source the products you need for your farm.
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                    <CardActionArea>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image="/Images/service4.jpg"
+                            alt="green iguana"
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Friend of a new farmer
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                We're here to support and guide new farmers, providing resources and assistance for a successful start in agriculture.
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
             </Grid>
+            {/* </Grid> */}
             {/* Service end*/}
 
             {/* Profiles section start */}
             <Typography
-                pt={7}
                 variant="h5"
                 fontWeight="500"
-                fontFamily="Roboto"
                 color="cropHeading.main"
                 gutterBottom
-                align='center'
+                mt={10}
             >
-                Maintainers
+                MAINTAINERS
             </Typography>
             <Grid container spacing={5}>
                 {profiles.map((profile) => (
