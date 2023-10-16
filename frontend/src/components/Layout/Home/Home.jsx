@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 const VideoBox = styled(Box)({
   position: 'relative',
@@ -75,25 +76,25 @@ const items = [
     image: '/Images/seema.jpg',
     name: 'Seema',
     message:
-      '"I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible"',
+      'I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible',
   },
   {
     image: '/Images/shivam.jpg',
     name: 'Shivam',
     message:
-      '"I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible"',
+      'I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible',
   },
   {
     image: '/Images/ramesh.jpg',
     name: 'Ramesh',
     message:
-      '"I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible"',
+      'I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible',
   },
   {
     image: '/Images/lala.jpg',
     name: 'Lala Ram',
     message:
-      '"I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible"',
+      'I have been using FarmHub website for over a year now and it has been a game-changer for me. The website provides me with all information I need to make informed decisionsabout my crops, including weather forecasts, market prices, and information on fertilizers, seeds, machinery, etc. The user-friendly interface and option to use the website in different languages makes it more widely accesible',
   },
 ];
 
@@ -300,8 +301,14 @@ export default function Home() {
         >
           Testimonials
         </Typography>
+
         <Carousel
           animation="slide"
+          autoPlay={true}
+          interval={4000}
+          stopAutoPlayOnHover={true}
+          prevArrow={false}
+          nextArrow={false}
           indicatorIconButtonProps={{
             style: {
               color: 'white',
@@ -309,22 +316,13 @@ export default function Home() {
           }}
           activeIndicatorIconButtonProps={{
             style: {
-              color: '#07412B', // 2
-            },
-          }}
-          indicatorContainerProps={{
-            style: {
-              position: 'absolute',
-              bottom: '1em',
-              right: '2em',
-              width: 'fit-content',
-              zIndex: 1,
+              color: '#07412B',
             },
           }}
           sx={{
             position: 'relative',
-            width: { md: '80%' },
-            height: { xs: '40rem', md: '20rem' },
+            width: { md: '70%' },
+            height: { xs: '40rem', md: 'auto' },
             m: 'auto',
             mt: 3,
             borderRadius: '1em',
@@ -335,64 +333,81 @@ export default function Home() {
               key={item.name}
               sx={{
                 display: 'flex',
-                flexDirection: { xs: 'column', md: 'row' },
+                flexDirection: { xs: 'column', md: 'column' },
                 alignItems: 'center',
-                height: { xs: '100%', md: '20rem' },
-                pb: { xs: 4, md: 0 },
-                backgroundColor: 'tertiary.main',
-                color: 'white',
+                height: { xs: '100%', md: '100%' },
+                color: '#07412b',
+                borderRadius: '1em',
+                rowGap: '1em',
+                position: 'relative',
+                background:
+                  'linear-gradient(to bottom, rgb(7, 65, 43) 23%, #FAFAFA 23%)',
+                boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
               }}
             >
-              <Box
-                display={{ xs: 'none', md: 'flex' }}
-                width="70rem"
-                height="100%"
-              >
-                <CardMedia
-                  component="img"
-                  width="100%"
-                  height="100%"
-                  image={item.image}
-                  sx={{ objectFit: 'cover' }}
-                  alt="Live from space album cover"
-                />
-              </Box>
-              <Avatar
-                src={item.image}
+              <FormatQuoteIcon
                 sx={{
-                  display: { md: 'none' },
-                  width: '5rem',
-                  height: '5rem',
-                  mt: 4,
+                  fontSize: '4rem',
+                  color: '#fafafa',
+                  position: 'absolute',
+                  top: '3%',
+                  left: '3%',
+                  webkitTransform: 'rotateY(180deg)',
+                  transform: 'rotateY(180deg)',
                 }}
-                alt="avatar"
               />
-              <Typography
-                display={{ xs: 'block', md: 'none' }}
-                textAlign="center"
-                component="div"
-                variant="h6"
-                mt={3}
+              <CardMedia
+                component="img"
+                width="100%"
+                height="100%"
+                image={item.image}
+                sx={{
+                  objectFit: 'cover',
+                  height: '8.625em',
+                  width: '8.625em',
+                  borderRadius: '50%',
+                  marginTop: '40px',
+                  border: '5px solid #fafafa',
+                }}
+                alt="Live from space album cover"
+              />
+              <CardContent
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  rowGap: '0.2em',
+                  padding: '0',
+                }}
               >
-                {item.name}
-              </Typography>
-              <CardContent sx={{ p: 4 }}>
                 <Typography
-                  variant="subtitle1"
-                  fontSize="1.1rem"
+                  variant="h6"
+                  fontSize="1.1em"
                   component="div"
+                  sx={{ padding: '0 6.5%', textAlign: 'justify' }}
                 >
                   {item.message}
                 </Typography>
                 <Typography
-                  display={{ xs: 'none', md: 'block' }}
+                  display={{ xs: 'block', md: 'block' }}
                   component="div"
                   variant="h6"
                   mt={3}
+                  mb={3}
                 >
                   {item.name}
                 </Typography>
               </CardContent>
+              <FormatQuoteIcon
+                sx={{
+                  fontSize: '4rem',
+                  color: '#07412b',
+                  position: 'absolute',
+                  bottom: '3%',
+                  right: '3%',
+                }}
+              />
             </Card>
           ))}
         </Carousel>
