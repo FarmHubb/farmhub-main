@@ -115,9 +115,10 @@ const AboutUs = () => {
                     display: "flex",
                     flexDirection: "row",
                     width: "100%",
+                    gap:5
                 }}
             >
-                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                <Card sx={{ maxWidth: 345,width:"45rem" , margin: 0 }}>
                     <CardActionArea>
                         <CardMedia
                             component="img"
@@ -135,7 +136,7 @@ const AboutUs = () => {
                         </CardContent>
                     </CardActionArea>
                 </Card>
-                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                <Card sx={{ maxWidth: 345, margin: 0 ,width:"45rem" }}>
                     <CardActionArea>
                         <CardMedia
                             component="img"
@@ -145,15 +146,15 @@ const AboutUs = () => {
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                Place of Information
+                                Places of Information
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Access a comprehensive knowledge base and stay informed with the latest agricultural news and guidance.
+                                Access a comprehensive knowledge base and stay informed with the latest agricultural news.
                             </Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
-                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                <Card sx={{ maxWidth: 345, margin: 0,width:"45rem"  }}>
                     <CardActionArea>
                         <CardMedia
                             component="img"
@@ -163,7 +164,7 @@ const AboutUs = () => {
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div" >
-                                Place for retailers
+                                Places for the retailers
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 Connect with trusted retailers and suppliers, making it easy to source the products you need for your farm.
@@ -171,7 +172,7 @@ const AboutUs = () => {
                         </CardContent>
                     </CardActionArea>
                 </Card>
-                <Card sx={{ maxWidth: 345, margin: 2 }}>
+                <Card sx={{ maxWidth: 270, margin: 0,width:"45rem"  }}>
                     <CardActionArea>
                         <CardMedia
                             component="img"
