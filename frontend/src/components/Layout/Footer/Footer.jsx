@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import GitHubIcon from '@mui/icons-material/GitHub';
 // import LanguageIcon from '@mui/icons-material/Language';
 // import InputLabel from '@mui/material/InputLabel';
 // import MenuItem from '@mui/material/MenuItem';
@@ -52,7 +53,13 @@ const styles = {
         '&:hover': {
             color: '#0072b1', // Change this to the desired hover color
           },
+    },
+    github:{
+        '&:hover':{
+            color: '#000000',
+        },
     }
+
   };
 // const LanguageSelect = styled(Select)({
 //     '& .MuiOutlinedInput-notchedOutline': {
@@ -133,6 +140,7 @@ export default function BasicGrid() {
                             <Typography variant='h6' gutterBottom>SOCIAL LINKS</Typography>
                             <Link component={RouterLink} to='https://www.linkedin.com/in/farm-hub-6843a1272/'  sx={{ ...styles.link, ...styles.linkedin }}><LinkedInIcon fontSize="large"/></Link>
                             <Link component={RouterLink} to='https://www.instagram.com/farm.hub4/' sx={{ ...styles.link, ...styles.instagram}}><InstagramIcon sx={{ ml: 1 }} fontSize="large"  /></Link>
+                            <Link component={RouterLink} to='https://github.com/marshadkhn/Farmhub' sx={{ ...styles.link, ...styles.github}}><GitHubIcon sx={{ ml: 1 }} fontSize="large"  /></Link>
                             <Box id ="google_translate_element"></Box>
                             {/* <Box mt={5}>
                                 <FormControl sx={{ minWidth: '8em' }}>
