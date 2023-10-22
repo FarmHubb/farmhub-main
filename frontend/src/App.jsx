@@ -68,7 +68,7 @@ export default function App() {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/user`, { withCredentials: true })
             .then((response) => {
                 let res = response.data
-                if (res.avatar) 
+                if (res.avatar)
                     res.avatar.data = bufferToString(res.avatar);
                 if (response) setUser(res)
                 else setUser(null);
@@ -243,7 +243,7 @@ export default function App() {
                     />
                     <Route path='order/:orderId' element={<Order />} />
                     <Route path='checkOut' element={<CheckOutSteps user={user} setTrigger={setTrigger} setUserTab={setUserTab} />} />
-                    <Route path='orderSuccess' element={<OrderSuccess setUserTab={setUserTab}/>}S/>
+                    <Route path='orderSuccess' element={<OrderSuccess setUserTab={setUserTab} />} S />
                     <Route path='/shop'>
                         <Route index element={<ShopHome />} />
                         <Route path='products/category/:category' element={
