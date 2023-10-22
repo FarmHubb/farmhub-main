@@ -333,7 +333,7 @@ function NavBar({
               aria-controls={openServices ? 'basic-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={openServices ? 'true' : undefined}
-              onMouseEnter={handleOpenServicesMenu}
+              onClick={handleOpenServicesMenu}
               sx={{ display: 'flex', alignItems: 'center', paddingRight: 0 }}
             >
               Services
@@ -353,7 +353,6 @@ function NavBar({
                 'aria-labelledby': 'basic-button',
               }}
               disableScrollLock={true}
-              onMouseLeave={handleCloseServiceMenu}
             >
               <MenuItem
                 component={Link}
@@ -366,7 +365,6 @@ function NavBar({
                 component={Link}
                 to="/doseCalculator"
                 onClick={handleCloseServiceMenu}
-                onMouseLeave={handleCloseServiceMenu}
               >
                 Dose Calculator
               </MenuItem>
@@ -382,7 +380,6 @@ function NavBar({
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
-              onMouseEnter={handleClick}
               sx={{ display: 'flex', alignItems: 'center', paddingRight: 0 }}
             >
               Categories
@@ -402,15 +399,13 @@ function NavBar({
                 'aria-labelledby': 'categories-button',
               }}
               disableScrollLock={true}
-              onMouseLeave={handleClose}
             >
-              {shopPages.map((page, index) => (
+              {shopPages.map((page) => (
                 <MenuItem
                   component={Link}
                   to={page.link}
                   key={page.name}
                   onClick={handleClose}
-                  onMouseLeave={index === shopPages.length - 1 && handleClose}
                 >
                   {page.name}
                 </MenuItem>
