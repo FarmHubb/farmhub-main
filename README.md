@@ -1,5 +1,4 @@
 <h1 align="center"><b>FarmHub</b></h1>
-<h2 align="center"><b>Accepting for Hacktoberfest 2023</b></h2>
 
 <!-- <div align="center">
 <img src="frontend/public/Images/main-logo.png"/>
@@ -9,15 +8,15 @@
  <p>
 
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
-![GitHub forks](https://img.shields.io/github/forks/marshadkhn/Farmhub)
-![GitHub Repo stars](https://img.shields.io/github/stars/marshadkhn/FarmHub)
-![GitHub contributors](https://img.shields.io/github/contributors/marshadkhn/FarmHub)
-![GitHub last commit](https://img.shields.io/github/last-commit/marshadkhn/FarmHub)
-![Github](https://img.shields.io/github/license/marshadkhn/FarmHub)
-![GitHub issues](https://img.shields.io/github/issues/marshadkhn/FarmHub)
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/marshadkhn/FarmHub)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/marshadkhn/FarmHub)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/marshadkhn/FarmHub)
+![GitHub forks](https://img.shields.io/github/forks/FarmHubb/farmhub-main)
+![GitHub Repo stars](https://img.shields.io/github/stars/FarmHubb/farmhub-main)
+![GitHub contributors](https://img.shields.io/github/contributors/FarmHubb/farmhub-main)
+![GitHub last commit](https://img.shields.io/github/last-commit/FarmHubb/farmhub-main)
+![Github](https://img.shields.io/github/license/FarmHubb/farmhub-main)
+![GitHub issues](https://img.shields.io/github/issues/FarmHubb/farmhub-main)
+![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/FarmHubb/farmhub-main)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/FarmHubb/farmhub-main)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/FarmHubb/farmhub-main)
 
  </p>
 </div>
@@ -59,6 +58,11 @@ You can refer to the following articles on **_basics of Git and Github and also 
 		Contributing Guidelines
 	</a>
 </h2>
+<br>
+
+<h2 align="center">Programs in which participated</h2>
+<h3><b>1. Hacktoberfest 2023</b></h3>
+<br>
 
 <h2 align=center>Project Maintainers</h2> 
 <table align="center">
