@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-import Carousel from 'react-material-ui-carousel'
 import Box from '@mui/material/Box';
-import Rating from '@mui/material/Rating';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
-import { Container } from '@mui/material';
+import Rating from '@mui/material/Rating';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Carousel from 'react-material-ui-carousel';
+import { Link as RouterLink } from 'react-router-dom';
 import bufferToString from './../../bufferToString';
 
 const banner = [
@@ -20,7 +21,7 @@ const banner = [
 
 export default function ShopHome() {
 
-    const [topProducts, setTopProducts] = useState(null);
+    const [topProducts, setTopProducts] = useState(Array.from(new Array(8)));
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/products/top`)
@@ -35,8 +36,6 @@ export default function ShopHome() {
             })
             .catch((err) => console.log(err))
     }, [])
-
-    if (!topProducts) return null; 
 
     return (
         <Box sx={{ mt: { xs: 6, sm: 8 } }}>
@@ -57,7 +56,7 @@ export default function ShopHome() {
                 ))}
             </Carousel>
 
-            {/* top Product */}
+            {/* Top Products */}
 
             <Container sx={{ mt: { xs: 6, sm: 8 } }}>
                 <Typography
@@ -73,36 +72,44 @@ export default function ShopHome() {
                     Top Products
                 </Typography>
                 <Grid container rowSpacing={3} columnSpacing={3}>
-                    {topProducts.map((product) => (
-                        <Grid item xs={12} sm={6} md={3} key={product._id}>
-                            <Link component={RouterLink} to={`/shop/product/${product._id}`} underline='none'>
+                    {topProducts.map((product, index) => (
+                        <Grid item xs={12} sm={6} md={3} key={product ? product._id : index}>
+                            <Link component={RouterLink} to={product && `/shop/product/${product._id}`} underline='none'>
                                 <Card elevation={2} sx={{ height: "100%" }}>
-                                    <CardMedia
-                                        sx={{ p: 2, boxSizing: 'border-box', objectFit: 'contain' }}
-                                        component="img"
-                                        height='250rem'
-                                        image={product.images[0].data}
-                                        alt={product.name}
-                                    />
+                                    <Box sx={{ height: '20rem' }}>
+                                        {product ?
+                                            <CardMedia
+                                                sx={{ p: 2, boxSizing: 'border-box', objectFit: 'contain' }}
+                                                component="img"
+                                                height='100%'
+                                                image={product.images[0].data}
+                                                alt={product.name}
+                                            /> :
+                                            <Skeleton variant="rectangular" height='100%' />
+                                        }
+                                    </Box>
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" component="div">
-                                            {product.name}
+                                            {product ? product.name : <Skeleton />}
                                         </Typography>
                                         <Box height='1.4em'>
-                                            {product.avgRating ?
-                                                <Rating name="read-only"
-                                                    value={product.avgRating}
-                                                    readOnly
-                                                    size='small'
-                                                />
-                                                :
-                                                <Typography variant="body2" color="text.secondary">
-                                                    No ratings
-                                                </Typography>
-                                            }
+                                            {product ?
+                                                (product.avgRating ?
+                                                    <Rating name="read-only"
+                                                        value={product.avgRating}
+                                                        readOnly
+                                                        size='small'
+                                                    />
+                                                    :
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        No ratings
+                                                    </Typography>
+                                                ) : <Skeleton width='40%' />}
                                         </Box>
                                         <Typography variant="body2" color="text.secondary">
-                                            ₹{(product.price).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                                            {product ?
+                                                ('₹' + (product.price).toLocaleString(undefined, { maximumFractionDigits: 2 }))
+                                                : <Skeleton width='40%' />}
                                         </Typography>
                                     </CardContent>
                                 </Card>
