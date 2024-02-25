@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
+import bufferToString from '../../bufferToString';
 
 export default function Order() {
 
@@ -46,7 +47,7 @@ export default function Order() {
                                     <CardMedia
                                         component="img"
                                         sx={{ width: 80, padding: 2 }}
-                                        src={order.product.images[0].data}
+                                        src={bufferToString(order.product.images[0])}
                                         alt="Product"
                                     />
                                     <CardContent 
