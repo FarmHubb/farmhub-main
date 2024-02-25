@@ -70,6 +70,11 @@ export default function App() {
                 let res = response.data
                 if (res.avatar)
                     res.avatar.data = bufferToString(res.avatar);
+                res.cart.forEach(product => {
+                    product.product.images.forEach(image => {
+                        image.data = bufferToString(image);
+                    });
+                });
                 if (response) setUser(res)
                 else setUser(null);
             })
