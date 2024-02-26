@@ -1,25 +1,23 @@
-import multer from 'multer';
 import {
     addAddress,
     addToCart,
     changePassword,
     checkOtp,
     createUser,
-    readUser,
     deleteAddress,
-    deletefromCart,
     deleteUser,
+    deletefromCart,
     forgotPassword,
     isAuth,
     login,
     logout,
+    readUser,
     resetPassword,
     updateAddress,
     updateInCart,
     updateUser,
 } from '../controllers/userController';
-
-var upload = multer({ dest: './uploads/' });
+import { upload } from '../middleware/imageUtils';
 
 const userRoutes = (app) => {
 

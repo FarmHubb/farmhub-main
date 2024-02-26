@@ -1,12 +1,10 @@
+import { config } from 'dotenv';
 import passport from "passport";
-import path from "path";
-import fs from "fs";
+import twilio from "twilio";
+import { readImage } from "../middleware/imageUtils";
 import Product from "../models/productModel";
 import User from "../models/userModel";
-require("dotenv").config();
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.AUTH_TOKEN;
-import twilio from "twilio";
+config();
 
 // -------------------------------- User Authentication --------------------------------
 
@@ -42,21 +40,13 @@ export const readUser = (req, res) => {
     res.status(200).json(req.user);
 };
 
-const readImage = (file) => {
-    let avatar = {};
-    avatar.data = fs.readFileSync(
-        path.join(__dirname, "..", "..", "uploads", String(file.filename))
-    );
-    avatar.contentType = file.mimetype;
-    return avatar;
-};
-
 export const createUser = async (req, res) => {
     try {
-        if (req.file) req.body.avatar = readImage(req.file);
+        if (req.file) 
+            req.body.avatar = readImage(req.file);
         let newUser = new User(req.body);
         const user = await newUser.save();
-        res.json(user);
+        res.status(201).json(user);
     } catch (err) {
         res.send(err);
     }
@@ -64,12 +54,13 @@ export const createUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        if (req.file) req.body.avatar = readImage(req.file);
+        if (req.file) 
+            req.body.avatar = readImage(req.file);
         const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
             new: true,
             runValidators: true,
         });
-        res.json(user);
+        res.status(200).json(user);
     } catch (err) {
         res.send(err);
     }
@@ -78,7 +69,7 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
         await User.findByIdAndRemove(req.params.userId);
-        res.json({ message: "Account deleted successfully" });
+        res.status(200).json({ message: "Account deleted successfully" });
     } catch (err) {
         res.send(err);
     }
@@ -88,12 +79,12 @@ export const deleteUser = async (req, res) => {
 
 export const changePassword = async (req, res) => {
     try {
-        const updatedUser = await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
             { phoneNumber: req.body.phoneNumber },
             { password: req.body.password },
             { new: true, runValidators: true }
         );
-        res.json(updatedUser);
+        res.status(200).json({ message: "Password changed successfully" });
     } catch (err) {
         res.send(err);
     }
@@ -115,7 +106,7 @@ export const forgotPassword = async (req, res) => {
     try {
         const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
         const phoneNumber = req.body.phoneNumber;
-        const client = twilio(accountSid, authToken);
+        const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
         const Otp = user.getResetPasswordOtp();
         const userUpdate = await User.findOneAndUpdate(
             { phoneNumber: req.body.phoneNumber },
@@ -162,12 +153,12 @@ export const checkOtp = async (req, res) => {
 
 export const addAddress = async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(
+        await User.findByIdAndUpdate(
             req.params.userId,
             { $push: { addresses: req.body } },
             { new: true, runValidators: true }
         );
-        res.json(user);
+        res.json({message: "Address added successfully"});
     } catch (err) {
         res.send(err);
     }

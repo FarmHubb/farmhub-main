@@ -1,20 +1,20 @@
 import {
-    productList,
     addProduct,
-    displayProduct,
-    updateProduct,
-    deleteProduct,
     addReview,
-    updateReview,
+    deleteProduct,
     deleteReview,
-    productSearch,
+    displayProduct,
     getAllProducts,
-    getTopProducts
+    getTopProducts,
+    productList,
+    productSearch,
+    updateProduct,
+    updateReview
 } from '../controllers/productController';
-import multer from 'multer';
+import { upload } from '../middleware/imageUtils';
+import { isAuth } from './../controllers/userController';
 
 const productRoutes = (app) => {
-    var upload = multer({ dest: './uploads/'});
 
     app.route('/product')
         .post(upload.array("images"), addProduct);
@@ -31,10 +31,10 @@ const productRoutes = (app) => {
         .put(upload.array("images"), updateProduct)
         .delete(deleteProduct);
     app.route('/product/:productId/review')
-        .put(addReview);
+        .put(isAuth, addReview);
     app.route('/product/:productId/review/:userId')
-        .put(updateReview)
-        .delete(deleteReview);
+        .put(isAuth, updateReview)
+        .delete(isAuth, deleteReview);
 }
 
 export default productRoutes;
