@@ -1,33 +1,47 @@
 import { config } from 'dotenv';
 import Order from "../models/orderModel";
 import User from "../models/userModel";
+import Product from "../models/productModel";
 import { PROD } from '../constants';
 config();
 
 export const createOrders = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId).populate("cart.product");
+        const user = req.user;
+        // Check if enough items are available in stock
+        for (var item of user.cart) {
+            if (item.product.quantity < item.quantity)
+                return res.status(400).json({ message: "Some products are not available in the quantities demanded by user" });
+        }
+        // Create orders once confirmed all items are available
         let newOrders = [];
         for (const item of user.cart) {
+            await Product.findByIdAndUpdate(
+                item.product._id,
+                { $inc: { quantity: -item.quantity } },
+                { new: true, runValidators: true }
+            );
             const subtotal = item.product.price * item.quantity;
+            const shippingCharges = subtotal > 1500 ? 0 : 60;
+            const tax = subtotal * 0.18;
             const newOrder = new Order({
                 product: item.product._id,
                 quantity: item.quantity,
                 subtotal: subtotal,
-                shippingCharges: subtotal > 1500 ? 0 : 60,
-                tax: subtotal * 0.18,
-                total: subtotal + subtotal * 0.18 + (subtotal > 1500 ? 0 : 60),
+                shippingCharges: shippingCharges,
+                tax: tax,
+                total: subtotal + tax + shippingCharges,
                 paymentInfo: req.body.paymentInfo,
-                user: req.params.userId,
+                user: req.user._id,
                 address: req.body.address,
             });
             newOrders.push(newOrder);
         }
         const orders = await Order.insertMany(newOrders, { populate: "product" });
         await User.findByIdAndUpdate(
-            req.params.userId,
+            req.user._id,
             { $set: { cart: [] } },
-            { runVaidators: true }
+            { runValidators: true }
         );
         res.status(201).json(process.env.NODE_ENV === PROD
             ? { message: "Order placed successfully" }
@@ -49,7 +63,7 @@ export const getOrder = async (req, res) => {
 
 export const getAllUserOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ user: req.params.userId })
+        const orders = await Order.find({ user: req.user })
             .populate("product")
             .sort({ createdAt: -1 });
         res.status(200).json(orders);

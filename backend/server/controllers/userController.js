@@ -121,7 +121,7 @@ export const forgotPassword = async (req, res) => {
         await User.findOneAndUpdate(
             { phoneNumber: req.body.phoneNumber },
             { resetPasswordOtp: otp },
-            { new: true, runValidators: true }
+            { runValidators: true }
         );
         client.messages
             .create({
@@ -205,11 +205,6 @@ export const addToCart = async (req, res) => {
             res.status(400).json({ message: "Not sufficient quantity available" });
             return;
         }
-        await Product.findByIdAndUpdate(
-            req.body.product,
-            { $inc: { quantity: -req.body.quantity } },
-            { runValidators: true }
-        );
         const user = await User.findByIdAndUpdate(
             req.params.userId,
             { $push: { cart: req.body } },
@@ -237,17 +232,13 @@ export const updateInCart = async (req, res) => {
             res.status(400).json({ message: "Not sufficient quantity available" });
             return;
         }
-        await Product.findByIdAndUpdate(
-            req.params.productId,
-            { $inc: { quantity: -quantity } },
-            { new: true, runValidators: true }
-        );
         await User.findOneAndUpdate(
             { _id: req.params.userId, "cart.product": req.params.productId },
             { $set: { "cart.$.quantity": req.body.quantity } },
             { new: true, runValidators: true }
         );
-        res.status(200).json({ message: "Cart updated successfully"});
+        const item = user.cart.find(item => item.product.toString() === req.params.productId);
+        res.status(200).json(item);
     } catch (err) {
         res.status(500).send(err);
     }
@@ -255,20 +246,10 @@ export const updateInCart = async (req, res) => {
 
 export const deletefromCart = async (req, res) => {
     try {
-        const user = await User.findOne(
-            { _id: req.params.userId, "cart.product": req.params.productId },
-            { "cart.$": 1 }
-        );
-        const quantity = user.cart[0].quantity;
-        await Product.findByIdAndUpdate(
-            req.params.productId,
-            { $inc: { quantity: +quantity } },
-            { new: true, runValidators: true }
-        );
         await User.findOneAndUpdate(
             { _id: req.params.userId, "cart.product": req.params.productId },
             { $pull: { cart: { product: req.params.productId } } },
-            { new: true, runValidators: true }
+            { runValidators: true }
         );
         res.status(200).json({ message: "Product deleted from cart successfully" });
     } catch (err) {
