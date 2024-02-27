@@ -48,7 +48,7 @@ export const createOrders = async (req, res) => {
             : orders
         );
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -57,7 +57,7 @@ export const getOrder = async (req, res) => {
         const order = await Order.findById(req.params.orderId).populate("product");
         res.status(200).json(order);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -68,7 +68,7 @@ export const getAllUserOrders = async (req, res) => {
             .sort({ createdAt: -1 });
         res.status(200).json(orders);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -83,6 +83,6 @@ export const updateOrderStatus = async (req, res) => {
         );
         res.status(200).json(order.status);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };

@@ -50,6 +50,12 @@ userRoutes(app);
 productRoutes(app);
 orderRoutes(app);
 paymentRoutes(app);
+app.use((err, req, res, next) => {
+    res.status(500).json(process.env.NODE_ENV === PROD
+        ? { message: 'Internal Server Error' }
+        : err);
+    process.env.NODE_ENV !== PROD && console.error(err);
+});
 
 // Server
 app.listen(process.env.PORT, () =>

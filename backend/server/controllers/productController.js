@@ -15,7 +15,7 @@ export const addProduct = async (req, res) => {
             : newProduct
         );
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -30,7 +30,7 @@ export const updateProduct = async (req, res) => {
         );
         res.status(200).json(product);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -39,7 +39,7 @@ export const deleteProduct = async (req, res) => {
         await Product.findByIdAndRemove(req.params.productId);
         res.status(204).json({ message: "Product deleted successfully" });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -57,7 +57,7 @@ export const getProduct = async (req, res) => {
         }
         res.status(200).json(product);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -72,7 +72,7 @@ export const productList = async (req, res) => {
         }).distinct("brand");
         res.status(200).json({ products: products, brands: brands });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -81,7 +81,7 @@ export const getAllProducts = async (req, res) => {
         const products = await Product.find({});
         res.status(200).json(products);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -93,7 +93,7 @@ export const productSearch = async (req, res) => {
         ).sort(req.params.sort !== "none" ? req.params.sort : "");
         res.status(200).json(products);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -112,7 +112,7 @@ export const getTopProducts = async (req, res) => {
         const products = await Product.find({ _id: { $in: topProducts } });
         res.status(200).json(products);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -127,7 +127,7 @@ export const addReview = async (req, res) => {
         );
         res.status(200).json(product.reviews[product.reviews.length - 1]);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -148,7 +148,7 @@ export const updateReview = async (req, res) => {
         );
         res.status(200).json(review);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -161,6 +161,6 @@ export const deleteReview = async (req, res) => {
         );
         res.status(200).json({ message: "Review deleted successfully" });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };

@@ -11,12 +11,12 @@ config();
 export const login = (req, res, next) => {
     passport.authenticate("local", function (err, user, info) {
         if (err)
-            return res.status(500).send(err);
+            return next(err);
         if (!user)
             return res.status(401).send(info.message);
         req.logIn(user, function (err) {
             if (err)
-                return res.status(500).send(err);
+                return next(err);
             return res.status(200).send({ message: "User logged in" });
         });
     })(req, res, next);
@@ -51,7 +51,7 @@ export const createUser = async (req, res) => {
             ? { message: "User created successfully" }
             : newUser);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -69,7 +69,7 @@ export const updateUser = async (req, res) => {
             : user
         );
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -78,7 +78,7 @@ export const deleteUser = async (req, res) => {
         await User.findByIdAndRemove(req.params.userId);
         res.status(204).json({ message: "User deleted successfully" });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -93,7 +93,7 @@ export const changePassword = async (req, res) => {
         );
         res.status(200).json({ message: "Password changed successfully" });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -105,7 +105,7 @@ export const resetPassword = async (req, res) => {
         req.body.phoneNumber = user.phoneNumber;
         changePassword(req, res);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -163,7 +163,7 @@ export const addAddress = async (req, res) => {
         );
         res.status(200).json(user.addresses[user.addresses.length - 1]);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -179,7 +179,7 @@ export const updateAddress = async (req, res) => {
         );
         res.status(200).json(address);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -192,7 +192,7 @@ export const deleteAddress = async (req, res) => {
         );
         res.status(200).json({ message: "Address deleted successfully" });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -212,7 +212,7 @@ export const addToCart = async (req, res) => {
         );
         res.status(200).json(user.cart[user.cart.length - 1]);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -240,7 +240,7 @@ export const updateInCart = async (req, res) => {
         const item = user.cart.find(item => item.product.toString() === req.params.productId);
         res.status(200).json(item);
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
 
@@ -253,6 +253,6 @@ export const deletefromCart = async (req, res) => {
         );
         res.status(200).json({ message: "Product deleted from cart successfully" });
     } catch (err) {
-        res.status(500).send(err);
+        next(err);
     }
 };
