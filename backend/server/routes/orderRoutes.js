@@ -1,25 +1,22 @@
 import {
-    createOrder,
-    orderInfo,
-    orderList,
-    updateOrder,
-    userOrder,
+    createOrders,
+    getOrder,
+    updateOrderStatus,
+    getAllUserOrders,
+    updateOrderStatus,
 } from '../controllers/orderController';
 
 const orderRoutes = (app) => {
 
     app.route('/order/:userId')
-        .post(createOrder);
-    
-    app.route('/orders')
-        .get(orderList);
+        .post(createOrders);
 
     app.route('/orders/:userId')
-        .get(userOrder);
+        .get(getAllUserOrders);
 
     app.route('/order/:orderId')    
-        .get(orderInfo)
-        .put(updateOrder);
+        .get(getOrder)
+        .put(updateOrderStatus);
 
 }
 

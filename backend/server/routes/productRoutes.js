@@ -6,7 +6,7 @@ import {
     displayProduct,
     getAllProducts,
     getTopProducts,
-    productList,
+    getProduct,
     productSearch,
     updateProduct,
     updateReview
@@ -19,9 +19,9 @@ const productRoutes = (app) => {
     app.route('/product')
         .post(upload.array("images"), addProduct);
     app.route('/products')
-        .get(getAllProducts);
+        .get(getAllProducts); // (dashboard)
     app.route('/products/category/:category/:sort')
-        .get(productList);
+        .get(getProduct);
     app.route('/products/search/:term/:sort')
         .get(productSearch)
     app.route('/products/top')

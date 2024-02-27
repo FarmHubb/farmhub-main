@@ -1,5 +1,6 @@
 import { readImages } from "../middleware/imageUtils";
 import Product from "../models/productModel";
+import { PROD } from './../constants';
 
 // -------------------------------- Manage and view products --------------------------------
 
@@ -8,38 +9,41 @@ export const addProduct = async (req, res) => {
         if (req.files.length)
             req.body.images = readImages(req.files);
         let newProduct = new Product(req.body);
-        const product = await newProduct.save();
-        res.json(product);
+        await newProduct.save();
+        res.status(201).json(process.env.NODE_ENV === PROD
+            ? { message: "Product added successfully" }
+            : newProduct
+        );
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
 export const updateProduct = async (req, res) => {
     try {
-        if (req.files.length) 
+        if (req.files.length)
             req.body.images = readImages(req.files);
         const product = await Product.findByIdAndUpdate(
             req.params.productId,
             req.body,
             { new: true, runValidators: true }
         );
-        res.json(product);
+        res.status(200).json(product);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
 export const deleteProduct = async (req, res) => {
     try {
         await Product.findByIdAndRemove(req.params.productId);
-        res.json({ message: "Product deleted successfully" });
+        res.status(204).json({ message: "Product deleted successfully" });
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
-export const displayProduct = async (req, res) => {
+export const getProduct = async (req, res) => {
     try {
         let product = await Product.findById(req.params.productId).populate(
             "reviews.user"
@@ -51,9 +55,9 @@ export const displayProduct = async (req, res) => {
                 return 0;
             });
         }
-        res.json(product);
+        res.status(200).json(product);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
@@ -66,18 +70,18 @@ export const productList = async (req, res) => {
         const brands = await Product.find({
             category: req.params.category,
         }).distinct("brand");
-        res.json({ products: products, brands: brands });
+        res.status(200).json({ products: products, brands: brands });
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({});
-        res.json(products);
+        res.status(200).json(products);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
@@ -87,9 +91,9 @@ export const productSearch = async (req, res) => {
             { $text: { $search: req.params.term } },
             "name price images reviews brand"
         ).sort(req.params.sort !== "none" ? req.params.sort : "");
-        res.json(products);
+        res.status(200).json(products);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
@@ -106,9 +110,9 @@ export const getTopProducts = async (req, res) => {
             "643be5d64885fe0b918bb192",
         ];
         const products = await Product.find({ _id: { $in: topProducts } });
-        res.json(products);
+        res.status(200).json(products);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
@@ -121,9 +125,9 @@ export const addReview = async (req, res) => {
             { $push: { reviews: req.body } },
             { new: true, runValidators: true }
         );
-        res.json(product);
+        res.status(200).json(product.reviews[product.reviews.length - 1]);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
@@ -137,23 +141,26 @@ export const updateReview = async (req, res) => {
                     "reviews.$.description": req.body.description,
                 },
             },
-            { new: true }
+            { new: true, runValidators: true }
         );
-        res.json(product);
+        const review = product.reviews.find(review =>
+            review.user.toString() === req.params.userId
+        );
+        res.status(200).json(review);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
 
 export const deleteReview = async (req, res) => {
     try {
-        const product = await Product.findOneAndUpdate(
+        await Product.findOneAndUpdate(
             { _id: req.params.productId, "reviews.user": req.params.userId },
             { $pull: { reviews: { user: req.params.userId } } },
-            { new: true }
+            { runValidators: true }
         );
-        res.json(product);
+        res.status(200).json({ message: "Review deleted successfully" });
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 };
