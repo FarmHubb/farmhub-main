@@ -57,6 +57,9 @@ export const readUser = (req, res, next) => {
 export const getUserProfile = async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id, '-password')
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         res.status(200).json(user);
     } catch (err) {
         next(err);
@@ -67,7 +70,7 @@ export const createUser = async (req, res, next) => {
     try {
         if (req.file)
             req.body.avatar = readImage(req.file);
-        
+
         let newUser;
         if (req.body.role === SELLER) {
             newUser = new Seller(req.body);
@@ -92,14 +95,13 @@ export const updateUser = async (req, res, next) => {
             req.body.avatar = readImage(req.file);
 
         let user;
-        const baseUser = await User.findById(req.user._id, 'role');
-        if (baseUser.role === SELLER) {
+        if (req.user.role === SELLER) {
             user = await Seller.findByIdAndUpdate(
                 req.user._id,
                 req.body,
                 { new: true, runValidators: true }
             );
-        } else if (baseUser.role === CUSTOMER) {
+        } else if (req.user.role === CUSTOMER) {
             user = await Customer.findByIdAndUpdate(
                 req.user._id,
                 req.body,
@@ -108,8 +110,11 @@ export const updateUser = async (req, res, next) => {
         } else {
             return res.status(400).json({ message: "Invalid user role" });
         }
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
 
-        res.status(200).json(process.env.NODE_ENV === PROD 
+
+        res.status(200).json(process.env.NODE_ENV === PROD
             ? { message: "User updated successfully" }
             : user
         );
@@ -120,6 +125,9 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
     try {
+        if (req.user.role === SELLER)
+            await Product.deleteMany({ userId: req.user._id });
+
         await User.findByIdAndRemove(req.user._id);
         res.status(204).json({ message: "User deleted successfully" });
     } catch (err) {
@@ -131,11 +139,14 @@ export const deleteUser = async (req, res, next) => {
 
 export const changePassword = async (req, res, next) => {
     try {
-        await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             { phoneNumber: req.body.phoneNumber },
             { password: req.body.password },
             { runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         res.status(200).json({ message: "Password changed successfully" });
     } catch (err) {
         next(err);
@@ -145,8 +156,13 @@ export const changePassword = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id);
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         const isMatch = await user.comparePassword(req.body.oldPassword);
-        if (!isMatch) return res.status(401).json({ message: "Old password is incorrect" });
+        if (!isMatch)
+            return res.status(401).json({ message: "Old password is incorrect" });
+
         req.body.phoneNumber = user.phoneNumber;
         changePassword(req, res);
     } catch (err) {
@@ -159,7 +175,7 @@ export const forgotPassword = async (req, res, next) => {
         const phoneNumber = req.body.phoneNumber;
         const user = await User.findOne({ phoneNumber: phoneNumber });
         if (!user)
-            return res.status(401).json({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
 
         const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
         const otp = Math.floor(100000 + Math.random() * 900000);
@@ -178,7 +194,7 @@ export const forgotPassword = async (req, res, next) => {
                 // console.log(message)
                 // res.json(message)
             });
-        res.json({ message: "OTP sent successfully"});
+        res.json({ message: "OTP sent successfully" });
     } catch (err) {
         next(err);
     }
@@ -187,9 +203,11 @@ export const forgotPassword = async (req, res, next) => {
 export const checkOtp = async (req, res, next) => {
     try {
         const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
-        if (req.body.otp !== user.resetPasswordOtp) {
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+        if (req.body.otp !== user.resetPasswordOtp)
             return res.status(401).json({ message: "Invalid OTP" });
-        }
+
         res.status(200).json({ message: "Valid OTP" });
     } catch (error) {
         res.send(error);
@@ -206,6 +224,9 @@ export const addAddress = async (req, res, next) => {
             { $push: { addresses: req.body } },
             { new: true, runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         res.status(200).json(user.addresses[user.addresses.length - 1]);
     } catch (err) {
         next(err);
@@ -219,6 +240,9 @@ export const updateAddress = async (req, res, next) => {
             { $set: { "addresses.$": req.body } },
             { runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         const address = user.addresses.find(address =>
             address._id.toString() === req.params.addressId
         );
@@ -230,11 +254,14 @@ export const updateAddress = async (req, res, next) => {
 
 export const deleteAddress = async (req, res, next) => {
     try {
-        await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             { _id: req.user._id, "addresses._id": req.params.addressId },
             { $pull: { addresses: { _id: req.params.addressId } } },
             { runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         res.status(200).json({ message: "Address deleted successfully" });
     } catch (err) {
         next(err);
@@ -246,14 +273,19 @@ export const deleteAddress = async (req, res, next) => {
 export const addToCart = async (req, res, next) => {
     try {
         const product = await Product.findById(req.body.product);
-        if (product.quantity < req.body.quantity) {
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+        if (product.quantity < req.body.quantity)
             return res.status(400).json({ message: "Not sufficient quantity available" });
-        }
+
         const user = await Customer.findByIdAndUpdate(
             req.user._id,
             { $push: { cart: req.body } },
             { new: true, runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         res.status(200).json(user.cart[user.cart.length - 1]);
     } catch (err) {
         next(err);
@@ -266,15 +298,21 @@ export const updateInCart = async (req, res, next) => {
             deletefromCart(req, res);
             return;
         }
+
         const product = await Product.findById(req.body.product);
-        if (product.quantity < req.body.quantity) {
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+        if (product.quantity < req.body.quantity)
             return res.status(400).json({ message: "Not sufficient quantity available" });
-        }
+
         const user = await Customer.findOneAndUpdate(
             { _id: req.user._id, "cart.product": req.params.productId },
             { $set: { "cart.$.quantity": req.body.quantity } },
             { new: true, runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         const item = user.cart.find(item => item.product.toString() === req.params.productId);
         res.status(200).json(item);
     } catch (err) {
@@ -284,11 +322,14 @@ export const updateInCart = async (req, res, next) => {
 
 export const deletefromCart = async (req, res, next) => {
     try {
-        await Customer.findOneAndUpdate(
+        const user = await Customer.findOneAndUpdate(
             { _id: req.user._id, "cart.product": req.params.productId },
             { $pull: { cart: { product: req.params.productId } } },
             { runValidators: true }
         );
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
         res.status(200).json({ message: "Product deleted from cart successfully" });
     } catch (err) {
         next(err);

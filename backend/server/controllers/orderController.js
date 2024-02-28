@@ -16,11 +16,13 @@ export const createOrders = async (req, res, next) => {
         // Create orders once confirmed all items are available
         let newOrders = [];
         for (const item of user.cart) {
-            Product.findByIdAndUpdate(
+            const product = await Product.findByIdAndUpdate(
                 item.product._id,
                 { $inc: { quantity: -item.quantity } },
                 { new: true, runValidators: true }
             );
+            if (!product)
+                continue;
             const subtotal = item.product.price * item.quantity;
             const shippingCharges = subtotal > 1500 ? 0 : 60;
             const tax = subtotal * 0.18;
@@ -37,7 +39,7 @@ export const createOrders = async (req, res, next) => {
             });
             newOrders.push(newOrder);
         }
-        const [orders] = await Promise.all([
+        const [orders, updatedUser] = await Promise.all([
             Order.insertMany(newOrders, { populate: "product" }),
             User.findByIdAndUpdate(
                 req.user._id,
@@ -45,6 +47,9 @@ export const createOrders = async (req, res, next) => {
                 { runValidators: true }
             )
         ]);
+        if (!updatedUser)
+            return res.status(404).json({ message: 'User not found' });
+        
         res.status(201).json(process.env.NODE_ENV === PROD
             ? { message: "Order placed successfully" }
             : orders
@@ -59,6 +64,9 @@ export const getOrder = async (req, res, next) => {
         const order = await Order.findById(req.params.orderId)
             .populate("product", "name price images")
             .select('-user', '-updatedAt');
+        if (!order)
+            return res.status(404).json({ message: 'Order not found' });
+
         res.status(200).json(order);
     } catch (err) {
         next(err);
@@ -98,6 +106,9 @@ export const updateOrderStatus = async (req, res, next) => {
             { status: req.body.status, dateDelivered: dd },
             { new: true, runValidators: true }
         );
+        if (!order)
+            return res.status(404).json({ message: 'Order not found' });
+        
         res.status(200).json(order.status);
     } catch (err) {
         next(err);

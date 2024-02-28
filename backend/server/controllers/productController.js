@@ -29,6 +29,9 @@ export const updateProduct = async (req, res, next) => {
             req.body,
             { new: true, runValidators: true }
         ).select('-reviews -seller');
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
         res.status(200).json(product);
     } catch (err) {
         next(err);
@@ -37,7 +40,10 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
     try {
-        await Product.findByIdAndRemove(req.params.productId);
+        const product = await Product.findByIdAndRemove(req.params.productId);
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
         res.status(204).json({ message: "Product deleted successfully" });
     } catch (err) {
         next(err);
@@ -49,6 +55,9 @@ export const getProduct = async (req, res, next) => {
         let product = await Product.findById(req.params.productId).populate(
             "reviews.user"
         );
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
         if (req.user) {
             product.reviews.sort((a, b) => {
                 if (a.user._id.equals(req.user._id)) return -1;
@@ -123,6 +132,9 @@ export const addReview = async (req, res, next) => {
             { $push: { reviews: req.body } },
             { new: true, runValidators: true }
         );
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
         res.status(200).json(product.reviews[product.reviews.length - 1]);
     } catch (err) {
         next(err);
@@ -141,6 +153,9 @@ export const updateReview = async (req, res, next) => {
             },
             { new: true, runValidators: true }
         );
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
         const review = product.reviews.find(review =>
             review.user.toString() === req.user._id
         );
@@ -152,11 +167,14 @@ export const updateReview = async (req, res, next) => {
 
 export const deleteReview = async (req, res, next) => {
     try {
-        await Product.findOneAndUpdate(
+        const product = await Product.findOneAndUpdate(
             { _id: req.params.productId, "reviews.user": req.user._id },
             { $pull: { reviews: { user: req.user._id } } },
             { runValidators: true }
         );
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
         res.status(200).json({ message: "Review deleted successfully" });
     } catch (err) {
         next(err);
