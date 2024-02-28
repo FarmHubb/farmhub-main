@@ -38,10 +38,10 @@ const productRoutes = (app) => {
     // ------------------------------- Manage Reviews -------------------------------
 
     app.route('/product/:productId/review')
-        .put(isAuth, isCustomer, addReview);
-    app.route('/product/:productId/review/:userId')
-        .put(isAuth, isCustomer, updateReview)
+        .put(isAuth, isCustomer, addReview)
         .delete(isAuth, isCustomer, deleteReview);
+    app.route('/product/:productId/review/update')
+        .put(isAuth, isCustomer, updateReview)
 }
 
 export default productRoutes;

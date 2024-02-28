@@ -27,7 +27,7 @@ passport.serializeUser((user, done) => done(null, user._id));
 passport.deserializeUser(async (id, done) => {
     try {
         let user;
-        const baseUser = await User.findById(req.params.userId);
+        const baseUser = await User.findById(req.user._id, 'role');
         if (baseUser.role === SELLER) {
             user = await Seller.findById(id, 'businessName companyLogo about').populate('cart.product');
         } else if (baseUser.role === CUSTOMER) {

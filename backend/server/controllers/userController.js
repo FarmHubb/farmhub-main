@@ -92,16 +92,16 @@ export const updateUser = async (req, res, next) => {
             req.body.avatar = readImage(req.file);
 
         let user;
-        const baseUser = await User.findById(req.params.userId);
+        const baseUser = await User.findById(req.user._id, 'role');
         if (baseUser.role === SELLER) {
             user = await Seller.findByIdAndUpdate(
-                req.params.userId,
+                req.user._id,
                 req.body,
                 { new: true, runValidators: true }
             );
         } else if (baseUser.role === CUSTOMER) {
             user = await Customer.findByIdAndUpdate(
-                req.params.userId,
+                req.user._id,
                 req.body,
                 { new: true, runValidators: true }
             );
@@ -120,7 +120,7 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
     try {
-        await User.findByIdAndRemove(req.params.userId);
+        await User.findByIdAndRemove(req.user._id);
         res.status(204).json({ message: "User deleted successfully" });
     } catch (err) {
         next(err);
@@ -144,7 +144,7 @@ export const changePassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.user._id);
         const isMatch = await user.comparePassword(req.body.oldPassword);
         if (!isMatch) return res.status(401).json({ message: "Old password is incorrect" });
         req.body.phoneNumber = user.phoneNumber;
@@ -202,7 +202,7 @@ export const checkOtp = async (req, res, next) => {
 export const addAddress = async (req, res, next) => {
     try {
         const user = await User.findByIdAndUpdate(
-            req.params.userId,
+            req.user._id,
             { $push: { addresses: req.body } },
             { new: true, runValidators: true }
         );
@@ -215,7 +215,7 @@ export const addAddress = async (req, res, next) => {
 export const updateAddress = async (req, res, next) => {
     try {
         const user = await User.findOneAndUpdate(
-            { _id: req.params.userId, "addresses._id": req.params.addressId },
+            { _id: req.user._id, "addresses._id": req.params.addressId },
             { $set: { "addresses.$": req.body } },
             { runValidators: true }
         );
@@ -231,7 +231,7 @@ export const updateAddress = async (req, res, next) => {
 export const deleteAddress = async (req, res, next) => {
     try {
         await User.findOneAndUpdate(
-            { _id: req.params.userId, "addresses._id": req.params.addressId },
+            { _id: req.user._id, "addresses._id": req.params.addressId },
             { $pull: { addresses: { _id: req.params.addressId } } },
             { runValidators: true }
         );
@@ -251,7 +251,7 @@ export const addToCart = async (req, res, next) => {
             return;
         }
         const user = await Customer.findByIdAndUpdate(
-            req.params.userId,
+            req.user._id,
             { $push: { cart: req.body } },
             { new: true, runValidators: true }
         );
@@ -268,7 +268,7 @@ export const updateInCart = async (req, res, next) => {
             return;
         }
         const user = await Customer.findOne(
-            { _id: req.params.userId, "cart.product": req.params.productId },
+            { _id: req.user._id, "cart.product": req.params.productId },
             { "cart.$": 1 }
         );
         const quantity = req.body.quantity - user.cart[0].quantity;
@@ -278,7 +278,7 @@ export const updateInCart = async (req, res, next) => {
             return;
         }
         await Customer.findOneAndUpdate(
-            { _id: req.params.userId, "cart.product": req.params.productId },
+            { _id: req.user._id, "cart.product": req.params.productId },
             { $set: { "cart.$.quantity": req.body.quantity } },
             { new: true, runValidators: true }
         );
@@ -292,7 +292,7 @@ export const updateInCart = async (req, res, next) => {
 export const deletefromCart = async (req, res, next) => {
     try {
         await Customer.findOneAndUpdate(
-            { _id: req.params.userId, "cart.product": req.params.productId },
+            { _id: req.user._id, "cart.product": req.params.productId },
             { $pull: { cart: { product: req.params.productId } } },
             { runValidators: true }
         );

@@ -117,6 +117,7 @@ export const getProductsBySeller = async (req, res, next) => {
 
 export const addReview = async (req, res, next) => {
     try {
+        req.body.user = req.user._id;
         const product = await Product.findByIdAndUpdate(
             req.params.productId,
             { $push: { reviews: req.body } },
@@ -131,7 +132,7 @@ export const addReview = async (req, res, next) => {
 export const updateReview = async (req, res, next) => {
     try {
         const product = await Product.findOneAndUpdate(
-            { _id: req.params.productId, "reviews.user": req.params.userId },
+            { _id: req.params.productId, "reviews.user": req.user._id },
             {
                 $set: {
                     "reviews.$.rating": req.body.rating,
@@ -141,7 +142,7 @@ export const updateReview = async (req, res, next) => {
             { new: true, runValidators: true }
         );
         const review = product.reviews.find(review =>
-            review.user.toString() === req.params.userId
+            review.user.toString() === req.user._id
         );
         res.status(200).json(review);
     } catch (err) {
@@ -152,8 +153,8 @@ export const updateReview = async (req, res, next) => {
 export const deleteReview = async (req, res, next) => {
     try {
         await Product.findOneAndUpdate(
-            { _id: req.params.productId, "reviews.user": req.params.userId },
-            { $pull: { reviews: { user: req.params.userId } } },
+            { _id: req.params.productId, "reviews.user": req.user._id },
+            { $pull: { reviews: { user: req.user._id } } },
             { runValidators: true }
         );
         res.status(200).json({ message: "Review deleted successfully" });

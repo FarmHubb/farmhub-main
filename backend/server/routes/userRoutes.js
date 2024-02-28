@@ -35,38 +35,36 @@ const userRoutes = (app) => {
     //-------------------------------- Manage and View Users --------------------------------
 
     app.route('/user')
-        .get(isAuth, readUser);
+        .get(isAuth, readUser)
+        .put(isAuth, upload.single('avatar'), updateUser)
+        .delete(isAuth, deleteUser);
     app.route('/user/profile')
         .get(isAuth, getUserProfile);
-    app.route('/user/:userId')
-        .delete(isAuth, deleteUser);
-    app.route('/user/:userId')
-        .put(isAuth, upload.single('avatar'), updateUser);
 
     //-------------------------------- Manage User Passwords --------------------------------
 
-    app.route('/user/:userId/password')
+    app.route('/user/password')
         .put(isAuth, resetPassword);
-    app.route("/password/forgot")
+    app.route("/user/password/forgot")
         .post(forgotPassword);
-    app.route("/password/otpCheck")
+    app.route("/user/password/otpCheck")
         .post(checkOtp);
-    app.route("/password/changePassword")
+    app.route("/user/password/changePassword")
         .post(changePassword);
 
     //-------------------------------- Manage User Addresses --------------------------------
 
-    app.route('/user/:userId/address')
+    app.route('/user/address')
         .put(isAuth, addAddress);
-    app.route('/user/:userId/address/:addressId')
+    app.route('/user/address/:addressId')
         .put(isAuth, updateAddress)
         .delete(isAuth, deleteAddress);
 
     //-------------------------------- Manage Customer Cart --------------------------------
 
-    app.route('/user/:userId/cart')
+    app.route('/user/cart')
         .put(isAuth, isCustomer, addToCart);
-    app.route('/user/:userId/cart/:productId')
+    app.route('/user/cart/:productId')
         .put(isAuth, isCustomer, updateInCart)
         .delete(isAuth, isCustomer, deletefromCart);
 }
