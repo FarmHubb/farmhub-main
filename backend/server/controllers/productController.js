@@ -14,7 +14,7 @@ export const addProduct = [
         .isIn(['Fertilizers', 'Pesticides', 'Seeds', 'Traps', 'Crop-Tonics']).escape(),
     body('brand', 'Brand must be specified.').trim().isLength({ min: 1 }).escape(),
     body('price', 'Price must be a positive number').trim().isFloat({ gt: 0 }),
-    body('quantity', 'Quantity must be a positive integer').trim().isInt({ gt: 0 }),
+    body('quantity', 'Quantity must be a positive integer').optional().trim().isInt({ gt: 0 }),
     checkValidation(),
 
     async (req, res, next) => {
