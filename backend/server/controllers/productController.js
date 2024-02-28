@@ -1,6 +1,6 @@
 import { readImages } from "../middleware/imageUtils";
 import Product from "../models/productModel";
-import { PROD } from './../constants';
+import { PROD, TOP_PRODUCTS } from './../constants';
 
 // -------------------------------- Manage and view products --------------------------------
 
@@ -76,15 +76,6 @@ export const productList = async (req, res, next) => {
     }
 };
 
-export const getAllProducts = async (req, res, next) => {
-    try {
-        const products = await Product.find({});
-        res.status(200).json(products);
-    } catch (err) {
-        next(err);
-    }
-};
-
 export const productSearch = async (req, res, next) => {
     try {
         const products = await Product.find(
@@ -99,17 +90,7 @@ export const productSearch = async (req, res, next) => {
 
 export const getTopProducts = async (req, res, next) => {
     try {
-        const topProducts = [
-            "6432960be07105bc0a7ebc1d",
-            "643296e1e07105bc0a7ebc20",
-            "643bdd29697478b49cc1de9a",
-            "643bde8e697478b49cc1ded3",
-            "643bdf5f697478b49cc1ded7",
-            "643be2ec4885fe0b918bb12b",
-            "643be5194885fe0b918bb15d",
-            "643be5d64885fe0b918bb192",
-        ];
-        const products = await Product.find({ _id: { $in: topProducts } });
+        const products = await Product.find({ _id: { $in: TOP_PRODUCTS } });
         res.status(200).json(products);
     } catch (err) {
         next(err);

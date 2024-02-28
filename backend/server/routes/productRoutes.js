@@ -3,8 +3,6 @@ import {
     addReview,
     deleteProduct,
     deleteReview,
-    displayProduct,
-    getAllProducts,
     getTopProducts,
     getProduct,
     productSearch,
@@ -12,29 +10,33 @@ import {
     updateReview
 } from '../controllers/productController';
 import { upload } from '../middleware/imageUtils';
-import { isAuth } from './../controllers/userController';
+import { isAuth, isCustomer, isSeller } from './../controllers/userController';
 
 const productRoutes = (app) => {
 
+    //-------------------------------- Manage Products --------------------------------
+    
     app.route('/product')
-        .post(upload.array("images"), addProduct);
-    app.route('/products')
-        .get(getAllProducts); // (dashboard)
+        .post(isAuth, isSeller, upload.array("images"), addProduct);
+
     app.route('/products/category/:category/:sort')
         .get(getProduct);
     app.route('/products/search/:term/:sort')
         .get(productSearch)
     app.route('/products/top')
         .get(getTopProducts)
+
     app.route('/product/:productId')
-        .get(displayProduct)
-        .put(upload.array("images"), updateProduct)
-        .delete(deleteProduct);
+        .put(isAuth, isSeller, upload.array("images"), updateProduct)
+        .delete(isAuth, isSeller, deleteProduct);
+
+    // ------------------------------- Manage Reviews -------------------------------
+
     app.route('/product/:productId/review')
-        .put(isAuth, addReview);
+        .put(isAuth, isCustomer, addReview);
     app.route('/product/:productId/review/:userId')
-        .put(isAuth, updateReview)
-        .delete(isAuth, deleteReview);
+        .put(isAuth, isCustomer, updateReview)
+        .delete(isAuth, isCustomer, deleteReview);
 }
 
 export default productRoutes;
