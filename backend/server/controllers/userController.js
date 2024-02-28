@@ -54,6 +54,15 @@ export const readUser = (req, res, next) => {
     res.status(200).json(req.user);
 };
 
+export const getUserProfile = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id, '-password')
+        res.status(200).json(user);
+    } catch (err) {
+        next(err);
+    }
+};
+
 export const createUser = async (req, res, next) => {
     try {
         if (req.file)

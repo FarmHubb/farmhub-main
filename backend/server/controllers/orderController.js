@@ -54,7 +54,10 @@ export const createOrders = async (req, res, next) => {
 
 export const getOrder = async (req, res, next) => {
     try {
-        const order = await Order.findById(req.params.orderId).populate("product");
+        const order = await Order.findById(req.params.orderId)
+            .populate("product", "name price images")
+            .select('-user', '-updatedAt');
+        
         res.status(200).json(order);
     } catch (err) {
         next(err);
@@ -64,7 +67,8 @@ export const getOrder = async (req, res, next) => {
 export const getOrdersByCustomer = async (req, res, next) => {
     try {
         const orders = await Order.find({ user: req.user })
-            .populate("product")
+            .populate("product", "name")
+            .select('status createdAt dateDelivered total')
             .sort({ createdAt: -1 });
         res.status(200).json(orders);
     } catch (err) {
@@ -76,6 +80,7 @@ export const getOrdersByProduct = async (req, res, next) => {
     try {
         const orders = await Order.find({ product: req.params.productId })
             .populate("user")
+            .select('status createdAt dateDelivered total')
             .sort({ createdAt: -1 });
         res.status(200).json(orders);
     } catch (err) {

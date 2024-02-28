@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import User from '../models/userModel';
+import { User, Seller, Customer } from '../models/userModel';
+import { CUSTOMER, SELLER } from '../constants';
 
 // Local strategy for phone number and password authentication
 passport.use(new LocalStrategy({ usernameField: 'phoneNumber' }, async (phoneNumber, password, done) => {
@@ -25,7 +26,15 @@ passport.serializeUser((user, done) => done(null, user._id));
 // Deserialize user to retrieve user from ID in the session
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await User.findById(id).populate('cart.product');
+        let user;
+        const baseUser = await User.findById(req.params.userId);
+        if (baseUser.role === SELLER) {
+            user = await Seller.findById(id, 'businessName companyLogo about').populate('cart.product');
+        } else if (baseUser.role === CUSTOMER) {
+            user = await Customer.findById(id, 'name avatar cart').populate('cart.product');
+        } else {
+            return res.status(400).json({ message: "Invalid user role" });
+        }
         return done(null, user);
     } catch (err) {
         return done(err);

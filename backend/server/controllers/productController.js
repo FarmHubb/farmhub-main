@@ -28,7 +28,7 @@ export const updateProduct = async (req, res, next) => {
             req.params.productId,
             req.body,
             { new: true, runValidators: true }
-        );
+        ).select('-reviews -seller');
         res.status(200).json(product);
     } catch (err) {
         next(err);
@@ -91,7 +91,10 @@ export const searchProducts = async (req, res, next) => {
 
 export const getTopProducts = async (req, res, next) => {
     try {
-        const products = await Product.find({ _id: { $in: TOP_PRODUCTS } });
+        const products = await Product.find(
+            { _id: { $in: TOP_PRODUCTS } },
+            "name price images reviews brand"
+        );
         res.status(200).json(products);
     } catch (err) {
         next(err);
