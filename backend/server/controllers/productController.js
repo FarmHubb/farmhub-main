@@ -64,13 +64,13 @@ export const getProduct = async (req, res, next) => {
 
 export const getProductsByCategory = async (req, res, next) => {
     try {
-        const products = await Product.find(
-            { category: req.params.category },
-            "name price images reviews brand"
-        ).sort(req.params.sort !== "none" ? req.params.sort : "");
-        const brands = await Product.find({
-            category: req.params.category,
-        }).distinct("brand");
+        const [products, brands] = await Promise.all([
+            Product.find(
+                { category: req.params.category },
+                "name price images reviews brand"
+            ).sort(req.params.sort !== "none" ? req.params.sort : ""),
+            Product.find({ category: req.params.category }).distinct("brand")
+        ]);
         res.status(200).json({ products: products, brands: brands });
     } catch (err) {
         next(err);

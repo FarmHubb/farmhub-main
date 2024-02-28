@@ -16,7 +16,7 @@ export const createOrders = async (req, res, next) => {
         // Create orders once confirmed all items are available
         let newOrders = [];
         for (const item of user.cart) {
-            await Product.findByIdAndUpdate(
+            Product.findByIdAndUpdate(
                 item.product._id,
                 { $inc: { quantity: -item.quantity } },
                 { new: true, runValidators: true }
@@ -37,12 +37,14 @@ export const createOrders = async (req, res, next) => {
             });
             newOrders.push(newOrder);
         }
-        const orders = await Order.insertMany(newOrders, { populate: "product" });
-        await User.findByIdAndUpdate(
-            req.user._id,
-            { $set: { cart: [] } },
-            { runValidators: true }
-        );
+        const [orders] = await Promise.all([
+            Order.insertMany(newOrders, { populate: "product" }),
+            User.findByIdAndUpdate(
+                req.user._id,
+                { $set: { cart: [] } },
+                { runValidators: true }
+            )
+        ]);
         res.status(201).json(process.env.NODE_ENV === PROD
             ? { message: "Order placed successfully" }
             : orders
@@ -57,7 +59,6 @@ export const getOrder = async (req, res, next) => {
         const order = await Order.findById(req.params.orderId)
             .populate("product", "name price images")
             .select('-user', '-updatedAt');
-        
         res.status(200).json(order);
     } catch (err) {
         next(err);
