@@ -62,7 +62,7 @@ export const getProduct = async (req, res, next) => {
     }
 };
 
-export const productList = async (req, res, next) => {
+export const getProductsByCategory = async (req, res, next) => {
     try {
         const products = await Product.find(
             { category: req.params.category },
@@ -77,7 +77,7 @@ export const productList = async (req, res, next) => {
     }
 };
 
-export const productSearch = async (req, res, next) => {
+export const searchProducts = async (req, res, next) => {
     try {
         const products = await Product.find(
             { $text: { $search: req.params.term } },
@@ -92,6 +92,18 @@ export const productSearch = async (req, res, next) => {
 export const getTopProducts = async (req, res, next) => {
     try {
         const products = await Product.find({ _id: { $in: TOP_PRODUCTS } });
+        res.status(200).json(products);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getProductsBySeller = async (req, res, next) => {
+    try {
+        const products = await Product.find(
+            { seller: req.params.sellerId },
+            "name price images reviews brand"
+        ).sort(req.params.sort !== "none" ? req.params.sort : "");
         res.status(200).json(products);
     } catch (err) {
         next(err);
