@@ -105,7 +105,10 @@ const Customer = User.discriminator(CUSTOMER, customerSchema);
 
 const sellerSchema = new Schema({
     bussinessName: { type: String, required: true },
-    companyLogo: { type: String },
+    companyLogo: {
+        data: { type: Buffer, required: true },
+        contentType: { type: String, required: true }
+    },
     about: { type: String },
 });
 
