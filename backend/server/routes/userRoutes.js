@@ -9,6 +9,7 @@ import {
     deletefromCart,
     forgotPassword,
     isAuth,
+    isCustomer,
     login,
     logout,
     readUser,
@@ -61,10 +62,10 @@ const userRoutes = (app) => {
     //-------------------------------- Manage User Cart --------------------------------
 
     app.route('/user/:userId/cart')
-        .put(isAuth, addToCart);
+        .put(isAuth, isCustomer, addToCart);
     app.route('/user/:userId/cart/:productId')
-        .put(isAuth, updateInCart)
-        .delete(isAuth, deletefromCart);
+        .put(isAuth, isCustomer, updateInCart)
+        .delete(isAuth, isCustomer, deletefromCart);
 }
 
 export default userRoutes;

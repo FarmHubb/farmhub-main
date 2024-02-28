@@ -1,18 +1,13 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
+import { CUSTOMER, SELLER } from '../constants';
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    name: { type: String, required: true },
     email: { type: String, required: true, unique: true, validate: validator.isEmail },
     password: { type: String, required: true, minLength: 6 },
-    avatar: {
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true }
-    },
-    role: { type: String, enum: ['admin', 'customer'], default: "customer" },
     phoneNumber: { 
         type: String, 
         required: true, 
@@ -32,34 +27,10 @@ const userSchema = new Schema({
             pincode: { type: String, required: true },
         }]
     },
-    cart: [{
-        _id: false,
-        product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-        quantity: { type: Number, required: true },
-    }],
     resetPasswordOtp: String
 }, {
+    discriminatorKey: 'role',
     timestamps: true,
-    virtuals: {
-        cartTotal: {
-            get() {
-                if (!this.populated('cart.product'))
-                    return null;
-                let cartSubtotal = 0;
-                for (const item of this.cart)
-                    cartSubtotal += item.product.price * item.quantity;
-                return cartSubtotal;
-            }
-        },
-        cartItems: {
-            get() {
-                let cartItems = 0;
-                for (const item of this.cart)
-                    cartItems += item.quantity;
-                return cartItems;
-            }
-        }
-    },
 });
 
 userSchema.set('toJSON', { getters: true });
@@ -92,4 +63,54 @@ userSchema.methods.comparePassword = async function comparePassword(candidate) {
     return bcrypt.compare(candidate, this.password);
 };
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+const customerSchema = new Schema({
+    name: { type: String, required: true },
+    avatar: {
+        data: { type: Buffer, required: true },
+        contentType: { type: String, required: true }
+    },
+    cart: [{
+        _id: false,
+        product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+        quantity: { type: Number, required: true },
+    }],
+}, {
+    virtuals: {
+        cartTotal: {
+            get() {
+                if (!this.populated('cart.product'))
+                    return null;
+                let cartSubtotal = 0;
+                for (const item of this.cart)
+                    cartSubtotal += item.product.price * item.quantity;
+                return cartSubtotal;
+            }
+        },
+        cartItems: {
+            get() {
+                let cartItems = 0;
+                for (const item of this.cart)
+                    cartItems += item.quantity;
+                return cartItems;
+            }
+        }
+    },
+})
+
+const Customer = User.discriminator(CUSTOMER, customerSchema);
+
+// -------------------------------- Seller Schema --------------------------------
+
+const sellerSchema = new Schema({
+    bussinessName: { type: String, required: true },
+    companyLogo: { type: String },
+    about: { type: String },
+});
+
+const Seller = User.discriminator(SELLER, sellerSchema);
+
+// ----------------------------------------------------------------
+
+export default { User, Customer, Seller }

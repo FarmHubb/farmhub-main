@@ -3,7 +3,8 @@ import passport from "passport";
 import twilio from "twilio";
 import { readImage } from "../middleware/imageUtils";
 import Product from "../models/productModel";
-import User from "../models/userModel";
+import { User, Customer, Seller } from "../models/userModel";
+import { CUSTOMER, SELLER } from '../constants';
 config();
 
 // -------------------------------- User Authentication --------------------------------
@@ -35,6 +36,18 @@ export const isAuth = (req, res, next) => {
     res.status(401).json({ message: 'User not logged in' });
 };
 
+export const isCustomer = (req, res, next) => {
+    if (req.user.role === 'Customer')
+        return next();
+    res.status(403).json({ message: 'User is not a customer' });
+};
+
+export const isSeller = (req, res, next) => {
+    if (req.user.role === 'Seller')
+        return next();
+    res.status(403).json({ message: 'User is not a seller' });
+};
+
 // -------------------------------- Manage and View Users --------------------------------
 
 export const readUser = (req, res, next) => {
@@ -45,7 +58,16 @@ export const createUser = async (req, res, next) => {
     try {
         if (req.file)
             req.body.avatar = readImage(req.file);
-        let newUser = new User(req.body);
+        
+        let newUser;
+        if (req.body.role === SELLER) {
+            newUser = new Seller(req.body);
+        } else if (req.body.role === CUSTOMER) {
+            newUser = new Customer(req.body);
+        } else {
+            return res.status(400).json({ message: "Invalid user role" });
+        }
+
         await newUser.save();
         res.status(201).json(process.env.NODE_ENV === PROD
             ? { message: "User created successfully" }
@@ -59,11 +81,25 @@ export const updateUser = async (req, res, next) => {
     try {
         if (req.file)
             req.body.avatar = readImage(req.file);
-        const user = await User.findByIdAndUpdate(
-            req.params.userId,
-            req.body,
-            { new: true, runValidators: true }
-        );
+
+        let user;
+        const baseUser = await User.findById(req.params.userId);
+        if (baseUser.role === SELLER) {
+            user = await Seller.findByIdAndUpdate(
+                req.params.userId,
+                req.body,
+                { new: true, runValidators: true }
+            );
+        } else if (baseUser.role === CUSTOMER) {
+            user = await Customer.findByIdAndUpdate(
+                req.params.userId,
+                req.body,
+                { new: true, runValidators: true }
+            );
+        } else {
+            return res.status(400).json({ message: "Invalid user role" });
+        }
+
         res.status(200).json(process.env.NODE_ENV === PROD 
             ? { message: "User updated successfully" }
             : user
@@ -205,7 +241,7 @@ export const addToCart = async (req, res, next) => {
             res.status(400).json({ message: "Not sufficient quantity available" });
             return;
         }
-        const user = await User.findByIdAndUpdate(
+        const user = await Customer.findByIdAndUpdate(
             req.params.userId,
             { $push: { cart: req.body } },
             { new: true, runValidators: true }
@@ -222,7 +258,7 @@ export const updateInCart = async (req, res, next) => {
             deletefromCart(req, res);
             return;
         }
-        const user = await User.findOne(
+        const user = await Customer.findOne(
             { _id: req.params.userId, "cart.product": req.params.productId },
             { "cart.$": 1 }
         );
@@ -232,7 +268,7 @@ export const updateInCart = async (req, res, next) => {
             res.status(400).json({ message: "Not sufficient quantity available" });
             return;
         }
-        await User.findOneAndUpdate(
+        await Customer.findOneAndUpdate(
             { _id: req.params.userId, "cart.product": req.params.productId },
             { $set: { "cart.$.quantity": req.body.quantity } },
             { new: true, runValidators: true }
@@ -246,7 +282,7 @@ export const updateInCart = async (req, res, next) => {
 
 export const deletefromCart = async (req, res, next) => {
     try {
-        await User.findOneAndUpdate(
+        await Customer.findOneAndUpdate(
             { _id: req.params.userId, "cart.product": req.params.productId },
             { $pull: { cart: { product: req.params.productId } } },
             { runValidators: true }
