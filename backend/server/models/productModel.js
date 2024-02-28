@@ -30,6 +30,7 @@ const productSchema = new Schema({
         ],
     },
     brand: { type: String, required: true },
+    seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     price: { type: Number, required: true },
     quantity: { type: Number, default: 1 },
     reviews: [reviewSchema]

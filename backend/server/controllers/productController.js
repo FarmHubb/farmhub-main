@@ -8,6 +8,7 @@ export const addProduct = async (req, res, next) => {
     try {
         if (req.files.length)
             req.body.images = readImages(req.files);
+        req.body.seller = req.user._id;
         let newProduct = new Product(req.body);
         await newProduct.save();
         res.status(201).json(process.env.NODE_ENV === PROD
