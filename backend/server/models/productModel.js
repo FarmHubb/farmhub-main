@@ -49,4 +49,4 @@ const productSchema = new Schema({
 
 productSchema.set('toJSON', { getters: true });
 
-module.exports = mongoose.model('Product', productSchema);
+export default mongoose.model('Product', productSchema);

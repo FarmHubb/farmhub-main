@@ -33,9 +33,9 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Export passport initialization, session, and setUser middleware
-module.exports = {
-    initialize: passport.initialize(),
-    session: passport.session(),
+export default {
+    initialize: passport.initialize,
+    session: passport.session,
     setUser: (req, res, next) => {
         res.locals.user = req.user;
         return next();

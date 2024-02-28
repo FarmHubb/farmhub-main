@@ -7,4 +7,4 @@ const paymentRoutes = (app) => {
     app.route("/payment/process").post(isAuth, processPayment);
 }
 
-module.exports = paymentRoutes;
+export default paymentRoutes;
