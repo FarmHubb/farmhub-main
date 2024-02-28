@@ -49,8 +49,6 @@ const userRoutes = (app) => {
         .post(forgotPassword);
     app.route("/user/password/otpCheck")
         .post(checkOtp);
-    app.route("/user/password/changePassword")
-        .post(changePassword);
 
     //-------------------------------- Manage User Addresses --------------------------------
 
