@@ -247,8 +247,7 @@ export const addToCart = async (req, res, next) => {
     try {
         const product = await Product.findById(req.body.product);
         if (product.quantity < req.body.quantity) {
-            res.status(400).json({ message: "Not sufficient quantity available" });
-            return;
+            return res.status(400).json({ message: "Not sufficient quantity available" });
         }
         const user = await Customer.findByIdAndUpdate(
             req.user._id,
@@ -267,17 +266,11 @@ export const updateInCart = async (req, res, next) => {
             deletefromCart(req, res);
             return;
         }
-        const user = await Customer.findOne(
-            { _id: req.user._id, "cart.product": req.params.productId },
-            { "cart.$": 1 }
-        );
-        const quantity = req.body.quantity - user.cart[0].quantity;
-        const product = await Product.findById(req.params.productId);
-        if (product.quantity < quantity) {
-            res.status(400).json({ message: "Not sufficient quantity available" });
-            return;
+        const product = await Product.findById(req.body.product);
+        if (product.quantity < req.body.quantity) {
+            return res.status(400).json({ message: "Not sufficient quantity available" });
         }
-        await Customer.findOneAndUpdate(
+        const user = await Customer.findOneAndUpdate(
             { _id: req.user._id, "cart.product": req.params.productId },
             { $set: { "cart.$.quantity": req.body.quantity } },
             { new: true, runValidators: true }
