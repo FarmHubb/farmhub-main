@@ -7,67 +7,61 @@ import User from "../models/userModel";
 import { body, checkValidation } from './../middleware/validation';
 config();
 
-export const createOrders = [
-
-    body('addressIndex', 'Address index must be a positive integer').isInt({ gt: 0 }).escape(),
-    checkValidation(),
-
-    async (req, res, next) => {
-        try {
-            const user = req.user;
-            if (addressIndex > user.address.length)
-                return res.status(400).json({ message: "Invalid address index" });
-            // Check if enough items are available in stock
-            for (var item of user.cart) {
-                if (item.product.quantity < item.quantity)
-                    return res.status(400).json({ message: "Some products are not available in the quantities demanded by user" });
-            }
-            // Create orders once confirmed all items are available
-            let newOrders = [];
-            for (const item of user.cart) {
-                const product = await Product.findByIdAndUpdate(
-                    item.product._id,
-                    { $inc: { quantity: -item.quantity } },
-                    { new: true, runValidators: true }
-                );
-                if (!product)
-                    continue;
-                const subtotal = item.product.price * item.quantity;
-                const shippingCharges = subtotal > 1500 ? 0 : 60;
-                const tax = subtotal * 0.18;
-                const newOrder = new Order({
-                    product: item.product._id,
-                    quantity: item.quantity,
-                    subtotal: subtotal,
-                    shippingCharges: shippingCharges,
-                    tax: tax,
-                    total: subtotal + tax + shippingCharges,
-                    paymentInfo: req.body.paymentInfo,
-                    user: req.user._id,
-                    address: req.user.address[req.body.addressIndex],
-                });
-                newOrders.push(newOrder);
-            }
-            const [orders, updatedUser] = await Promise.all([
-                Order.insertMany(newOrders, { populate: "product" }),
-                User.findByIdAndUpdate(
-                    req.user._id,
-                    { $set: { cart: [] } },
-                    { runValidators: true }
-                )
-            ]);
-            if (!updatedUser)
-                return res.status(404).json({ message: 'User not found' });
-
-            res.status(201).json(process.env.NODE_ENV === PROD
-                ? { message: "Order placed successfully" }
-                : orders
-            );
-        } catch (err) {
-            next(err);
+export const createOrders = async (req, res, next) => {
+    try {
+        const user = req.user;
+        if (addressIndex < 0 || addressIndex > user.address.length)
+            return res.status(400).json({ message: "Invalid address index" });
+        // Check if enough items are available in stock
+        for (var item of user.cart) {
+            if (item.product.quantity < item.quantity)
+                return res.status(400).json({ message: "Some products are not available in the quantities demanded by user" });
         }
+        // Create orders once confirmed all items are available
+        let newOrders = [];
+        for (const item of user.cart) {
+            const product = await Product.findByIdAndUpdate(
+                item.product._id,
+                { $inc: { quantity: -item.quantity } },
+                { new: true, runValidators: true }
+            );
+            if (!product)
+                continue;
+            const subtotal = item.product.price * item.quantity;
+            const shippingCharges = subtotal > 1500 ? 0 : 60;
+            const tax = subtotal * 0.18;
+            const newOrder = new Order({
+                product: item.product._id,
+                quantity: item.quantity,
+                subtotal: subtotal,
+                shippingCharges: shippingCharges,
+                tax: tax,
+                total: subtotal + tax + shippingCharges,
+                paymentInfo: req.body.paymentInfo,
+                user: req.user._id,
+                address: req.user.address[req.body.addressIndex],
+            });
+            newOrders.push(newOrder);
+        }
+        const [orders, updatedUser] = await Promise.all([
+            Order.insertMany(newOrders, { populate: "product" }),
+            User.findByIdAndUpdate(
+                req.user._id,
+                { $set: { cart: [] } },
+                { runValidators: true }
+            )
+        ]);
+        if (!updatedUser)
+            return res.status(404).json({ message: 'User not found' });
+
+        res.status(201).json(process.env.NODE_ENV === PROD
+            ? { message: "Order placed successfully" }
+            : orders
+        );
+    } catch (err) {
+        next(err);
     }
-]
+};
 
 export const getOrder = async (req, res, next) => {
     try {
