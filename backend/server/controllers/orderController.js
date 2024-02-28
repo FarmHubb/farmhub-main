@@ -1,10 +1,10 @@
 import { config } from 'dotenv';
-import { check, validationResult } from 'express-validator';
+import { body } from "express-validator";
 import { PROD } from '../constants';
 import Order from "../models/orderModel";
 import Product from "../models/productModel";
 import User from "../models/userModel";
-import { body, checkValidation } from './../middleware/validation';
+import { checkValidation } from './../middleware/validation';
 config();
 
 export const createOrders = async (req, res, next) => {
@@ -104,7 +104,7 @@ export const getOrdersByProduct = async (req, res, next) => {
 export const updateOrderStatus = [
 
     body('status', 'Invalid status').isIn(["Not processed", "Processing", "Shipped", "Delivered", "Cancelled"]).escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {

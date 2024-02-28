@@ -15,7 +15,7 @@ export const addProduct = [
     body('brand', 'Brand must be specified.').trim().isLength({ min: 1 }).escape(),
     body('price', 'Price must be a positive number').trim().isFloat({ gt: 0 }),
     body('quantity', 'Quantity must be a positive integer').optional().trim().isInt({ gt: 0 }),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -50,7 +50,7 @@ export const updateProduct = [
     body('brand', 'Brand must be specified.').optional().trim().isLength({ min: 1 }).escape(),
     body('price', 'Price must be a positive number').optional().trim().isFloat({ gt: 0 }),
     body('quantity', 'Quantity must be a positive integer').optional().trim().isInt({ gt: 0 }),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -169,7 +169,7 @@ export const addReview = [
 
     body('rating', 'Rating must be a number between 1 and 5').isInt({ min: 1, max: 5 }),
     body('description', 'Description must be a string').optional().isString().trim().escape(),
-    checkValidation(),
+    checkValidation,
     
     async (req, res, next) => {
         try {
@@ -193,7 +193,7 @@ export const updateReview = [
     
     body('rating', 'Rating must be a number between 1 and 5').optional().isInt({ min: 1, max: 5 }),
     body('description', 'Description must be a string').optional().isString().trim().escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {

@@ -79,7 +79,7 @@ export const createUser = [
             throw new Error('Invalid phone number');
         return true;
     }),
-    checkValidation(),
+    checkValidation,
 
     (req, res, next) => {
         if (req.body.role === SELLER) {
@@ -91,7 +91,7 @@ export const createUser = [
             return res.status(400).json({ message: "Invalid user role" });
         }
     },
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -136,7 +136,7 @@ export const updateUser = [
             throw new Error('Invalid phone number');
         return true;
     }),
-    checkValidation(),
+    checkValidation,
 
     (req, res, next) => {
         if (req.body.role === SELLER) {
@@ -148,7 +148,7 @@ export const updateUser = [
             return res.status(400).json({ message: "Invalid user role" });
         }
     },
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -228,7 +228,7 @@ export const resetPassword = [
 
     body('password', 'Password must be at least 6 characters long').trim().isLength({ min: 6 }).escape(),
     body('oldPassword', 'Password must be at least 6 characters long').trim().isLength({ min: 6 }).escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -255,7 +255,7 @@ export const forgotPassword = [
             throw new Error('Invalid phone number');
         return true;
     }),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -296,7 +296,7 @@ export const checkOtp = [
         return true;
     }),
     // TODO: Add validator for OTP
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -323,7 +323,7 @@ export const addAddress = [
     body('state', 'State must be specified.').trim().isLength({ min: 1 }).escape(),
     body('country', 'Country must be specified.').trim().isLength({ min: 1 }).escape(),
     body('pincode', 'Pincode must be valid.').trim().isPostalCode('IN').escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -349,7 +349,7 @@ export const updateAddress = [
     body('state', 'State must be specified.').optional().trim().isLength({ min: 1 }).escape(),
     body('country', 'Country must be specified.').optional().trim().isLength({ min: 1 }).escape(),
     body('pincode', 'Pincode must be valid.').optional().trim().isPostalCode('IN').escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -393,7 +393,7 @@ export const addToCart = [
 
     body('product', 'Product ID must be specified.').trim().isMongoId().escape(),
     body('quantity', 'Quantity must be specified and be a number.').trim().isInt({ gt: 0 }).escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
@@ -421,7 +421,7 @@ export const addToCart = [
 export const updateInCart = [
 
     body('quantity', 'Quantity must be specified and be a number.').trim().isInt({ gt: 0 }).escape(),
-    checkValidation(),
+    checkValidation,
 
     async (req, res, next) => {
         try {
