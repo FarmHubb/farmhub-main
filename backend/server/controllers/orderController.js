@@ -61,10 +61,21 @@ export const getOrder = async (req, res, next) => {
     }
 };
 
-export const getAllUserOrders = async (req, res, next) => {
+export const getOrdersByCustomer = async (req, res, next) => {
     try {
         const orders = await Order.find({ user: req.user })
             .populate("product")
+            .sort({ createdAt: -1 });
+        res.status(200).json(orders);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getOrdersByProduct = async (req, res, next) => {
+    try {
+        const orders = await Order.find({ product: req.params.productId })
+            .populate("user")
             .sort({ createdAt: -1 });
         res.status(200).json(orders);
     } catch (err) {
