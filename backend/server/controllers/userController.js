@@ -37,11 +37,11 @@ export const isAuth = (req, res, next) => {
 
 // -------------------------------- Manage and View Users --------------------------------
 
-export const readUser = (req, res) => {
+export const readUser = (req, res, next) => {
     res.status(200).json(req.user);
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
     try {
         if (req.file)
             req.body.avatar = readImage(req.file);
@@ -55,7 +55,7 @@ export const createUser = async (req, res) => {
     }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
     try {
         if (req.file)
             req.body.avatar = readImage(req.file);
@@ -73,7 +73,7 @@ export const updateUser = async (req, res) => {
     }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
     try {
         await User.findByIdAndRemove(req.params.userId);
         res.status(204).json({ message: "User deleted successfully" });
@@ -84,7 +84,7 @@ export const deleteUser = async (req, res) => {
 
 // -------------------------------- Manage User Password --------------------------------
 
-export const changePassword = async (req, res) => {
+export const changePassword = async (req, res, next) => {
     try {
         await User.findOneAndUpdate(
             { phoneNumber: req.body.phoneNumber },
@@ -97,7 +97,7 @@ export const changePassword = async (req, res) => {
     }
 };
 
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.userId);
         const isMatch = await user.comparePassword(req.body.oldPassword);
@@ -109,7 +109,7 @@ export const resetPassword = async (req, res) => {
     }
 };
 
-export const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res, next) => {
     try {
         const phoneNumber = req.body.phoneNumber;
         const user = await User.findOne({ phoneNumber: phoneNumber });
@@ -134,12 +134,12 @@ export const forgotPassword = async (req, res) => {
                 // res.json(message)
             });
         res.json({ message: "OTP sent successfully"});
-    } catch (error) {
-        res.status(500).send(error);
+    } catch (err) {
+        next(err);
     }
 };
 
-export const checkOtp = async (req, res) => {
+export const checkOtp = async (req, res, next) => {
     try {
         const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
         if (req.body.otp !== user.resetPasswordOtp) {
@@ -154,7 +154,7 @@ export const checkOtp = async (req, res) => {
 
 // -------------------------------- Manage User Addresses --------------------------------
 
-export const addAddress = async (req, res) => {
+export const addAddress = async (req, res, next) => {
     try {
         const user = await User.findByIdAndUpdate(
             req.params.userId,
@@ -167,7 +167,7 @@ export const addAddress = async (req, res) => {
     }
 };
 
-export const updateAddress = async (req, res) => {
+export const updateAddress = async (req, res, next) => {
     try {
         const user = await User.findOneAndUpdate(
             { _id: req.params.userId, "addresses._id": req.params.addressId },
@@ -183,7 +183,7 @@ export const updateAddress = async (req, res) => {
     }
 };
 
-export const deleteAddress = async (req, res) => {
+export const deleteAddress = async (req, res, next) => {
     try {
         await User.findOneAndUpdate(
             { _id: req.params.userId, "addresses._id": req.params.addressId },
@@ -198,7 +198,7 @@ export const deleteAddress = async (req, res) => {
 
 // -------------------------------- Manage User Cart --------------------------------
 
-export const addToCart = async (req, res) => {
+export const addToCart = async (req, res, next) => {
     try {
         const product = await Product.findById(req.body.product);
         if (product.quantity < req.body.quantity) {
@@ -216,7 +216,7 @@ export const addToCart = async (req, res) => {
     }
 };
 
-export const updateInCart = async (req, res) => {
+export const updateInCart = async (req, res, next) => {
     try {
         if (req.body.quantity == 0) {
             deletefromCart(req, res);
@@ -244,7 +244,7 @@ export const updateInCart = async (req, res) => {
     }
 };
 
-export const deletefromCart = async (req, res) => {
+export const deletefromCart = async (req, res, next) => {
     try {
         await User.findOneAndUpdate(
             { _id: req.params.userId, "cart.product": req.params.productId },

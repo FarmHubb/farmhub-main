@@ -4,7 +4,7 @@ import { PROD } from './../constants';
 
 // -------------------------------- Manage and view products --------------------------------
 
-export const addProduct = async (req, res) => {
+export const addProduct = async (req, res, next) => {
     try {
         if (req.files.length)
             req.body.images = readImages(req.files);
@@ -19,7 +19,7 @@ export const addProduct = async (req, res) => {
     }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
     try {
         if (req.files.length)
             req.body.images = readImages(req.files);
@@ -34,7 +34,7 @@ export const updateProduct = async (req, res) => {
     }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
     try {
         await Product.findByIdAndRemove(req.params.productId);
         res.status(204).json({ message: "Product deleted successfully" });
@@ -43,7 +43,7 @@ export const deleteProduct = async (req, res) => {
     }
 };
 
-export const getProduct = async (req, res) => {
+export const getProduct = async (req, res, next) => {
     try {
         let product = await Product.findById(req.params.productId).populate(
             "reviews.user"
@@ -61,7 +61,7 @@ export const getProduct = async (req, res) => {
     }
 };
 
-export const productList = async (req, res) => {
+export const productList = async (req, res, next) => {
     try {
         const products = await Product.find(
             { category: req.params.category },
@@ -76,7 +76,7 @@ export const productList = async (req, res) => {
     }
 };
 
-export const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res, next) => {
     try {
         const products = await Product.find({});
         res.status(200).json(products);
@@ -85,7 +85,7 @@ export const getAllProducts = async (req, res) => {
     }
 };
 
-export const productSearch = async (req, res) => {
+export const productSearch = async (req, res, next) => {
     try {
         const products = await Product.find(
             { $text: { $search: req.params.term } },
@@ -97,7 +97,7 @@ export const productSearch = async (req, res) => {
     }
 };
 
-export const getTopProducts = async (req, res) => {
+export const getTopProducts = async (req, res, next) => {
     try {
         const topProducts = [
             "6432960be07105bc0a7ebc1d",
@@ -118,7 +118,7 @@ export const getTopProducts = async (req, res) => {
 
 // -------------------------------- Reviews --------------------------------
 
-export const addReview = async (req, res) => {
+export const addReview = async (req, res, next) => {
     try {
         const product = await Product.findByIdAndUpdate(
             req.params.productId,
@@ -131,7 +131,7 @@ export const addReview = async (req, res) => {
     }
 };
 
-export const updateReview = async (req, res) => {
+export const updateReview = async (req, res, next) => {
     try {
         const product = await Product.findOneAndUpdate(
             { _id: req.params.productId, "reviews.user": req.params.userId },
@@ -152,7 +152,7 @@ export const updateReview = async (req, res) => {
     }
 };
 
-export const deleteReview = async (req, res) => {
+export const deleteReview = async (req, res, next) => {
     try {
         await Product.findOneAndUpdate(
             { _id: req.params.productId, "reviews.user": req.params.userId },

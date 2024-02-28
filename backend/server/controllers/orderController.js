@@ -5,7 +5,7 @@ import Product from "../models/productModel";
 import { PROD } from '../constants';
 config();
 
-export const createOrders = async (req, res) => {
+export const createOrders = async (req, res, next) => {
     try {
         const user = req.user;
         // Check if enough items are available in stock
@@ -52,7 +52,7 @@ export const createOrders = async (req, res) => {
     }
 };
 
-export const getOrder = async (req, res) => {
+export const getOrder = async (req, res, next) => {
     try {
         const order = await Order.findById(req.params.orderId).populate("product");
         res.status(200).json(order);
@@ -61,7 +61,7 @@ export const getOrder = async (req, res) => {
     }
 };
 
-export const getAllUserOrders = async (req, res) => {
+export const getAllUserOrders = async (req, res, next) => {
     try {
         const orders = await Order.find({ user: req.user })
             .populate("product")
@@ -72,7 +72,7 @@ export const getAllUserOrders = async (req, res) => {
     }
 };
 
-export const updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (req, res, next) => {
     try {
         let dd;
         if (req.body.status === "Delivered") dd = new Date();
