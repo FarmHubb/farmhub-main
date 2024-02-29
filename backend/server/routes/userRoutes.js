@@ -1,7 +1,6 @@
 import {
     addAddress,
     addToCart,
-    changePassword,
     checkOtp,
     createUser,
     deleteAddress,
@@ -36,15 +35,15 @@ const userRoutes = (app) => {
 
     app.route('/user')
         .get(isAuth, readUser)
-        .put(isAuth, upload.single('avatar'), updateUser)
+        .patch(isAuth, upload.single('avatar'), updateUser)
         .delete(isAuth, deleteUser);
     app.route('/user/profile')
         .get(isAuth, getUserProfile);
 
     //-------------------------------- Manage User Passwords --------------------------------
 
-    app.route('/user/password')
-        .put(isAuth, resetPassword);
+    app.route('/user/password/reset')
+        .patch(isAuth, resetPassword);
     app.route("/user/password/forgot")
         .post(forgotPassword);
     app.route("/user/password/otpCheck")
@@ -53,17 +52,17 @@ const userRoutes = (app) => {
     //-------------------------------- Manage User Addresses --------------------------------
 
     app.route('/user/address')
-        .put(isAuth, addAddress);
+        .post(isAuth, addAddress);
     app.route('/user/address/:addressId')
-        .put(isAuth, updateAddress)
+        .patch(isAuth, updateAddress)
         .delete(isAuth, deleteAddress);
 
     //-------------------------------- Manage Customer Cart --------------------------------
 
     app.route('/user/cart')
-        .put(isAuth, isCustomer, addToCart);
+        .post(isAuth, isCustomer, addToCart);
     app.route('/user/cart/:productId')
-        .put(isAuth, isCustomer, updateInCart)
+        .patch(isAuth, isCustomer, updateInCart)
         .delete(isAuth, isCustomer, deletefromCart);
 }
 

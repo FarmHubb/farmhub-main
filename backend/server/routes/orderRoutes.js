@@ -20,7 +20,7 @@ const orderRoutes = (app) => {
 
     app.route('/order/:orderId')    
         .get(isAuth, getOrder)
-        .put(isAuth, isSeller, updateOrderStatus);
+        .patch(isAuth, isSeller, updateOrderStatus);
 
 }
 

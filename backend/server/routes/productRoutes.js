@@ -32,16 +32,16 @@ const productRoutes = (app) => {
     
     app.route('/product/:productId')
         .get(getProduct)
-        .put(isAuth, isSeller, upload.array("images"), updateProduct)
+        .patch(isAuth, isSeller, upload.array("images"), updateProduct)
         .delete(isAuth, isSeller, deleteProduct);
 
     // ------------------------------- Manage Reviews -------------------------------
 
     app.route('/product/:productId/review')
-        .put(isAuth, isCustomer, addReview)
+        .post(isAuth, isCustomer, addReview)
         .delete(isAuth, isCustomer, deleteReview);
     app.route('/product/:productId/review/update')
-        .put(isAuth, isCustomer, updateReview)
+        .patch(isAuth, isCustomer, updateReview)
 }
 
 export default productRoutes;
