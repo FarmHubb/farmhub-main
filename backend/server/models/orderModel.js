@@ -12,11 +12,11 @@ const orderSchema = new Schema({
     paymentInfo:{
         id:{
             type: String,
-            required: true,
+            // required: true,
         },
         status:{
             type: String,
-            required: true,
+            // required: true,
         },
     },
     status: {

@@ -39,9 +39,8 @@ const productRoutes = (app) => {
 
     app.route('/product/:productId/review')
         .post(isAuth, isCustomer, addReview)
-        .delete(isAuth, isCustomer, deleteReview);
-    app.route('/product/:productId/review/update')
         .patch(isAuth, isCustomer, updateReview)
+        .delete(isAuth, isCustomer, deleteReview);
 }
 
 export default productRoutes;

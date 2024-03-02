@@ -1,23 +1,28 @@
 import { config } from 'dotenv';
 import { body } from "express-validator";
-import { PROD } from '../constants';
 import Order from "../models/orderModel";
 import Product from "../models/productModel";
-import User from "../models/userModel";
+import { User } from "../models/userModel";
 import { checkValidation } from './../middleware/validation';
 config();
 
 export const createOrders = async (req, res, next) => {
     try {
-        const user = req.user;
-        if (addressIndex < 0 || addressIndex > user.address.length)
+        let user = await User.findById(req.user._id).populate('cart.product');
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
+        if (req.body.addressIndex < 0 || req.body.addressIndex >= user.addresses.length)
             return res.status(400).json({ message: "Invalid address index" });
-        // Check if enough items are available in stock
+
+        if (user.cart.length === 0)
+            return res.status(400).json({ message: "Cart is empty" });
+
         for (var item of user.cart) {
             if (item.product.quantity < item.quantity)
                 return res.status(400).json({ message: "Some products are not available in the quantities demanded by user" });
         }
-        // Create orders once confirmed all items are available
+
         let newOrders = [];
         for (const item of user.cart) {
             const product = await Product.findByIdAndUpdate(
@@ -38,24 +43,25 @@ export const createOrders = async (req, res, next) => {
                 tax: tax,
                 total: subtotal + tax + shippingCharges,
                 paymentInfo: req.body.paymentInfo,
-                user: req.user._id,
-                address: req.user.address[req.body.addressIndex],
+                user: user._id,
+                address: user.addresses[req.body.addressIndex],
             });
             newOrders.push(newOrder);
         }
-        const [orders, updatedUser] = await Promise.all([
+        let orders;
+        [orders, user] = await Promise.all([
             Order.insertMany(newOrders, { populate: "product" }),
             User.findByIdAndUpdate(
-                req.user._id,
+                user._id,
                 { $set: { cart: [] } },
                 { runValidators: true }
             )
         ]);
-        if (!updatedUser)
+        if (!user)
             return res.status(404).json({ message: 'User not found' });
 
-        res.status(201).json(process.env.NODE_ENV === PROD
-            ? { message: "Order placed successfully" }
+        res.status(201).json(process.env.NODE_ENV === 'production'
+            ? { message: "Orders placed successfully" }
             : orders
         );
     } catch (err) {
@@ -65,9 +71,8 @@ export const createOrders = async (req, res, next) => {
 
 export const getOrder = async (req, res, next) => {
     try {
-        const order = await Order.findById(req.params.orderId)
+        const order = await Order.findById(req.params.orderId, '-user -updatedAt')
             .populate("product", "name price images")
-            .select('-user', '-updatedAt');
         if (!order)
             return res.status(404).json({ message: 'Order not found' });
 
@@ -79,9 +84,9 @@ export const getOrder = async (req, res, next) => {
 
 export const getOrdersByCustomer = async (req, res, next) => {
     try {
-        const orders = await Order.find({ user: req.user })
+        const orders = await Order.find({ user: req.user },
+            'status createdAt dateDelivered total')
             .populate("product", "name")
-            .select('status createdAt dateDelivered total')
             .sort({ createdAt: -1 });
         res.status(200).json(orders);
     } catch (err) {
@@ -91,9 +96,8 @@ export const getOrdersByCustomer = async (req, res, next) => {
 
 export const getOrdersByProduct = async (req, res, next) => {
     try {
-        const orders = await Order.find({ product: req.params.productId })
-            .populate("user")
-            .select('status createdAt dateDelivered total')
+        const orders = await Order.find({ product: req.params.productId },
+            'status createdAt dateDelivered total')
             .sort({ createdAt: -1 });
         res.status(200).json(orders);
     } catch (err) {
@@ -118,7 +122,7 @@ export const updateOrderStatus = [
             if (!order)
                 return res.status(404).json({ message: 'Order not found' });
 
-            res.status(200).json(order.status);
+            res.status(200).json({ status: order.status });
         } catch (err) {
             next(err);
         }

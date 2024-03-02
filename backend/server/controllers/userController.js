@@ -482,7 +482,7 @@ export const updateInCart = [
                 { new: true, runValidators: true }
             );
             if (!user)
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({ message: 'User or product not found' });
     
             const item = user.cart.find(item => item.product.toString() === req.params.productId);
             res.status(200).json(item);

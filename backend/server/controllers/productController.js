@@ -1,7 +1,6 @@
 import { body } from "express-validator";
 import { readImages } from "../middleware/imageUtils";
 import Product from "../models/productModel";
-import { PROD, TOP_PRODUCTS } from './../constants';
 import { checkValidation } from "../middleware/validation";
 
 // -------------------------------- Manage and view products --------------------------------
@@ -31,7 +30,7 @@ export const addProduct = [
                 seller: req.user._id,
             });
             await newProduct.save();
-            res.status(201).json(process.env.NODE_ENV === PROD
+            res.status(201).json(process.env.NODE_ENV === 'production'
                 ? { message: "Product added successfully" }
                 : newProduct
             );
@@ -141,8 +140,19 @@ export const searchProducts = async (req, res, next) => {
 
 export const getTopProducts = async (req, res, next) => {
     try {
+        const topProducts = [
+            "6432960be07105bc0a7ebc1d",
+            "643296e1e07105bc0a7ebc20",
+            "643bdd29697478b49cc1de9a",
+            "643bde8e697478b49cc1ded3",
+            "643bdf5f697478b49cc1ded7",
+            "643be2ec4885fe0b918bb12b",
+            "643be5194885fe0b918bb15d",
+            "643be5d64885fe0b918bb192",
+        ];
+
         const products = await Product.find(
-            { _id: { $in: TOP_PRODUCTS } },
+            { _id: { $in: topProducts } },
             "name price images reviews brand"
         );
         res.status(200).json(products);
@@ -173,15 +183,22 @@ export const addReview = [
     
     async (req, res, next) => {
         try {
+            let product;
             req.body.user = req.user._id;
-            const product = await Product.findByIdAndUpdate(
+            product = await Product.findById(req.params.productId);
+            if (!product)
+                return res.status(404).json({ message: 'Product not found' });
+
+            const userReview = product.reviews.find(review => review.user.toString() === req.user._id.toString());
+            if (userReview)
+                return res.status(400).json({ message: 'You have already reviewed this product' });
+
+            product = await Product.findByIdAndUpdate(
                 req.params.productId,
                 { $push: { reviews: req.body } },
                 { new: true, runValidators: true }
             );
-            if (!product)
-                return res.status(404).json({ message: 'Product not found' });
-    
+
             res.status(200).json(product.reviews[product.reviews.length - 1]);
         } catch (err) {
             next(err);
@@ -208,10 +225,10 @@ export const updateReview = [
                 { new: true, runValidators: true }
             );
             if (!product)
-                return res.status(404).json({ message: 'Product not found' });
-    
+                return res.status(404).json({ message: 'Product or review not found' });
+            
             const review = product.reviews.find(review =>
-                review.user.toString() === req.user._id
+                review.user.toString() === req.user._id.toString()
             );
             res.status(200).json(review);
         } catch (err) {
@@ -228,7 +245,7 @@ export const deleteReview = async (req, res, next) => {
             { runValidators: true }
         );
         if (!product)
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({ message: 'Product or review not found' });
 
         res.status(200).json({ message: "Review deleted successfully" });
     } catch (err) {

@@ -51,9 +51,9 @@ productRoutes(app);
 orderRoutes(app);
 paymentRoutes(app);
 app.use((err, req, res, next) => {
-    res.status(500).json(process.env.NODE_ENV === PROD
-        ? { message: 'Internal Server Error' }
-        : err);
+    process.env.NODE_ENV === 'production'
+        ? res.status(500).json({ message: 'Internal Server Error' })
+        : res.status(500).json(err.message);
     console.error(err);
 });
 

@@ -62,7 +62,7 @@ userSchema.methods.comparePassword = async function comparePassword(candidate) {
     return bcrypt.compare(candidate, this.password);
 };
 
-export const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 const customerSchema = new Schema({
     name: { type: String, required: true },
@@ -98,7 +98,7 @@ const customerSchema = new Schema({
     },
 })
 
-export const Customer = User.discriminator('Customer', customerSchema);
+const Customer = User.discriminator('Customer', customerSchema);
 
 // -------------------------------- Seller Schema --------------------------------
 
@@ -111,4 +111,6 @@ const sellerSchema = new Schema({
     about: { type: String },
 });
 
-export const Seller = User.discriminator('Seller', sellerSchema);
+const Seller = User.discriminator('Seller', sellerSchema);
+
+export { User, Customer, Seller };
