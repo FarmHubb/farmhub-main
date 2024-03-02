@@ -1,13 +1,11 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
-import { CUSTOMER, SELLER } from '../constants';
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     email: { type: String, required: true, unique: true, validate: validator.isEmail },
-    password: { type: String, required: true, minLength: 6 },
     phoneNumber: { 
         type: String, 
         required: true, 
@@ -18,6 +16,7 @@ const userSchema = new Schema({
             }
         }
     },
+    password: { type: String, required: true, minLength: 6 },
     addresses: {
         type: [{
             area: { type: String, required: true },
@@ -63,13 +62,13 @@ userSchema.methods.comparePassword = async function comparePassword(candidate) {
     return bcrypt.compare(candidate, this.password);
 };
 
-const User = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
 
 const customerSchema = new Schema({
     name: { type: String, required: true },
     avatar: {
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true }
+        data: { type: Buffer },
+        contentType: { type: String }
     },
     cart: [{
         _id: false,
@@ -99,21 +98,17 @@ const customerSchema = new Schema({
     },
 })
 
-const Customer = User.discriminator(CUSTOMER, customerSchema);
+export const Customer = User.discriminator('Customer', customerSchema);
 
 // -------------------------------- Seller Schema --------------------------------
 
 const sellerSchema = new Schema({
     bussinessName: { type: String, required: true },
     companyLogo: {
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true }
+        data: { type: Buffer },
+        contentType: { type: String }
     },
     about: { type: String },
 });
 
-const Seller = User.discriminator(SELLER, sellerSchema);
-
-// ----------------------------------------------------------------
-
-export default { User, Customer, Seller }
+export const Seller = User.discriminator('Seller', sellerSchema);

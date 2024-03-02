@@ -2,7 +2,8 @@ import {
     addAddress,
     addToCart,
     checkOtp,
-    createUser,
+    createCustomer,
+    createSeller,
     deleteAddress,
     deleteUser,
     deletefromCart,
@@ -10,13 +11,15 @@ import {
     getUserProfile,
     isAuth,
     isCustomer,
+    isSeller,
     login,
     logout,
     readUser,
     resetPassword,
     updateAddress,
+    updateCustomer,
     updateInCart,
-    updateUser,
+    updateSeller,
 } from '../controllers/userController';
 import { upload } from '../middleware/imageUtils';
 
@@ -24,19 +27,25 @@ const userRoutes = (app) => {
 
     //-------------------------------- User Authentication --------------------------------
 
-    app.route('/user/register')
-        .post(upload.single('avatar'), createUser);
     app.route('/user/login')
-        .post(login);
+    .post(login);
     app.route('/user/logout')
-        .get(isAuth, logout);
-
+    .get(isAuth, logout);
+    
     //-------------------------------- Manage and View Users --------------------------------
+    
+    app.route('/user/customer')
+        .post(upload.single('avatar'), createCustomer)
+        .patch(isAuth, isCustomer, upload.single('avatar'), updateCustomer)
+
+    app.route('/user/seller')
+        .post(upload.single('companyLogo'), createSeller)
+        .patch(isAuth, isSeller, upload.single('comapanyLogo'), updateSeller)
 
     app.route('/user')
         .get(isAuth, readUser)
-        .patch(isAuth, upload.single('avatar'), updateUser)
         .delete(isAuth, deleteUser);
+
     app.route('/user/profile')
         .get(isAuth, getUserProfile);
 
@@ -59,9 +68,8 @@ const userRoutes = (app) => {
 
     //-------------------------------- Manage Customer Cart --------------------------------
 
-    app.route('/user/cart')
-        .post(isAuth, isCustomer, addToCart);
     app.route('/user/cart/:productId')
+        .post(isAuth, isCustomer, addToCart)
         .patch(isAuth, isCustomer, updateInCart)
         .delete(isAuth, isCustomer, deletefromCart);
 }
