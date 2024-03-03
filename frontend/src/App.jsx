@@ -89,7 +89,7 @@ export default function App() {
     // -------------------------------- Cart --------------------------------
 
     async function updateInCart(productId, quantity) {
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`,
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`,
             { quantity: quantity },
             { withCredentials: true })
             .then((response) => {

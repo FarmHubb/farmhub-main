@@ -105,7 +105,7 @@ export default function Product({
     }, [id, prevId, updateTrigger, user])
 
     async function addToCart(productId) {
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`, { quantity: 1 }, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`, { quantity: 1 }, { withCredentials: true })
             .then((response) => {
                 if (response) setTrigger(prevValue => !prevValue)
             })
@@ -123,7 +123,7 @@ export default function Product({
             description: reviewDescription.current.value,
         };
 
-        axios.put(
+        axios.post(
             `${process.env.REACT_APP_BACKEND_URL}/product/${id}/review`,
             reviewDetails,
             { withCredentials: true }
@@ -140,7 +140,7 @@ export default function Product({
             description: reviewDescription.current.value,
         };
 
-        axios.put(
+        axios.patch(
             `${process.env.REACT_APP_BACKEND_URL}/product/${id}/review`,
             reviewDetails,
             { withCredentials: true }
