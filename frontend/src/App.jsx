@@ -7,8 +7,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Route, Outlet, Routes } from 'react-router-dom'
 import Navbar from './components/Layout/Navbar/Navbar'
-import Home from './components/Layout/Home/Home';
-import Footer from "./components/Layout/Footer/Footer"
+import Home from './components/Home';
+import Footer from "./components/Layout/Footer"
 import Crops from './components/Crops/Crops'
 import DoseCalculator from './components/Services/doseCalculater'
 import ProductList from './components/Shop/ProductList';
@@ -16,17 +16,17 @@ import ProductDetail from './components/Shop/ProductDetail';
 import SignUp from './components/Layout/Navbar/SignUp';
 import CropDetails from './components/Crops/CropDetails';
 import ShopHome from './components/Shop/ShopHome';
-import AboutUs from './components/Layout/About us/AboutUs';
-import TermsAndConditions from './components/Layout/Terms And privacy Policy/TermsAndConditions';
-import PrivacyPolicy from './components/Layout/Terms And privacy Policy/PrivacyPolicy';
-import User from './components/User/User';
-import Order from './components/User/Order';
-import CheckOutSteps from './components/Cart/CheckOutSteps';
+import AboutUs from './components/About/AboutUs';
+import TermsAndConditions from './components/About/TermsAndConditions';
+import PrivacyPolicy from './components/About/PrivacyPolicy';
+import User from './components/User Profile/User';
+import Order from './components/User Profile/Orders/Order';
+import CheckOutSteps from './components/Order/CheckOutSteps';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import grey from '@mui/material/colors/grey';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import OrderSuccess from './components/Cart/OrderSuccess';
+import OrderSuccess from './components/Order/OrderSuccess';
 import Weather from './components/Services/weather';
 import bufferToString from './bufferToString';
 

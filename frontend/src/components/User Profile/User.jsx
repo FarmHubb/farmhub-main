@@ -1,6 +1,6 @@
-import Profile from './Profile';
-import Addresses from './Addresses';
-import Orders from './Orders';
+import Profile from './Profile.jsx';
+import Addresses from './Addresses.jsx';
+import Orders from './Orders/Orders.jsx';
 import Dashboard from './Dashboard.jsx';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
