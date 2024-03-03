@@ -89,6 +89,8 @@ const customerSchema = new Schema({
         },
         cartItems: {
             get() {
+                if(!this.cart)
+                    return null;
                 let cartItems = 0;
                 for (const item of this.cart)
                     cartItems += item.quantity;

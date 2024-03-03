@@ -93,7 +93,7 @@ export const deleteProduct = async (req, res, next) => {
 export const getProduct = async (req, res, next) => {
     try {
         let product = await Product.findById(req.params.productId).populate(
-            "reviews.user"
+            "reviews.user", "name avatar"
         );
         if (!product)
             return res.status(404).json({ message: 'Product not found' });
