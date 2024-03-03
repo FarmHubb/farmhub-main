@@ -28,9 +28,9 @@ passport.deserializeUser(async (id, done) => {
         let user;
         const baseUser = await User.findById(id, 'role');
         if (baseUser.role === 'Seller') {
-            user = await Seller.findById(id, 'bussinessName companyLogo about');
+            user = await Seller.findById(id, '-password');
         } else if (baseUser.role === 'Customer') {
-            user = await Customer.findById(id, 'name avatar cart').populate('cart.product');
+            user = await Customer.findById(id, '-password').populate('cart.product', 'name images price');
         } else {
             return res.status(400).json({ message: "Invalid user role" });
         }

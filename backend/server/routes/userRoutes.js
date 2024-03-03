@@ -8,7 +8,6 @@ import {
     deleteUser,
     deletefromCart,
     forgotPassword,
-    getUserProfile,
     isAuth,
     isCustomer,
     isSeller,
@@ -45,9 +44,6 @@ const userRoutes = (app) => {
     app.route('/user')
         .get(isAuth, readUser)
         .delete(isAuth, deleteUser);
-
-    app.route('/user/profile')
-        .get(isAuth, getUserProfile);
 
     //-------------------------------- Manage User Passwords --------------------------------
 

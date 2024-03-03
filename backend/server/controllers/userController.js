@@ -56,18 +56,6 @@ export const readUser = (req, res, next) => {
     res.status(200).json(req.user);
 };
 
-export const getUserProfile = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.user._id, '-password')
-        if (!user)
-            return res.status(404).json({ message: 'User not found' });
-
-        res.status(200).json(user);
-    } catch (err) {
-        next(err);
-    }
-};
-
 export const createCustomer = [
     
     body('name', 'Name must be specified.').trim().isLength({ min: 1 }).escape(),
