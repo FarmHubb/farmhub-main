@@ -56,7 +56,7 @@ const ConfirmOrder = ({ user, orderCharges, setActiveStep, shippingAddress }) =>
 
 
 
-                            <Link component={RouterLink} to={`/shop/product/${item.product._id}`} underline='none'>
+                            <Link component={RouterLink} to={`/shop/product/${item.product._id}`} underline='none'  key={item.product._id}>
                                 <Card 
                                     sx={{ 
                                         display: 'flex', 

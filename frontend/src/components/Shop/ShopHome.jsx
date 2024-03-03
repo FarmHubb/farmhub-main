@@ -51,8 +51,8 @@ export default function ShopHome() {
 
                 }}
             >
-                {banner.map(item => (
-                    <Box component='img' sx={{ width: '100%', height: '100%', objectFit: 'cover' }} src={item} />
+                {banner.map((item, i) => (
+                    <Box component='img' sx={{ width: '100%', height: '100%', objectFit: 'cover' }} src={item} key={i} />
                 ))}
             </Carousel>
 

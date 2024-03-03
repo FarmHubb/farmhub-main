@@ -55,6 +55,7 @@ export default function Orders({ user }) {
                 </Grid>
                 {orders.map(order => (
                     <Link
+                        key={order._id}
                         component={RouterLink}
                         to={`/order/${order._id}`}
                         underline='none'

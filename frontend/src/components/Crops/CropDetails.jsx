@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
@@ -49,6 +49,7 @@ function CropDetail() {
                 <Grid container spacing={{ xs: 8, md: 15 }} pt={5}>
                     {crops.category.map((crop) => (
                         <Grid
+                            key={crop.name}
                             item
                             container
                             spacing={{ xs: 5, md: 8 }}
@@ -87,7 +88,7 @@ function CropDetail() {
                                             }}
                                         >
                                             {crop.crops.map((crop) => (
-                                                <ListItem component={RouterLink} to="/" disablePadding>
+                                                <ListItem component={RouterLink} to="/" disablePadding key={crop.name}>
                                                     <ListItemIcon sx={{ minWidth: "30px" }}>
                                                         <FiberManualRecordIcon
                                                             sx={{
@@ -118,7 +119,7 @@ function CropDetail() {
                                         </List>
                                     ) : (
                                         crop.crops.map((crop) => (
-                                            <>
+                                            <Fragment key={crop.name}>
                                                 <Typography mt={4} variant="subtitle1" color="primary">
                                                     {crop.name}
                                                 </Typography>
@@ -136,7 +137,7 @@ function CropDetail() {
                                                     Read more
                                                 </Link>
                                                 {/* <Link component={RouterLink} to={crop.link} color='tertiary.main'>Read more</Link> */}
-                                            </>
+                                            </Fragment>
                                         ))
                                     )}
                                 </Box>

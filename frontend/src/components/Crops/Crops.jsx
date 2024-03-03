@@ -56,6 +56,7 @@ function Crops() {
             <Grid container spacing={5}>
                 {featuredCrops.map((crop) => (
                     <Grid
+                        key={crop.name}
                         component={Link}
                         to={crop.link}
                         item

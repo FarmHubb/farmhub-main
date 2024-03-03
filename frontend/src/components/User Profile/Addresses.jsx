@@ -67,7 +67,7 @@ export default function Addresses({
             if(error) return;
         }
         setStatus('submitting');
-        const url = `${process.env.REACT_APP_BACKEND_URL}/user/${user._id}/address${addressId ? `/${addressId}` : ''}`;
+        const url = `${process.env.REACT_APP_BACKEND_URL}/user/address${addressId ? `/${addressId}` : ''}`;
         const data = method === 'delete' ? {} : addressValues;
 
         axios({
@@ -153,8 +153,8 @@ export default function Addresses({
                     autoComplete="off"
                     onSubmit={
                         (e) => addressSec === 'add'
-                            ? updateAddresses(e, null, 'put')
-                            : updateAddresses(e, user.addresses[addressSec]._id, 'put')
+                            ? updateAddresses(e, null, 'post')
+                            : updateAddresses(e, user.addresses[addressSec]._id, 'patch')
                     }
                     sx={{ borderRadius: '0.5rem', mt: 2 }}
                 >
