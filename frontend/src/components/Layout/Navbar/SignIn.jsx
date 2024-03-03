@@ -42,7 +42,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                 setOpen(false);
             })
             .catch((error) => {
-                const res = error.response.data;
+                const res = error.response.data.message;
                 if(res === 'Invalid Phone Number') setSignInStatus('Invalid Phone Number');
                 if(res === 'Invalid Password') setSignInStatus('Invalid Password');
             });

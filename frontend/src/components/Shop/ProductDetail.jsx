@@ -105,12 +105,7 @@ export default function Product({
     }, [id, prevId, updateTrigger, user])
 
     async function addToCart(productId) {
-        const itemDetails = {
-            product: productId,
-            quantity: 1
-        };
-
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/${user._id}/cart`, itemDetails, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`, { quantity: 1 }, { withCredentials: true })
             .then((response) => {
                 if (response) setTrigger(prevValue => !prevValue)
             })
@@ -124,12 +119,15 @@ export default function Product({
         e.preventDefault();
 
         const reviewDetails = {
-            user: user._id,
             rating: rating,
             description: reviewDescription.current.value,
         };
 
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/product/${id}/review`, reviewDetails, { withCredentials: true })
+        axios.put(
+            `${process.env.REACT_APP_BACKEND_URL}/product/${id}/review`,
+            reviewDetails,
+            { withCredentials: true }
+        )
             .then(() => { setTrigger(prevValue => !prevValue); setReviewForm(false); })
             .catch((error) => console.log(error));
     }
@@ -143,7 +141,7 @@ export default function Product({
         };
 
         axios.put(
-            `${process.env.REACT_APP_BACKEND_URL}/product/${id}/review/${user._id}`,
+            `${process.env.REACT_APP_BACKEND_URL}/product/${id}/review`,
             reviewDetails,
             { withCredentials: true }
         )
@@ -162,7 +160,7 @@ export default function Product({
     };
 
     async function deleteReview() {
-        axios.delete(`${process.env.REACT_APP_BACKEND_URL}/product/${id}/review/${user._id}`, { withCredentials: true })
+        axios.delete(`${process.env.REACT_APP_BACKEND_URL}/product/${id}/review`, { withCredentials: true })
             .then(() => setTrigger(prevValue => !prevValue))
             .catch((error) => console.log(error));
     }

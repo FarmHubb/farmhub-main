@@ -89,7 +89,7 @@ export default function App() {
     // -------------------------------- Cart --------------------------------
 
     async function updateInCart(productId, quantity) {
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/${user._id}/cart/${productId}`,
+        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`,
             { quantity: quantity },
             { withCredentials: true })
             .then((response) => {
@@ -99,7 +99,7 @@ export default function App() {
     }
 
     async function removeFromCart(productId) {
-        axios.delete(`${process.env.REACT_APP_BACKEND_URL}/user/${user._id}/cart/${productId}`, { withCredentials: true })
+        axios.delete(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`, { withCredentials: true })
             .then((response) => {
                 if (response) setTrigger(prevValue => !prevValue)
             })

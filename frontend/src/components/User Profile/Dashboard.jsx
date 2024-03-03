@@ -37,32 +37,32 @@ const Dashboard = () => {
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/products`)
-            .then((response) => {
-                setProducts(response.data);
-                response.data.forEach((item) => {
-                    if (item.quantity === 0) {
-                        setOutOfStock(value => value + 1);
-                    }
-                })
-            })
-            .catch((err) => console.log(err));
+        // axios.get(`${process.env.REACT_APP_BACKEND_URL}/products`)
+        //     .then((response) => {
+        //         setProducts(response.data);
+        //         response.data.forEach((item) => {
+        //             if (item.quantity === 0) {
+        //                 setOutOfStock(value => value + 1);
+        //             }
+        //         })
+        //     })
+        //     .catch((err) => console.log(err));
 
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders`)
-            .then((response) => {
-                setOrders(response.data);
-                setTotalPrice(0);
-                response.data.forEach((item) => {
-                    setTotalPrice((value) => value + item.total);
-                });
-            })
-            .catch((err) => console.log(err));
+        // axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders`)
+        //     .then((response) => {
+        //         setOrders(response.data);
+        //         setTotalPrice(0);
+        //         response.data.forEach((item) => {
+        //             setTotalPrice((value) => value + item.total);
+        //         });
+        //     })
+        //     .catch((err) => console.log(err));
 
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/users`)
-            .then((response) => {
-                setUsers(response.data);
-            })
-            .catch((err) => console.log(err));
+        // axios.get(`${process.env.REACT_APP_BACKEND_URL}/users`)
+        //     .then((response) => {
+        //         setUsers(response.data);
+        //     })
+        //     .catch((err) => console.log(err));
 
     }, []);
 

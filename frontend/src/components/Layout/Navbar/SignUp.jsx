@@ -135,7 +135,7 @@ export default function SignUp({ setTrigger, openSnackbar }) {
         formData.append('phoneNumber', signUpInfo.phoneNumber);
 
         axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/user/register`,
+            `${process.env.REACT_APP_BACKEND_URL}/user/customer`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true })
             .then((response) => {
