@@ -1,26 +1,26 @@
-import express from 'express';
 import bodyparser from 'body-parser';
-import connectDB from './config/database';
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
 import MongoStore from 'connect-mongo';
-import auth from './middleware/auth';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import userRoutes from './routes/userRoutes';
-import productRoutes from './routes/productRoutes';
+import { config } from 'dotenv';
+import express from 'express';
+import session from 'express-session';
+import connectDB from './config/database';
+import auth from './middleware/auth';
 import orderRoutes from './routes/orderRoutes';
-import paymentRoutes from './routes/paymentRoutes'
-require('dotenv').config();
+import paymentRoutes from './routes/paymentRoutes';
+import productRoutes from './routes/productRoutes';
+import userRoutes from './routes/userRoutes';
+
+config();
 const app = express();
+connectDB(); // MongoDB connection
 
-// mongo connection
-connectDB();
-
-// bodyparser setup
+// Bodyparser setup
 app.use(bodyparser.json({ limit: "150mb", extended: true }))
 app.use(bodyparser.urlencoded({ limit: "150mb", extended: true, parameterLimit: 50000 }))
 
-// cors
+// CORS setup
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
     credentials: true,
@@ -28,6 +28,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
+// Session and cookies
 app.use(cookieParser());
 app.use(session({
     secret: 'secret',
@@ -37,20 +38,26 @@ app.use(session({
         mongoUrl: process.env.MONGODB_URL,
     })
 }))
-
-app.get('/', function(req, res) {
-    res.send('Welcome to our API')
-})
-
 app.use(auth.initialize);
 app.use(auth.session);
 app.use(auth.setUser);
 
+// Routes
+app.get('/', function(req, res) {
+    res.send('Welcome to our API')
+})
 userRoutes(app);
 productRoutes(app);
 orderRoutes(app);
 paymentRoutes(app);
+app.use((err, req, res, next) => {
+    process.env.NODE_ENV === 'production'
+        ? res.status(500).json({ message: 'Internal Server Error' })
+        : res.status(500).json(err.message);
+    console.error(err);
+});
 
+// Server
 app.listen(process.env.PORT, () =>
     console.log(`Server running on port ${process.env.PORT}`)
 );

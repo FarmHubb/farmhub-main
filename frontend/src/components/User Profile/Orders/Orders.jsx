@@ -17,7 +17,7 @@ export default function Orders({ user }) {
 
     useEffect(() => {
         if (!user) return;
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders/${user._id}`, { withCredentials: true })
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders`, { withCredentials: true })
             .then(response => setOrders(response.data))
             .catch(error => console.log(error));
     }, [user])
@@ -55,6 +55,7 @@ export default function Orders({ user }) {
                 </Grid>
                 {orders.map(order => (
                     <Link
+                        key={order._id}
                         component={RouterLink}
                         to={`/order/${order._id}`}
                         underline='none'

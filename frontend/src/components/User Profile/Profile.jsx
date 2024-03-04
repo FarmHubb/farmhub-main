@@ -94,8 +94,8 @@ export default function Profile({
         formData.append('email', userValues.email);
         formData.append('phoneNumber', userValues.phoneNumber);
 
-        axios.put(
-            `${process.env.REACT_APP_BACKEND_URL}/user/${user._id}`,
+        axios.patch(
+            `${process.env.REACT_APP_BACKEND_URL}/user/customer`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true })
             .then((response) => {
@@ -193,7 +193,7 @@ export default function Profile({
             password: updatePass.password,
         };
 
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/${user._id}/password`, PassDetails, { withCredentials: true })
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/reset`, PassDetails, { withCredentials: true })
             .then((response) => {
                 if(response.data.message === 'Old password is incorrect') {
                     setPassErrors(() => ({

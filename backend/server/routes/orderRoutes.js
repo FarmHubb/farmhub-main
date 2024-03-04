@@ -1,25 +1,26 @@
 import {
-    createOrder,
-    orderInfo,
-    orderList,
-    updateOrder,
-    userOrder,
+    createOrders,
+    getOrdersByCustomer,
+    getOrder,
+    updateOrderStatus,
+    getOrdersByProduct
 } from '../controllers/orderController';
+import { isAuth, isCustomer, isSeller } from './../controllers/userController';
 
 const orderRoutes = (app) => {
 
-    app.route('/order/:userId')
-        .post(createOrder);
-    
-    app.route('/orders')
-        .get(orderList);
+    app.route('/order')
+        .post(isAuth, isCustomer, createOrders);
 
-    app.route('/orders/:userId')
-        .get(userOrder);
+    app.route('/orders')
+        .get(isAuth, isCustomer, getOrdersByCustomer);
+
+    app.route('/orders/product/:productId')
+        .get(isAuth, isSeller, getOrdersByProduct);
 
     app.route('/order/:orderId')    
-        .get(orderInfo)
-        .put(updateOrder);
+        .get(isAuth, getOrder)
+        .patch(isAuth, isSeller, updateOrderStatus);
 
 }
 

@@ -1,12 +1,10 @@
 import {
     processPayment,
-    sendStripeApiKey,
 } from "../controllers/paymentController";
+import { isAuth } from "../controllers/userController";
 
 const paymentRoutes = (app) => {
-    app.route("/payment/process").post(processPayment);
-
-    app.route("/stripeapikey").get(sendStripeApiKey);
+    app.route("/payment/process").post(isAuth, processPayment);
 }
 
-module.exports = paymentRoutes;
+export default paymentRoutes;

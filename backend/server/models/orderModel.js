@@ -12,11 +12,11 @@ const orderSchema = new Schema({
     paymentInfo:{
         id:{
             type: String,
-            required: true,
+            // required: true,
         },
         status:{
             type: String,
-            required: true,
+            // required: true,
         },
     },
     status: {
@@ -41,4 +41,4 @@ const orderSchema = new Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Order', orderSchema);
+export default mongoose.model('Order', orderSchema);

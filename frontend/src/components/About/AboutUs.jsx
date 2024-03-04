@@ -206,7 +206,7 @@ const AboutUs = () => {
             </Typography>
             <Grid container spacing={5}>
                 {profiles.map((profile) => (
-                    <Grid item xs={12} sm={6} md={3} display="flex" justifyContent="center">
+                    <Grid item xs={12} sm={6} md={3} display="flex" justifyContent="center" key={profile.name}>
                         <Card sx={{ maxWidth: 345, width: "15rem" }}>
                             <CardActionArea>
                                 <CardMedia

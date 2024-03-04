@@ -1,77 +1,73 @@
-import multer from 'multer';
 import {
     addAddress,
     addToCart,
-    changePassword,
     checkOtp,
-    createUser,
-    currentUserDetails,
+    createCustomer,
+    createSeller,
     deleteAddress,
-    deletefromCart,
     deleteUser,
-    displayUser,
+    deletefromCart,
     forgotPassword,
+    isAuth,
+    isCustomer,
+    isSeller,
     login,
     logout,
+    readUser,
     resetPassword,
     updateAddress,
+    updateCustomer,
     updateInCart,
-    updateUser,
-    userList
+    updateSeller,
 } from '../controllers/userController';
+import { upload } from '../middleware/imageUtils';
 
 const userRoutes = (app) => {
-    var upload = multer({ dest: './uploads/'});
 
     //-------------------------------- User Authentication --------------------------------
 
-    app.route('/user/register')
-        .post(upload.single('avatar'), createUser);
     app.route('/user/login')
-        .post(login);
+    .post(login);
     app.route('/user/logout')
-        .get(logout);
-
+    .get(isAuth, logout);
+    
     //-------------------------------- Manage and View Users --------------------------------
+    
+    app.route('/user/customer')
+        .post(upload.single('avatar'), createCustomer)
+        .patch(isAuth, isCustomer, upload.single('avatar'), updateCustomer)
+
+    app.route('/user/seller')
+        .post(upload.single('companyLogo'), createSeller)
+        .patch(isAuth, isSeller, upload.single('comapanyLogo'), updateSeller)
 
     app.route('/user')
-        .get(currentUserDetails);
-    app.route('/user/:userId/password')
-        .put(resetPassword);
-    app.route('/user/:userId')
-        .get(displayUser)
-        .delete(deleteUser);
-    app.route('/user/:userId')
-        .put(upload.single('avatar'), updateUser);
-    app.route("/password/forgot")
+        .get(isAuth, readUser)
+        .delete(isAuth, deleteUser);
+
+    //-------------------------------- Manage User Passwords --------------------------------
+
+    app.route('/user/password/reset')
+        .patch(isAuth, resetPassword);
+    app.route("/user/password/forgot")
         .post(forgotPassword);
-    app.route("/password/otpCheck")
+    app.route("/user/password/otpCheck")
         .post(checkOtp);
-    app.route("/password/changePassword")
-        .post(changePassword);
-    app.route('/users')
-        .get(userList);
 
     //-------------------------------- Manage User Addresses --------------------------------
 
-    app.route('/user/:userId/address')
-        .put(addAddress);
-    app.route('/user/:userId/address/:addressId')
-        .put(updateAddress)
-        .delete(deleteAddress);
+    app.route('/user/address')
+        .post(isAuth, addAddress);
+    app.route('/user/address/:addressId')
+        .patch(isAuth, updateAddress)
+        .delete(isAuth, deleteAddress);
 
-    //-------------------------------- Manage User Cart --------------------------------
+    //-------------------------------- Manage Customer Cart --------------------------------
 
-    app.route('/user/:userId/cart')
-        .put(addToCart);
-    app.route('/user/:userId/cart/:productId')
-        .put(updateInCart)
-        .delete(deletefromCart);
-
-
-
+    app.route('/user/cart/:productId')
+        .post(isAuth, isCustomer, addToCart)
+        .patch(isAuth, isCustomer, updateInCart)
+        .delete(isAuth, isCustomer, deletefromCart);
 }
-
-
 
 export default userRoutes;

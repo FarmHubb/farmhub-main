@@ -1,40 +1,46 @@
 import {
-    productList,
     addProduct,
-    displayProduct,
-    updateProduct,
-    deleteProduct,
     addReview,
-    updateReview,
+    deleteProduct,
     deleteReview,
-    productSearch,
-    getAllProducts,
-    getTopProducts
+    getTopProducts,
+    getProduct,
+    searchProducts,
+    updateProduct,
+    updateReview,
+    getProductsByCategory,
+    getProductsBySeller
 } from '../controllers/productController';
-import multer from 'multer';
+import { upload } from '../middleware/imageUtils';
+import { isAuth, isCustomer, isSeller } from './../controllers/userController';
 
 const productRoutes = (app) => {
-    var upload = multer({ dest: './uploads/'});
 
+    //-------------------------------- Manage Products --------------------------------
+    
     app.route('/product')
-        .post(upload.array("images"), addProduct);
-    app.route('/products')
-        .get(getAllProducts);
+        .post(isAuth, isSeller, upload.array("images"), addProduct);
+
     app.route('/products/category/:category/:sort')
-        .get(productList);
+        .get(getProductsByCategory);
     app.route('/products/search/:term/:sort')
-        .get(productSearch)
+        .get(searchProducts)
     app.route('/products/top')
         .get(getTopProducts)
+    app.route('/products/seller/:sellerId/:sort')
+        .get(getProductsBySeller);
+    
     app.route('/product/:productId')
-        .get(displayProduct)
-        .put(upload.array("images"), updateProduct)
-        .delete(deleteProduct);
+        .get(getProduct)
+        .patch(isAuth, isSeller, upload.array("images"), updateProduct)
+        .delete(isAuth, isSeller, deleteProduct);
+
+    // ------------------------------- Manage Reviews -------------------------------
+
     app.route('/product/:productId/review')
-        .put(addReview);
-    app.route('/product/:productId/review/:userId')
-        .put(updateReview)
-        .delete(deleteReview);
+        .post(isAuth, isCustomer, addReview)
+        .patch(isAuth, isCustomer, updateReview)
+        .delete(isAuth, isCustomer, deleteReview);
 }
 
 export default productRoutes;
