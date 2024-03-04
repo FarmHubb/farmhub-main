@@ -1,29 +1,25 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import EventIcon from '@mui/icons-material/Event';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import {
-    CardNumberElement,
-    Elements,
     CardCvcElement,
     CardExpiryElement,
-    useStripe,
+    CardNumberElement,
+    Elements,
     useElements,
+    useStripe,
 } from "@stripe/react-stripe-js";
-
 import { loadStripe } from '@stripe/stripe-js';
+import axios from 'axios';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-
-
-const Payments = ({ user, orderCharges, setTrigger, setActiveStep, shippingAddress }) => {
+const Payments = ({ user, orderCharges, setTrigger, setActiveStep, addressIndex, shippingAddress }) => {
 
     const navigate = useNavigate();
     const stripe = useStripe();
@@ -37,19 +33,12 @@ const Payments = ({ user, orderCharges, setTrigger, setActiveStep, shippingAddre
         e.preventDefault();
 
         try {
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
             const { data } = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}/payment/process`,
                 paymentData,
-                config
+                { withCredentials: true }
             );
-
             const client_secret = data.client_secret;
-            // console.log(client_secret);
 
             if (!stripe || !elements) return;
 
@@ -69,9 +58,7 @@ const Payments = ({ user, orderCharges, setTrigger, setActiveStep, shippingAddre
                 },
             });
 
-
             if (result.error) {
-
                 console.error(result.error.message);
             } else {
                 if (result.paymentIntent.status === "succeeded") {
@@ -82,10 +69,10 @@ const Payments = ({ user, orderCharges, setTrigger, setActiveStep, shippingAddre
 
                     let orderDetails = {
                         paymentInfo: paymentInfo,
-                        address: shippingAddress
+                        addressIndex: addressIndex,
                     }
 
-                    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/order/${user._id}`, orderDetails, { withCredentials: true })
+                    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/order`, orderDetails, { withCredentials: true })
                         .then(response => {
                             if (!response.data.errors) {
                                 setTrigger(prevValue => !prevValue);
@@ -99,7 +86,7 @@ const Payments = ({ user, orderCharges, setTrigger, setActiveStep, shippingAddre
                 }
             }
         } catch (error) {
-            console.error(error.response.data.message);
+            console.error(error);
         }
     };
 

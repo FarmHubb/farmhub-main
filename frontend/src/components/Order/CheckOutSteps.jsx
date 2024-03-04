@@ -1,17 +1,92 @@
-import React, { useEffect, useState } from "react";
-import Typography from '@mui/material/Typography';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import Container from '@mui/material/Container';
 import Step from '@mui/material/Step';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import Shipping from "./Shipping";
+import React, { useEffect, useState } from "react";
 import ConfirmOrder from "./ConfirmOrder";
 import Payment from "./Payment";
+import Shipping from "./Shipping";
+
+export default function CheckoutSteps({ user, setTrigger, setUserTab }) {
+
+    const [addressIndex, setAddressIndex] = useState(null);
+    const [activeStep, setActiveStep] = useState(0)
+    const [orderCharges, setOrderCharges] = useState(null);
+
+    useEffect(() => {
+        if (!user) return;
+
+        let subtotal = user.cart.reduce((acc, item) =>
+            acc + item.quantity * item.product.price, 0
+        );
+        let shippingCharges = subtotal > 1500 ? 0 : 60;
+        let tax = subtotal * 0.18;
+        let totalPrice = subtotal + tax + shippingCharges;
+
+        setOrderCharges({
+            subtotal: subtotal,
+            shippingCharges: shippingCharges,
+            tax: tax,
+            totalPrice: totalPrice
+        })
+    }, [user]);
+
+    return (
+        <Container sx={{ mt: { xs: 7, sm: 11 } }}>
+            <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />} >
+                {['Shipping Details', 'Confirm Order', 'Payment'].map((item, index) => (
+                    <Step
+                        key={item}
+                        active={activeStep === index ? true : false}
+                        completed={activeStep >= index ? true : false}
+                    >
+                        <StepLabel
+                            style={{
+                                color: activeStep >= index ? "tertiary.main" : "rgba(0, 0, 0, 0.649)",
+                            }}
+                            StepIconComponent={ColorlibStepIcon}
+                        >
+                            <Typography>{item}</Typography>
+                        </StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
+            {activeStep === 0 &&
+                <Shipping
+                    user={user}
+                    setActiveStep={setActiveStep}
+                    addressIndex={addressIndex}
+                    setAddressIndex={setAddressIndex}
+                    setUserTab={setUserTab}
+                />
+            }
+            {activeStep === 1 &&
+                <ConfirmOrder
+                    user={user}
+                    orderCharges={orderCharges}
+                    setActiveStep={setActiveStep}
+                    shippingAddress={user.addresses[addressIndex]}
+                />
+            }
+            {activeStep === 2 &&
+                <Payment
+                    user={user}
+                    orderCharges={orderCharges}
+                    setTrigger={setTrigger}
+                    setActiveStep={setActiveStep}
+                    addressIndex={addressIndex}
+                    shippingAddress={user.addresses[addressIndex]}
+                />
+            }
+        </Container>
+    );
+};
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -74,107 +149,3 @@ function ColorlibStepIcon(props) {
         </ColorlibStepIconRoot>
     );
 }
-
-const CheckoutSteps = ({ user, setTrigger, setUserTab }) => {
-
-    const [addressIndex, setAddressIndex] = useState(null)
-
-    const steps = [
-        {
-            label: <Typography>Shipping Details</Typography>,
-
-        },
-        {
-            label: <Typography>Confirm Order</Typography>,
-
-        },
-        {
-            label: <Typography>Payment</Typography>,
-
-        },
-    ];
-    
-    const [activeStep, setActiveStep] = useState(0)
-
-    const [orderCharges, setOrderCharges] = useState(null);
-
-    useEffect(() => {
-        if(!user) return;
-
-        let subtotal = user.cart.reduce(
-            (acc, item) => acc + item.quantity * item.product.price,
-            0
-        );
-
-        let shippingCharges = subtotal > 1500 ? 0 : 60;
-
-        let tax = subtotal * 0.18;
-
-        let totalPrice = subtotal + tax + shippingCharges;
-
-        setOrderCharges({
-            subtotal: subtotal,
-            shippingCharges: shippingCharges,
-            tax: tax,
-            totalPrice: totalPrice
-        })
-    }, [user])
-
-    if(!orderCharges) return null;
-
-    return (
-        <Container sx={{ mt: { xs: 7, sm: 11 } }}>
-            <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />} >
-                {steps.map((item, index) => (
-                    <Step
-                        key={index}
-                        active={activeStep === index ? true : false}
-                        completed={activeStep >= index ? true : false}
-                    >
-                        <StepLabel
-                            style={{
-                                color: activeStep >= index ? "tertiary.main" : "rgba(0, 0, 0, 0.649)",
-                            }}
-                            StepIconComponent={ColorlibStepIcon}
-                        >
-                            {item.label}
-                        </StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
-            {
-                activeStep === 0 ?
-                    <Shipping 
-                        user={user} 
-                        setActiveStep={setActiveStep} 
-                        addressIndex={addressIndex} 
-                        setAddressIndex={setAddressIndex}
-                        setUserTab={setUserTab}
-                    />
-                    : null
-            }
-            {
-                activeStep === 1 ?
-                    <ConfirmOrder 
-                        user={user}
-                        orderCharges={orderCharges}
-                        setActiveStep={setActiveStep} 
-                        shippingAddress={user.addresses[addressIndex]}
-                    />
-                    : null}
-            {
-                activeStep === 2 ?
-                    <Payment 
-                        user={user}
-                        orderCharges={orderCharges}
-                        setTrigger={setTrigger} 
-                        setActiveStep={setActiveStep} 
-                        shippingAddress={user.addresses[addressIndex]}
-                    />
-                    : null
-            }
-        </Container>
-    );
-};
-
-export default CheckoutSteps;
