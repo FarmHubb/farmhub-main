@@ -50,7 +50,7 @@ const userRoutes = (app) => {
 
     app.route("/user/sendotp")
         .patch(sendOTPController);
-    app.route("/user/checkotp")
+    app.route("/user/verifyotp")
         .patch(verifyOTP);
     app.route("/user/password/reset")
         .patch(resetPassword);
