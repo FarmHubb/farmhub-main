@@ -240,7 +240,7 @@ export const sendOTPController = [
     async (req, res, next) => {
         try {
             if(req.user)
-                return res.status(400).json({ message: "Cannot send OTP if user is logged in" });
+                return res.status(409).json({ message: "Cannot send OTP if user is logged in" });
 
             const phoneNumber = req.body.phoneNumber;
             const user = await User.findOne({ phoneNumber: phoneNumber });
