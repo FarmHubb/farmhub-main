@@ -70,7 +70,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
             phoneNumber: forgotPass.phoneNumber
         };
 
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/password/forgot`, PassDetails, { withCredentials: true })
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/sendotp`, PassDetails, { withCredentials: true })
             .then(() => {
                 setStatus('otp');
             })
@@ -85,7 +85,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
             otp: forgotPass.otp
         };
 
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/password/otpCheck`, PassDetails, { withCredentials: true })
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/verifyotp`, PassDetails, { withCredentials: true })
             .then((response) => {
                 if(response.data.message === 'Invalid OTP') {
                     setValidOtp(false);
@@ -106,7 +106,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
             password: forgotPass.password,
         };
 
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/password/changePassword`, PassDetails, { withCredentials: true })
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/password/reset`, PassDetails, { withCredentials: true })
             .then(() => {
                 setStatus('signIn')
             })

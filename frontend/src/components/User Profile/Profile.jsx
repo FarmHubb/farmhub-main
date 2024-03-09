@@ -190,10 +190,10 @@ export default function Profile({
 
         const PassDetails = {
             oldPassword: updatePass.oldPass,
-            password: updatePass.password,
+            password: updatePass.newPass,
         };
 
-        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/reset`, PassDetails, { withCredentials: true })
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/password/change`, PassDetails, { withCredentials: true })
             .then((response) => {
                 if(response.data.message === 'Old password is incorrect') {
                     setPassErrors(() => ({
