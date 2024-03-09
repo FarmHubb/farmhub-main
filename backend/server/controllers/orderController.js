@@ -2,13 +2,13 @@ import { config } from 'dotenv';
 import { body } from "express-validator";
 import Order from "../models/orderModel";
 import Product from "../models/productModel";
-import { User } from "../models/userModel";
+import { Customer } from "../models/userModel";
 import { checkValidation } from './../middleware/validation';
 config();
 
 export const createOrders = async (req, res, next) => {
     try {
-        let user = await User.findById(req.user._id).populate('cart.product');
+        let user = await Customer.findById(req.user._id).populate('cart.product');
         if (!user)
             return res.status(404).json({ message: 'User not found' });
 
@@ -51,7 +51,7 @@ export const createOrders = async (req, res, next) => {
         let orders;
         [orders, user] = await Promise.all([
             Order.insertMany(newOrders, { populate: "product" }),
-            User.findByIdAndUpdate(
+            Customer.findByIdAndUpdate(
                 user._id,
                 { $set: { cart: [] } },
                 { runValidators: true }
