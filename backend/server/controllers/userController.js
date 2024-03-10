@@ -219,7 +219,7 @@ export const deleteUser = async (req, res, next) => {
         if (req.user.role === 'Seller')
             await Product.deleteMany({ userId: req.user._id });
 
-        await User.findByIdAndRemove(req.user._id);
+        await User.findByIdAndDelete(req.user._id);
         res.status(204).json({ message: "User deleted successfully" });
     } catch (err) {
         next(err);
