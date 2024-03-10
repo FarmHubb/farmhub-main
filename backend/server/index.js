@@ -53,7 +53,13 @@ paymentRoutes(app);
 app.use((err, req, res, next) => {
     process.env.NODE_ENV === 'production'
         ? res.status(500).json({ message: 'Internal Server Error' })
-        : res.status(500).json(err.message);
+        : res.status(500).json({ 
+            name: err.name, 
+            message: err.message, 
+            code: err.code, 
+            stack: err.stack,
+            error: err
+        });
     console.error(err);
 });
 
