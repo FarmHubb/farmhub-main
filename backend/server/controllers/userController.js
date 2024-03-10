@@ -68,7 +68,7 @@ export const createCustomer = [
 
     async (req, res, next) => {
         try {
-            const existingUser = await Customer.findOne({
+            const existingUser = await User.findOne({
                 $or: [
                     { email: req.body.email },
                     { phoneNumber: req.body.phoneNumber }
@@ -111,7 +111,7 @@ export const createSeller = [
 
     async (req, res, next) => {
         try {
-            const existingUser = await Seller.findOne({
+            const existingUser = await User.findOne({
                 $or: [
                     { email: req.body.email },
                     { phoneNumber: req.body.phoneNumber }
