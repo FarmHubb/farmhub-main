@@ -5,8 +5,9 @@ import { checkValidation } from "../middleware/validation";
 
 // -------------------------------- Manage and view products --------------------------------
 
+// Add a new product
 export const addProduct = [
-
+    // Validate the request body
     body('name', 'Name must be specified.').trim().isLength({ min: 1 }).escape(),
     body('description', 'Description must be specified.').trim().isLength({ min: 1 }).escape(),
     body('category', 'Category must be specified.').trim()
@@ -18,8 +19,11 @@ export const addProduct = [
 
     async (req, res, next) => {
         try {
+            // Check if there are any uploaded images
             if (req.files.length)
                 req.body.images = readImages(req.files);
+
+            // Create a new product object
             let newProduct = new Product({
                 name: req.body.name,
                 description: req.body.description,
@@ -29,7 +33,11 @@ export const addProduct = [
                 quantity: req.body.quantity,
                 seller: req.user._id,
             });
+
+            // Save the new product to the database
             await newProduct.save();
+
+            // Return the response
             res.status(201).json(process.env.NODE_ENV === 'production'
                 ? { message: "Product added successfully" }
                 : newProduct
@@ -40,8 +48,9 @@ export const addProduct = [
     }
 ]
 
+// Update a product
 export const updateProduct = [
-
+    // Validate the request body
     body('name', 'Name must be specified.').optional().trim().isLength({ min: 1 }).escape(),
     body('description', 'Description must be specified.').optional().trim().isLength({ min: 1 }).escape(),
     body('category', 'Category must be specified.').optional().trim()
@@ -53,9 +62,11 @@ export const updateProduct = [
 
     async (req, res, next) => {
         try {
+            // Check if there are any uploaded images
             if (req.files.length)
                 req.body.images = readImages(req.files);
 
+            // Find and update the product
             const product = await Product.findByIdAndUpdate(
                 req.params.productId,
                 {
@@ -68,9 +79,12 @@ export const updateProduct = [
                 },
                 { new: true, runValidators: true }
             ).select('-reviews -seller');
+
+            // If product is not found, return 404 status
             if (!product)
                 return res.status(404).json({ message: 'Product not found' });
 
+            // Return the updated product
             res.status(200).json(product);
         } catch (err) {
             next(err);
@@ -78,26 +92,36 @@ export const updateProduct = [
     }
 ]
 
+// Delete a product
 export const deleteProduct = async (req, res, next) => {
     try {
+        // Find and remove the product by its ID
         const product = await Product.findByIdAndDelete(req.params.productId);
+
+        // If product is not found, return 404 status
         if (!product)
             return res.status(404).json({ message: 'Product not found' });
 
+        // Return success message
         res.status(204).json({ message: "Product deleted successfully" });
     } catch (err) {
         next(err);
     }
 };
 
+// Get a product
 export const getProduct = async (req, res, next) => {
     try {
+        // Find the product by its ID and populate the user field in the reviews with name and avatar
         let product = await Product.findById(req.params.productId).populate(
             "reviews.user", "name avatar"
         );
+
+        // If product is not found, return 404 status
         if (!product)
             return res.status(404).json({ message: 'Product not found' });
 
+        // Sort the reviews to show the logged in user's review first
         if (req.user) {
             product.reviews.sort((a, b) => {
                 if (a.user._id.equals(req.user._id)) return -1;
@@ -105,14 +129,18 @@ export const getProduct = async (req, res, next) => {
                 return 0;
             });
         }
+
+        // Return the product with populated reviews
         res.status(200).json(product);
     } catch (err) {
         next(err);
     }
 };
 
+// Get products by category
 export const getProductsByCategory = async (req, res, next) => {
     try {
+        // Find products in the specified category and get a list of brands in it
         const [products, brands] = await Promise.all([
             Product.find(
                 { category: req.params.category },
@@ -120,26 +148,34 @@ export const getProductsByCategory = async (req, res, next) => {
             ).sort(req.params.sort !== "none" ? req.params.sort : ""),
             Product.find({ category: req.params.category }).distinct("brand")
         ]);
+
+        // Return the products and brands
         res.status(200).json({ products: products, brands: brands });
     } catch (err) {
         next(err);
     }
 };
 
+// Search products
 export const searchProducts = async (req, res, next) => {
     try {
+        // Find products that match the search term
         const products = await Product.find(
             { $text: { $search: req.params.term } },
             "name price images reviews brand"
         ).sort(req.params.sort !== "none" ? req.params.sort : "");
+
+        // Return the search results
         res.status(200).json(products);
     } catch (err) {
         next(err);
     }
 };
 
+// Get top products
 export const getTopProducts = async (req, res, next) => {
     try {
+        // Define the IDs of the top products
         const topProducts = [
             "6432960be07105bc0a7ebc1d",
             "643296e1e07105bc0a7ebc20",
@@ -151,22 +187,29 @@ export const getTopProducts = async (req, res, next) => {
             "643be5d64885fe0b918bb192",
         ];
 
+        // Find the top products
         const products = await Product.find(
             { _id: { $in: topProducts } },
             "name price images reviews brand"
         );
+
+        // Return the top products
         res.status(200).json(products);
     } catch (err) {
         next(err);
     }
 };
 
+// Get products by seller
 export const getProductsBySeller = async (req, res, next) => {
     try {
+        // Find products sold by the specified seller
         const products = await Product.find(
             { seller: req.params.sellerId },
             "name price images reviews brand"
         ).sort(req.params.sort !== "none" ? req.params.sort : "");
+
+        // Return the products
         res.status(200).json(products);
     } catch (err) {
         next(err);
@@ -175,29 +218,34 @@ export const getProductsBySeller = async (req, res, next) => {
 
 // -------------------------------- Reviews --------------------------------
 
+// Add a review to a product
 export const addReview = [
-
+    // Validate the request body
     body('rating', 'Rating must be a number between 1 and 5').isInt({ min: 1, max: 5 }),
     body('description', 'Description must be a string').optional().isString().trim().escape(),
     checkValidation,
 
     async (req, res, next) => {
         try {
+            // Check if product exists
             let product;
             req.body.user = req.user._id;
             product = await Product.findById(req.params.productId);
             if (!product)
                 return res.status(404).json({ message: 'Product not found' });
 
+            // Check if the user has already reviewed the product
             const userReview = product.reviews.find(review =>
                 review.user.toString() === req.user._id.toString());
             if (userReview)
                 return res.status(400).json({ message: 'You have already reviewed this product' });
 
+            // Calculate the new average rating
             const newAvgRating =
                 (product.reviews.reduce((sum, review) => sum + review.rating, 0) + Number(req.body.rating))
                 / (product.reviews.length + 1);
 
+            // Add the review to the product and update the average rating
             product = await Product.findByIdAndUpdate(
                 req.params.productId,
                 {
@@ -207,6 +255,7 @@ export const addReview = [
                 { new: true, runValidators: true }
             );
 
+            // Return the updated review
             res.status(200).json(product.reviews[product.reviews.length - 1]);
         } catch (err) {
             next(err);
@@ -214,29 +263,34 @@ export const addReview = [
     }
 ]
 
+// Update a review
 export const updateReview = [
-    
+    // Validate the request body
     body('rating', 'Rating must be a number between 1 and 5').optional().isInt({ min: 1, max: 5 }),
     body('description', 'Description must be a string').optional().isString().trim().escape(),
     checkValidation,
 
     async (req, res, next) => {
         try {
+            // Find the product by ID
             let product = await Product.findById(req.params.productId);
             if (!product)
                 return res.status(404).json({ message: 'Product not found' });
 
-            let review = product.reviews.find(review => 
+            // Find the review by user ID
+            let review = product.reviews.find(review =>
                 review.user.toString() === req.user._id.toString());
 
             if (!review)
                 return res.status(404).json({ message: 'Review not found' });
 
+            // Calculate the new average rating
             review.rating = Number(req.body.rating);
             const newAvgRating =
                 product.reviews.reduce((sum, review) => sum + review.rating, 0)
                 / product.reviews.length;
 
+            // Update the review in the product and update the average rating
             product = await Product.findOneAndUpdate(
                 { _id: req.params.productId, "reviews.user": req.user._id },
                 {
@@ -251,35 +305,44 @@ export const updateReview = [
             if (!product)
                 return res.status(404).json({ message: 'Product or review not found' });
 
+            // Find the updated review
             review = product.reviews.find(review =>
                 review.user.toString() === req.user._id.toString()
             );
+
+            // Return the updated review
             res.status(200).json(review);
         } catch (err) {
             next(err);
         }
     }
-] 
+]
 
+// Delete a review
 export const deleteReview = async (req, res, next) => {
     try {
+        // Find the product by ID
         let product = await Product.findById(req.params.productId);
         if (!product)
             return res.status(404).json({ message: 'Product not found' });
 
+        // Find the index of the review in the product's reviews array
         const reviewIndex = product.reviews.findIndex(review =>
             review.user.toString() === req.user._id.toString());
 
+        // If the review is not found, return an error
         if (reviewIndex === -1)
             return res.status(404).json({ message: 'Review not found' });
-
+        
+        // Calculate the new average rating
         product.reviews.splice(reviewIndex, 1);
         let newAvgRating = 0;
         if (product.reviews.length)
             newAvgRating =
                 product.reviews.reduce((sum, review) => sum + review.rating, 0)
                 / product.reviews.length;
-        
+
+        // Update the product by removing the review and updating the average rating
         product = await Product.findOneAndUpdate(
             { _id: req.params.productId, "reviews.user": req.user._id },
             {
@@ -288,9 +351,12 @@ export const deleteReview = async (req, res, next) => {
             },
             { runValidators: true }
         );
+
+        // If the product or review is not found, return an error
         if (!product)
             return res.status(404).json({ message: 'Product or review not found' });
 
+        // Return a success message
         res.status(200).json({ message: "Review deleted successfully" });
     } catch (err) {
         next(err);
