@@ -180,7 +180,7 @@ export const addReview = [
     body('rating', 'Rating must be a number between 1 and 5').isInt({ min: 1, max: 5 }),
     body('description', 'Description must be a string').optional().isString().trim().escape(),
     checkValidation,
-    
+
     async (req, res, next) => {
         try {
             let product;
@@ -189,13 +189,21 @@ export const addReview = [
             if (!product)
                 return res.status(404).json({ message: 'Product not found' });
 
-            const userReview = product.reviews.find(review => review.user.toString() === req.user._id.toString());
+            const userReview = product.reviews.find(review =>
+                review.user.toString() === req.user._id.toString());
             if (userReview)
                 return res.status(400).json({ message: 'You have already reviewed this product' });
 
+            const newAvgRating =
+                (product.reviews.reduce((sum, review) => sum + review.rating, 0) + Number(req.body.rating))
+                / (product.reviews.length + 1);
+
             product = await Product.findByIdAndUpdate(
                 req.params.productId,
-                { $push: { reviews: req.body } },
+                {
+                    $push: { reviews: req.body },
+                    avgRating: newAvgRating
+                },
                 { new: true, runValidators: true }
             );
 
@@ -214,20 +222,36 @@ export const updateReview = [
 
     async (req, res, next) => {
         try {
-            const product = await Product.findOneAndUpdate(
+            let product = await Product.findById(req.params.productId);
+            if (!product)
+                return res.status(404).json({ message: 'Product not found' });
+
+            let review = product.reviews.find(review => 
+                review.user.toString() === req.user._id.toString());
+
+            if (!review)
+                return res.status(404).json({ message: 'Review not found' });
+
+            review.rating = Number(req.body.rating);
+            const newAvgRating =
+                product.reviews.reduce((sum, review) => sum + review.rating, 0)
+                / product.reviews.length;
+
+            product = await Product.findOneAndUpdate(
                 { _id: req.params.productId, "reviews.user": req.user._id },
                 {
                     $set: {
                         "reviews.$.rating": req.body.rating,
                         "reviews.$.description": req.body.description,
                     },
+                    avgRating: newAvgRating
                 },
                 { new: true, runValidators: true }
             );
             if (!product)
                 return res.status(404).json({ message: 'Product or review not found' });
-            
-            const review = product.reviews.find(review =>
+
+            review = product.reviews.find(review =>
                 review.user.toString() === req.user._id.toString()
             );
             res.status(200).json(review);
@@ -239,9 +263,29 @@ export const updateReview = [
 
 export const deleteReview = async (req, res, next) => {
     try {
-        const product = await Product.findOneAndUpdate(
+        let product = await Product.findById(req.params.productId);
+        if (!product)
+            return res.status(404).json({ message: 'Product not found' });
+
+        const reviewIndex = product.reviews.findIndex(review =>
+            review.user.toString() === req.user._id.toString());
+
+        if (reviewIndex === -1)
+            return res.status(404).json({ message: 'Review not found' });
+
+        product.reviews.splice(reviewIndex, 1);
+        let newAvgRating = 0;
+        if (product.reviews.length)
+            newAvgRating =
+                product.reviews.reduce((sum, review) => sum + review.rating, 0)
+                / product.reviews.length;
+        
+        product = await Product.findOneAndUpdate(
             { _id: req.params.productId, "reviews.user": req.user._id },
-            { $pull: { reviews: { user: req.user._id } } },
+            {
+                $pull: { reviews: { user: req.user._id } },
+                avgRating: newAvgRating
+            },
             { runValidators: true }
         );
         if (!product)

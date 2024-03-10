@@ -33,19 +33,8 @@ const productSchema = new Schema({
     seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     price: { type: Number, required: true },
     quantity: { type: Number, default: 0 },
+    avgRating: { type: Number, default: 0 },
     reviews: [reviewSchema]
-}, {
-    virtuals: {
-        avgRating: {
-            get() {
-                if(this.reviews) {
-                    let ratingSum = 0;
-                    this.reviews.forEach(review => ratingSum += review.rating)
-                    return (ratingSum / this.reviews.length);
-                }
-            }
-        }
-    }
 });
 
 productSchema.set('toJSON', { getters: true });
