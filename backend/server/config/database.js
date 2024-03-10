@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
 
-mongoose.set('strictQuery', true);
-const connectDB = () => {
-    mongoose.connect(process.env.MONGODB_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }).then((data) => {
+export default async function connectDB() {
+    try {
+        const data = await mongoose.connect(process.env.MONGODB_URL);
         console.log(`MongoDB connected with server ${data.connection.host}`);
-    });
+    } catch (err) {
+        console.error(`Error connecting to MongoDB: ${err.message}`);
+        process.exit(1);
+    }
 }
-
-export default connectDB;
