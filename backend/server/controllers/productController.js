@@ -137,7 +137,7 @@ export const getProduct = async (req, res, next) => {
     }
 };
 
-// Get products by category
+// Get products
 export const getProducts = async (req, res, next) => {
     try {
         // Get query parameters
