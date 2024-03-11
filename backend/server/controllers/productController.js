@@ -138,35 +138,61 @@ export const getProduct = async (req, res, next) => {
 };
 
 // Get products by category
-export const getProductsByCategory = async (req, res, next) => {
+export const getProducts = async (req, res, next) => {
     try {
-        // Find products in the specified category and get a list of brands in it
-        const [products, brands] = await Promise.all([
-            Product.find(
-                { category: req.params.category },
-                "name price images reviews brand"
-            ).sort(req.params.sort !== "none" ? req.params.sort : ""),
-            Product.find({ category: req.params.category }).distinct("brand")
+        // Get query parameters
+        let {
+            category,
+            minPrice,
+            maxPrice,
+            minRating,
+            brands,
+            term,
+            seller,
+            sort
+        } = req.query;
+        // Parse query parameters
+        brands = brands ? brands.split(',') : [];
+
+        // Initialize filter
+        let filter = {};
+        // filter by category
+        if (category)
+            filter.category = category;
+        // filter by search term
+        if (term) {
+            const regex = new RegExp(term, 'i'); // 'i' makes it case insensitive
+            filter.$or = [
+                { name: regex },
+                { description: regex },
+                { brand: regex },
+                { category: regex }
+            ];
+        }
+        // filter by price range
+        if (minPrice || maxPrice) {
+            filter.price = {};
+            if (minPrice) filter.price.$gte = minPrice;
+            if (maxPrice) filter.price.$lte = maxPrice;
+        }
+        // filter by ratings
+        if (minRating)
+            filter.avgRating = { $gte: minRating };
+        // filter by brands
+        if (brands.length > 0)
+            filter.brand = { $in: brands };
+        // filter by seller
+        if (seller)
+            filter.seller = seller;
+
+        // Find products that match the filter and list of brands in it   
+        const [products, brandList] = await Promise.all([
+            Product.find(filter, "name price images avgRating brand").sort(sort),
+            Product.find({ category: category }).distinct("brand")
         ]);
 
         // Return the products and brands
-        res.status(200).json({ products: products, brands: brands });
-    } catch (err) {
-        next(err);
-    }
-};
-
-// Search products
-export const searchProducts = async (req, res, next) => {
-    try {
-        // Find products that match the search term
-        const products = await Product.find(
-            { $text: { $search: req.params.term } },
-            "name price images reviews brand"
-        ).sort(req.params.sort !== "none" ? req.params.sort : "");
-
-        // Return the search results
-        res.status(200).json(products);
+        res.status(200).json({ products: products, brands: brandList });
     } catch (err) {
         next(err);
     }
@@ -190,26 +216,10 @@ export const getTopProducts = async (req, res, next) => {
         // Find the top products
         const products = await Product.find(
             { _id: { $in: topProducts } },
-            "name price images reviews brand"
+            "name price images avgRating brand"
         );
 
         // Return the top products
-        res.status(200).json(products);
-    } catch (err) {
-        next(err);
-    }
-};
-
-// Get products by seller
-export const getProductsBySeller = async (req, res, next) => {
-    try {
-        // Find products sold by the specified seller
-        const products = await Product.find(
-            { seller: req.params.sellerId },
-            "name price images reviews brand"
-        ).sort(req.params.sort !== "none" ? req.params.sort : "");
-
-        // Return the products
         res.status(200).json(products);
     } catch (err) {
         next(err);

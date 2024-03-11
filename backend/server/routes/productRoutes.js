@@ -3,13 +3,11 @@ import {
     addReview,
     deleteProduct,
     deleteReview,
-    getTopProducts,
     getProduct,
-    searchProducts,
+    getProducts,
+    getTopProducts,
     updateProduct,
-    updateReview,
-    getProductsByCategory,
-    getProductsBySeller
+    updateReview
 } from '../controllers/productController';
 import { upload } from '../middleware/imageUtils';
 import { isAuth, isCustomer, isSeller } from './../controllers/userController';
@@ -21,14 +19,10 @@ const productRoutes = (app) => {
     app.route('/product')
         .post(isAuth, isSeller, upload.array("images"), addProduct);
 
-    app.route('/products/category/:category/:sort')
-        .get(getProductsByCategory);
-    app.route('/products/search/:term/:sort')
-        .get(searchProducts)
+    app.route('/products')
+        .get(getProducts);
     app.route('/products/top')
         .get(getTopProducts)
-    app.route('/products/seller/:sellerId/:sort')
-        .get(getProductsBySeller);
     
     app.route('/product/:productId')
         .get(getProduct)
