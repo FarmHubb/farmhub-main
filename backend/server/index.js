@@ -11,6 +11,7 @@ import orderRoutes from './routes/orderRoutes';
 import paymentRoutes from './routes/paymentRoutes';
 import productRoutes from './routes/productRoutes';
 import userRoutes from './routes/userRoutes';
+import cropRoutes from './routes/api';
 
 config();
 const app = express();
@@ -50,6 +51,8 @@ userRoutes(app);
 productRoutes(app);
 orderRoutes(app);
 paymentRoutes(app);
+cropRoutes(app);
+
 app.use((err, req, res, next) => {
     process.env.NODE_ENV === 'production'
         ? res.status(500).json({ message: 'Internal Server Error' })
