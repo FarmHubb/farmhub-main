@@ -251,7 +251,7 @@ export default function App() {
                     <Route path='orderSuccess' element={<OrderSuccess setUserTab={setUserTab} />} S />
                     <Route path='/shop'>
                         <Route index element={<ShopHome />} />
-                        <Route path='products/category/:category' element={
+                        <Route path='products' element={
                             <ProductList updateTrigger={updateTrigger} />}
                         />
                         <Route path='product/:id' element={

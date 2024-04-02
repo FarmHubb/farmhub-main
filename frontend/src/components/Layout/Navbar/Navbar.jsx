@@ -63,23 +63,23 @@ const scrollToTop = () => {
 const shopPages = [
   {
     name: 'Fertilizers',
-    link: '/shop/products/category/Fertilizers',
+    link: '/shop/products?category=Fertilizers',
   },
   {
     name: 'Pesticides',
-    link: '/shop/products/category/Pesticides',
+    link: '/shop/products?category=Pesticides',
   },
   {
     name: 'Crop-Tonics',
-    link: '/shop/products/category/Crop-Tonics',
+    link: '/shop/products?category=Crop-Tonics',
   },
   {
     name: 'Seeds',
-    link: '/shop/products/category/Seeds',
+    link: '/shop/products?category=Seeds',
   },
   {
     name: 'Traps',
-    link: '/shop/products/category/Traps',
+    link: '/shop/products?category=Traps',
   },
 ];
 

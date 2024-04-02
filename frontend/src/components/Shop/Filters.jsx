@@ -7,16 +7,18 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 
 export default function Filters({
-    priceRange,
-    changePriceRange,
-    ratings,
+    minPrice,
+    maxPrice,
+    setPriceRange,
     checkPriceRange,
-    checkedRating,
-    changeCheckedRating,
+    minRating,
+    setMinRating,
     brands,
     checkedBrands,
-    changeCheckedBrands
+    setCheckedBrands
 }) {
+    const ratings = [4, 3, 2, 1];
+
     return (
         <>
             <Typography variant='subtitle1' fontWeight='500'>Price Range</Typography>
@@ -25,10 +27,10 @@ export default function Filters({
                     type='number'
                     size="small"
                     variant="outlined"
-                    name='min'
+                    name='minPrice'
                     label='Min'
-                    value={priceRange.min}
-                    onChange={(event) => changePriceRange(event)}
+                    value={minPrice}
+                    onChange={(event) => setPriceRange(event)}
                     onBlur={(event) => checkPriceRange(event)}
                 />
                 <Typography px={1} fontWeight='500'>-</Typography>
@@ -36,10 +38,10 @@ export default function Filters({
                     type='number'
                     size="small"
                     variant="outlined"
-                    name='max'
+                    name='maxPrice'
                     label='Max'
-                    value={priceRange.max}
-                    onChange={(event) => changePriceRange(event)}
+                    value={maxPrice}
+                    onChange={(event) => setPriceRange(event)}
                     onBlur={(event) => checkPriceRange(event)}
                 />
             </Box>
@@ -51,8 +53,8 @@ export default function Filters({
                         sx={{ ml: 0 }}
                         control={
                             <Checkbox
-                                checked={checkedRating.some(selected => selected === rating)}
-                                onChange={(event) => changeCheckedRating(event, rating)}
+                                checked={minRating === rating}
+                                onChange={(event) => setMinRating(event, rating)}
                                 color='tertiary'
                             />
                         }
@@ -69,8 +71,8 @@ export default function Filters({
                                 sx={{ ml: 0 }}
                                 control={
                                     <Checkbox
-                                        checked={checkedBrands.some(selected => selected === brand)}
-                                        onChange={(event) => changeCheckedBrands(event, brand)}
+                                        checked={checkedBrands?.includes(brand)}
+                                        onChange={(event) => setCheckedBrands(event, brand)}
                                         color='tertiary'
                                     />
                                 }
