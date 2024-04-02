@@ -303,7 +303,7 @@ export default function App() {
           <Route path="/shop">
             <Route index element={<ShopHome />} />
             <Route
-              path="products/category/:category"
+              path="products"
               element={<ProductList updateTrigger={updateTrigger} />}
             />
             <Route

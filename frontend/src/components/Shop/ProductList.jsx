@@ -1,105 +1,112 @@
-import { useState, useEffect } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import axios from 'axios';
-import bufferToString from '../../bufferToString';
-import Filters from './Filters'
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Link from '@mui/material/Link';
-import Rating from '@mui/material/Rating';
-import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Drawer from '@mui/material/Drawer';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
+import Rating from '@mui/material/Rating';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import bufferToString from '../../bufferToString';
+import Filters from './Filters';
 
 export default function ProductList({ updateTrigger }) {
-
+    
     const [products, setProducts] = useState(null);
     const [brands, setBrands] = useState(null);
-    const { category } = useParams();
-    const { search } = useParams();
-    const [sort, setSort] = useState('none');
+
+    const [searchParams, setSearchParams] = useSearchParams({ minPrice: '', maxPrice: '', brands: '' });
+    const sort = searchParams.get('sort');
+    const category = searchParams.get('category');
+    const term = searchParams.get('term');
+    const minPrice = searchParams.get('minPrice');
+    const maxPrice = searchParams.get('maxPrice');
+    const minRating = Number(searchParams.get('minRating'));
+    const checkedBrands = searchParams.get('brands');
 
     useEffect(() => {
-        category ?
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/products/category/${category}/${sort}`)
-                .then((response) => {
-                    let res = response.data;
-                    res.products.forEach(product => {
-                        product.images.forEach(image => {
-                            image.data = bufferToString(image);
-                        });
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/products`, { params: searchParams })
+            .then((response) => {
+                let res = response.data;
+                res.products.forEach(product => {
+                    product.images.forEach(image => {
+                        image.data = bufferToString(image);
                     });
-                    setProducts(res.products);
-                    setBrands(res.brands);
-                })
-                .catch((err) => console.log(err))
-            :
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/products/search/${search}/${sort}`)
-                .then((response) => {
-                    response.data.forEach(product => {
-                        product.images.forEach(image => {
-                            image.data = bufferToString(image);
-                        });
-                    });
-                    setProducts(response.data);
-                    setBrands(null);
-                })
-                .catch((err) => console.log(err))
-    }, [updateTrigger, search, category, sort])
+                });
+                setProducts(res.products);
+                setBrands(res.brands);
+            })
+            .catch((err) => console.log(err))
+    }, [searchParams])
 
-    const [priceRange, setPriceRange] = useState({
-        min: '',
-        max: ''
-    })
-
-    function changePriceRange(event) {
-        setPriceRange({ ...priceRange, [event.target.name]: event.target.value })
+    function setSort(sortCriteria) {
+        setSearchParams(prev => {
+            sortCriteria ? prev.set('sort', sortCriteria) : prev.delete('sort');
+            return prev;
+        });
     }
 
-    function checkPriceRange(event) {
-        if ((event.target.name === 'min' && priceRange.max) || (event.target.name === 'max' && priceRange.min))
-            if (priceRange.min > priceRange.max)
-                setPriceRange({ ...priceRange, [event.target.name]: '' })
+    function setPriceRange(e) {
+        setSearchParams(prev => {
+            prev.set(e.target.name, e.target.value);
+            return prev;
+        }, { replace: true });
     }
 
-    const ratings = [5, 4, 3, 2, 1];
+    function checkPriceRange(e) {
+        if ((e.target.name === 'minPrice' && maxPrice) || (e.target.name === 'maxPrice' && minPrice))
+            if (minPrice > maxPrice) {
+                setSearchParams(prev => {
+                    prev.set([e.target.name], '');
+                    return prev;
+                }, { replace: true });
+            }
+    }
 
-    const [checkedRating, setCheckedRating] = useState([]);
-
-    const changeCheckedRating = (event, rating) => {
-        event.target.checked ?
-            setCheckedRating([...checkedRating, rating])
-            :
-            setCheckedRating(newCheckedRating => newCheckedRating.filter(selected => selected !== rating))
+    const setMinRating = (e, rating) => {
+        setSearchParams(prev => {
+            e.target.checked 
+            ? prev.set('minRating', rating)
+            : prev.delete('minRating');
+            return prev;
+        });
     };
 
-    const [checkedBrands, setCheckedBrands] = useState([]);
-
-    const changeCheckedBrands = (event, rating) => {
-        event.target.checked ?
-            setCheckedBrands([...checkedBrands, rating])
-            :
-            setCheckedBrands(newCheckedBrands => newCheckedBrands.filter(selected => selected !== rating))
+    const setCheckedBrands = (e, brand) => {
+        setSearchParams(prev => {
+            const brands = prev.get('brands') ? prev.get('brands').split(',') : [];
+            if (e.target.checked) {
+                brands.push(brand);
+            } else {
+                const index = brands.indexOf(brand);
+                if (index > -1) {
+                    brands.splice(index, 1);
+                }
+            }
+            prev.set('brands', brands.join(','));
+            return prev;
+        }, { replace: true });
     };
 
     const filterProps = {
-        priceRange: priceRange,
-        changePriceRange: changePriceRange,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        setPriceRange: setPriceRange,
         checkPriceRange: checkPriceRange,
-        ratings: ratings,
-        checkedRating: checkedRating,
-        changeCheckedRating: changeCheckedRating,
+        minRating: minRating,
+        setMinRating: setMinRating,
         brands: brands,
         checkedBrands: checkedBrands,
-        changeCheckedBrands: changeCheckedBrands
+        setCheckedBrands: setCheckedBrands
     }
 
     const [cartDrawer, setCartDrawer] = useState(false);
@@ -113,7 +120,7 @@ export default function ProductList({ updateTrigger }) {
                             <CardContent sx={{ p: '0.8em !important' }}>
                                 <Stack direction='row' alignItems='center' flexWrap='wrap'>
                                     <Typography mr='auto' variant='subtitle1' fontWeight='500'>
-                                        {category ? category : `Results for "${search}"`}
+                                        {category ? category : `Results for "${term}"`}
                                     </Typography>
                                     <IconButton 
                                         onClick={() => setCartDrawer(true)} 
@@ -131,11 +138,11 @@ export default function ProductList({ updateTrigger }) {
                                             size='small'
                                             color='primary'
                                             value={sort}
-                                            onChange={(event) => setSort(event.target.value)}
+                                            onChange={(e) => setSort(e.target.value)}
                                             displayEmpty
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
-                                            <MenuItem value='none'>Relavance</MenuItem>
+                                            <MenuItem value={null}>Relavance</MenuItem>
                                             <MenuItem value='price'>Price Low to High</MenuItem>
                                             <MenuItem value='-price'>Price High to Low</MenuItem>
                                         </Select>
@@ -161,12 +168,7 @@ export default function ProductList({ updateTrigger }) {
                         </Box>
                     </Drawer>
                     <Grid item xs={12} md={9} container rowSpacing={3} columnSpacing={3}>
-                        {products.filter(product =>
-                            (checkedRating.length === 0 || checkedRating.includes(Math.round(product.avgRating)))
-                            && (checkedBrands.length === 0 || checkedBrands.includes(product.brand))
-                            && (priceRange.min ? product.price > priceRange.min : true)
-                            && (priceRange.max ? product.price < priceRange.max : true))
-                            .map(product => (
+                        {products.map(product => (
                                 <Grid item xs={12} sm={6} md={4} key={product._id}>
                                     <Link component={RouterLink} to={`/shop/product/${product._id}`} underline='none'>
                                         <Card elevation={2}>

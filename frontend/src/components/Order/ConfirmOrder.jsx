@@ -1,18 +1,19 @@
-import React from 'react'
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-const ConfirmOrder = ({ user, orderCharges, setActiveStep, shippingAddress }) => {
+export default function ConfirmOrder({ user, orderCharges, setActiveStep, shippingAddress }) {
 
+    if (!orderCharges) return null;
 
     return (
         <Container sx={{ mt: { xs: 6, sm: 8 } }}>
@@ -53,15 +54,12 @@ const ConfirmOrder = ({ user, orderCharges, setActiveStep, shippingAddress }) =>
                     <Typography variant="h5" mt={4} mb={2} color="cropHeading.main">Your Cart Items:</Typography>
                     {user.cart &&
                         user.cart.map((item) =>
-
-
-
-                            <Link component={RouterLink} to={`/shop/product/${item.product._id}`} underline='none'  key={item.product._id}>
-                                <Card 
-                                    sx={{ 
-                                        display: 'flex', 
-                                        width: '100%', 
-                                        marginBottom: '2rem', 
+                            <Link component={RouterLink} to={`/shop/product/${item.product._id}`} underline='none' key={item.product._id}>
+                                <Card
+                                    sx={{
+                                        display: 'flex',
+                                        width: '100%',
+                                        marginBottom: '2rem',
                                         backgroundColor: "primary.main"
                                     }}>
                                     <CardMedia
@@ -84,8 +82,6 @@ const ConfirmOrder = ({ user, orderCharges, setActiveStep, shippingAddress }) =>
                                             </Typography>
                                         </Box>
                                     </CardContent>
-
-
                                 </Card>
                             </Link>
                         )}
@@ -132,14 +128,12 @@ const ConfirmOrder = ({ user, orderCharges, setActiveStep, shippingAddress }) =>
             </Grid>
 
 
-            <Button onClick={() => setActiveStep(0)} size='large' sx={{ textTransform: 'none', marginRight: "2rem", mt: 2}} color='primary' variant='contained'>
+            <Button onClick={() => setActiveStep(0)} size='large' sx={{ textTransform: 'none', marginRight: "2rem", mt: 2 }} color='primary' variant='contained'>
                 Back to Shipping Details
             </Button>
-            <Button onClick={() => setActiveStep(2)} size='large' sx={{ textTransform: 'none', mt: 2}} color='tertiary' variant='contained'>
+            <Button onClick={() => setActiveStep(2)} size='large' sx={{ textTransform: 'none', mt: 2 }} color='tertiary' variant='contained'>
                 Proceed for Payment
             </Button>
         </Container>
     )
 }
-
-export default ConfirmOrder

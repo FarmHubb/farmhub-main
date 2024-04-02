@@ -26,7 +26,8 @@ const userSchema = new Schema({
             pincode: { type: String, required: true },
         }]
     },
-    resetPasswordOtp: String
+    otp: String,
+    otpExpiry: Date
 }, {
     discriminatorKey: 'role',
     timestamps: true,

@@ -1,24 +1,25 @@
 import {
     addAddress,
     addToCart,
-    checkOtp,
+    verifyOTP,
     createCustomer,
     createSeller,
     deleteAddress,
     deleteUser,
     deletefromCart,
-    forgotPassword,
+    sendOTPController,
     isAuth,
     isCustomer,
     isSeller,
     login,
     logout,
     readUser,
-    resetPassword,
+    changePassword,
     updateAddress,
     updateCustomer,
     updateInCart,
     updateSeller,
+    resetPassword,
 } from '../controllers/userController';
 import { upload } from '../middleware/imageUtils';
 
@@ -47,12 +48,14 @@ const userRoutes = (app) => {
 
     //-------------------------------- Manage User Passwords --------------------------------
 
-    app.route('/user/password/reset')
-        .patch(isAuth, resetPassword);
-    app.route("/user/password/forgot")
-        .post(forgotPassword);
-    app.route("/user/password/otpCheck")
-        .post(checkOtp);
+    app.route("/user/sendotp")
+        .patch(sendOTPController);
+    app.route("/user/verifyotp")
+        .patch(verifyOTP);
+    app.route("/user/password/reset")
+        .patch(resetPassword);
+    app.route('/user/password/change')
+        .patch(isAuth, changePassword);
 
     //-------------------------------- Manage User Addresses --------------------------------
 
