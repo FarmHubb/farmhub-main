@@ -361,12 +361,19 @@ function NavBar({
               >
                 Weather
               </MenuItem>
-              <MenuItem
+              {/* <MenuItem
                 component={Link}
                 to="/doseCalculator"
                 onClick={handleCloseServiceMenu}
               >
                 Dose Calculator
+              </MenuItem> */}
+              <MenuItem
+                component={Link}
+                to="/predict"
+                onClick={handleCloseServiceMenu}
+              >
+                Ai Prediction
               </MenuItem>
             </Menu>
 

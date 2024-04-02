@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 /* Define App level styling here */
 body {
     margin: 0;
@@ -15,6 +20,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Works for Firefox */
-input[type="number"] {
+/* input[type="number"] {
     -moz-appearance: textfield;
-}
+} */
