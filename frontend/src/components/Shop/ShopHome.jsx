@@ -12,7 +12,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Link as RouterLink } from 'react-router-dom';
-import bufferToString from './../../bufferToString';
+import bufferToString from '../../utils/bufferToString';
 
 const banner = [
     'Images/ad1.jpg',

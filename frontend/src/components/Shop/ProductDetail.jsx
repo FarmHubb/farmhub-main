@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import bufferToString from '../../bufferToString';
+import bufferToString from '../../utils/bufferToString';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Grid from '@mui/material/Grid';
@@ -22,6 +22,8 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
+import { addToCart, updateInCart } from '../../utils/Cart';
+import { SetTriggerContext } from '../../contexts/SetTriggerContext';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -57,14 +59,15 @@ function a11yProps(index) {
 }
 
 export default function Product({
-    user,
+    isAuth,
+    userProfile,
+    userCart,
     updateTrigger,
-    setTrigger,
     setLoginDialog,
-    updateInCart,
 }) {
 
-    const { id } = useParams()
+    const { id } = useParams();
+    const setTrigger = useContext(SetTriggerContext);
     const [product, setProduct] = useState(null);
     const [productImage, setImage] = useState(null);
     const [prevId, setPrevId] = useState(null);
@@ -95,22 +98,14 @@ export default function Product({
                     if (prevId !== id)
                         setImage(res.images[0]);
                     setPrevId(id);
-                    if (res.reviews.length && user && res.reviews[0].user._id === user._id) {
+                    if (res.reviews.length && isAuth && res.reviews[0].user._id === userProfile._id) {
                         setCurrentUserReview(true);
                         setRating(res.reviews[0].rating);
                     }
                 }
             })
             .catch((err) => console.log(err));
-    }, [id, prevId, updateTrigger, user])
-
-    async function addToCart(productId) {
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`, { quantity: 1 }, { withCredentials: true })
-            .then((response) => {
-                if (response) setTrigger(prevValue => !prevValue)
-            })
-            .catch((error) => console.log(error));
-    }
+    }, [id, prevId, updateTrigger, isAuth, userProfile])
 
     const [reviewForm, setReviewForm] = useState(false);
     const reviewDescription = useRef(null);
@@ -250,32 +245,36 @@ export default function Product({
                             ₹{(product.price).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                         </Typography>
                         <Stack spacing={2} mt={3} direction="row" alignItems='center'>
-                            {user ?
-                                user.cart.some(item => item.product._id === product._id) ?
+                            {isAuth ?
+                                userCart.cartItems.some(item => item.product._id === product._id) ?
                                     <>
                                         <IconButton
                                             color='primary'
                                             onClick={() => updateInCart(
                                                 product._id,
-                                                user.cart.find(item => item.product._id === product._id).quantity + 1)}
+                                                userCart.cartItems.find(item => item.product._id === product._id).quantity + 1,
+                                                setTrigger
+                                            )}
                                         >
                                             <AddIcon />
                                         </IconButton>
                                         <Typography variant='h6'>
-                                            {user.cart.find(item => item.product._id === product._id).quantity}
+                                            {userCart.cartItems.find(item => item.product._id === product._id).quantity}
                                         </Typography>
                                         <IconButton
                                             color='primary'
                                             onClick={() => updateInCart(
                                                 product._id,
-                                                user.cart.find(item => item.product._id === product._id).quantity - 1)}
+                                                userCart.cartItems.find(item => item.product._id === product._id).quantity - 1,
+                                                setTrigger
+                                            )}
                                         >
                                             <RemoveIcon />
                                         </IconButton>
                                     </>
                                     :
                                     <>
-                                        <Button variant="contained" type='button' onClick={() => addToCart(product._id)}>
+                                        <Button variant="contained" type='button' onClick={() => addToCart(product._id, setTrigger)}>
                                             Add to Cart
                                         </Button>
                                         {/* <Button variant="contained">
@@ -306,7 +305,7 @@ export default function Product({
                             <Typography sx={{ whiteSpace: 'pre-wrap' }}>{product.description}</Typography>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            {user ?
+                            {isAuth ?
                                 reviewForm ?
                                     <Box
                                         component="form"
@@ -354,7 +353,7 @@ export default function Product({
                                                     src={product.reviews[0].user.avatar && product.reviews[0].user.avatar.data}
                                                 />
                                                 <Box display='flex' flexDirection='column' ml={2}>
-                                                    <Typography>{product.reviews[0].user.fullName}</Typography>
+                                                    <Typography>{product.reviews[0].user.name}</Typography>
                                                     <Rating
                                                         name="read-only"
                                                         value={product.reviews[0].rating}

@@ -1,15 +1,16 @@
-import Profile from './Profile.jsx';
-import Addresses from './Addresses.jsx';
-import Orders from './Orders/Orders.jsx';
-import Dashboard from './Dashboard.jsx';
-import { styled } from '@mui/material/styles';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Grid from '@mui/material/Grid';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import PropTypes from 'prop-types';
+import { useContext, useState } from 'react';
+import { UserAddressContext, UserProfileContext } from '../../contexts/UserContexts.js';
+import Addresses from './Addresses.jsx';
+import Orders from './Orders/Orders.jsx';
+import Profile from './Profile.jsx';
 
 const StyledTab = styled(Tab)(() => ({
     alignItems: 'start',
@@ -48,70 +49,56 @@ function a11yProps(index) {
 }
 
 export default function User({
-    setTrigger,
-    user,
-    profSec,
-    setProfSec,
-    addressSec,
-    setAddressSec,
     userTab,
     setUserTab,
-    openSnackbar
 }) {
 
+    const userProfile = useContext(UserProfileContext);
+    const userAddresses = useContext(UserAddressContext);
+
+    const [profSec, setProfSec] = useState(true);
+    const [addressSec, setAddressSec] = useState("view");
+    
     const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('md'));
     const orientation = isSmallScreen ? 'horizontal' : 'vertical';
 
-    if (user) {
-        return (
-            <Container sx={{ mt: { xs: 6, sm: 8 } }}>
-                <Grid container pt={5} rowSpacing={3}>
-                    <Grid item xs={12} md={2}>
-                        <Tabs
-                            orientation={orientation}
-                            variant="scrollable"
-                            value={userTab}
-                            onChange={(e, newUserTab) => setUserTab(newUserTab)}
-                            aria-label="Vertical tabs example"
-                            sx={{ borderRight: 1, borderColor: 'divider' }}
-                        >
-                            <StyledTab label="Profile" {...a11yProps(0)} onClick={() => setProfSec(true)} />
-                            <StyledTab label="Addresses" {...a11yProps(1)} onClick={() => setAddressSec('view')} />
-                            <StyledTab label="Orders" {...a11yProps(2)} />
-                            {user.role === 'admin' ? <StyledTab label="Dashboard" {...a11yProps(3)} /> : null}
-                        </Tabs>
-                    </Grid>
-                    <Grid item xs={12} md={10}>
-                        <TabPanel value={userTab} index={0}>
-                            <Profile
-                                setTrigger={setTrigger}
-                                user={user}
-                                openSnackbar={openSnackbar}
-                                profSec={profSec}
-                                setProfSec={setProfSec}
-                            />
-                        </TabPanel>
-                        <TabPanel value={userTab} index={1}>
-                            <Addresses
-                                setTrigger={setTrigger}
-                                user={user}
-                                openSnackbar={openSnackbar}
-                                addressSec={addressSec}
-                                setAddressSec={setAddressSec}
-                            />
-                        </TabPanel>
-                        <TabPanel value={userTab} index={2}>
-                            <Orders user={user} />
-                        </TabPanel>
-                        {user.role === 'admin' ?
-                            <TabPanel value={userTab} index={3}>
-                                <Dashboard />
-                            </TabPanel>
-                            : null
-                        }
-                    </Grid>
+    return (
+        <Container sx={{ mt: { xs: 6, sm: 8 } }}>
+            <Grid container pt={5} rowSpacing={3}>
+                <Grid item xs={12} md={2}>
+                    <Tabs
+                        orientation={orientation}
+                        variant="scrollable"
+                        value={userTab}
+                        onChange={(e, newUserTab) => setUserTab(newUserTab)}
+                        aria-label="Vertical tabs example"
+                        sx={{ borderRight: 1, borderColor: 'divider' }}
+                    >
+                        <StyledTab label="Profile" {...a11yProps(0)} onClick={() => setProfSec(true)} />
+                        <StyledTab label="Addresses" {...a11yProps(1)} onClick={() => setAddressSec('view')} />
+                        <StyledTab label="Orders" {...a11yProps(2)} />
+                    </Tabs>
                 </Grid>
-            </Container>
-        );
-    }
+                <Grid item xs={12} md={10}>
+                    <TabPanel value={userTab} index={0}>
+                        <Profile
+                            userProfile={userProfile}
+                            profSec={profSec}
+                            setProfSec={setProfSec}
+                        />
+                    </TabPanel>
+                    <TabPanel value={userTab} index={1}>
+                        <Addresses
+                            userAddresses={userAddresses}
+                            addressSec={addressSec}
+                            setAddressSec={setAddressSec}
+                        />
+                    </TabPanel>
+                    <TabPanel value={userTab} index={2}>
+                        <Orders />
+                    </TabPanel>
+                </Grid>
+            </Grid>
+        </Container>
+    );
 }

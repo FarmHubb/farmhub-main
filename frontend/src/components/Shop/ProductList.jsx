@@ -16,10 +16,10 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
-import bufferToString from '../../bufferToString';
+import bufferToString from '../../utils/bufferToString';
 import Filters from './Filters';
 
-export default function ProductList({ updateTrigger }) {
+export default function ProductList() {
     
     const [products, setProducts] = useState(null);
     const [brands, setBrands] = useState(null);

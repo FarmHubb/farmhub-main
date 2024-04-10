@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import startCase from 'lodash/startCase';
@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import { SnackbarDispatchContext } from '../../../contexts/SnackbarContext';
 
 function TextFieldx({ children, ...other }) {
     return (
@@ -32,8 +33,10 @@ function TextFieldx({ children, ...other }) {
     );
 }
 
-export default function SignUp({ setTrigger, openSnackbar }) {
+export default function SignUp({ setTrigger }) {
 
+    const openSnackbar = useContext(SnackbarDispatchContext);
+    
     const fields = [
         { name: 'name', label: 'Enter your name' },
         { name: 'phoneNumber', label: 'Enter your Phone Number' },

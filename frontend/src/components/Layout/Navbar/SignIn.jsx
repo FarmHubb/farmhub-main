@@ -9,10 +9,17 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
+import { LoginDialogContext } from '../../../contexts/LoginDialogContext';
+import { SetTriggerContext } from '../../../contexts/SetTriggerContext';
 
-export default function SignIn({ open, setOpen, status, setStatus, signInStatus, setSignInStatus, setTrigger }) {
+export default function SignIn({ status, setStatus, signInStatus, setSignInStatus }) {
+
+    const { loginDialog, setLoginDialog } = useContext(LoginDialogContext);
+    const setTrigger = useContext(SetTriggerContext);
+    const [searchParams] = useSearchParams();
+    const next = searchParams.get('next');
 
     const [loginInfo, setLoginInfo] = useState({
         phoneNumber: "",
@@ -26,6 +33,8 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
 
     // -------------------------------- Login User -------------------------------- 
 
+    const navigate = useNavigate();
+    
     async function submitUser(e) {
         e.preventDefault();
         setSignInStatus('authenticating');
@@ -39,7 +48,9 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
             .then(() => {
                 setSignInStatus('typing');
                 setTrigger(prevValue => !prevValue);
-                setOpen(false);
+                setLoginDialog(false);
+                if(next)
+                    navigate(next, { replace: true });
             })
             .catch((error) => {
                 const res = error.response.data.message;
@@ -116,7 +127,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
     // ---------------------------------------------------------------- 
 
     return (
-        <Dialog open={open} onClose={() => setOpen(false)} disableScrollLock={true}>
+        <Dialog open={loginDialog} onClose={() => setLoginDialog(false)} disableScrollLock={true}>
             {status === 'signIn' &&
                 <Box component='form' onSubmit={submitUser}>
                     <DialogTitle>SIGN IN</DialogTitle>
@@ -153,7 +164,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                     </Link>
                         <Typography mt={3} variant="subtitle2">
                             {'New User? '}
-                            <Link component={RouterLink} to='/signup' onClick={() => setOpen(false)} color='tertiary.main'>
+                            <Link component={RouterLink} to='/signup' onClick={() => setLoginDialog(false)} color='tertiary.main'>
                                 Create an Account
                             </Link>
                         </Typography>
@@ -165,7 +176,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                         <Button color='tertiary' type='submit' disabled={loginInfo.phoneNumber.trim() === '' || loginInfo.password.trim() === ''}>
                             Sign In
                         </Button>
-                        <Button color='tertiary' onClick={() => setOpen(false)}>Cancel</Button>
+                        <Button color='tertiary' onClick={() => setLoginDialog(false)}>Cancel</Button>
                     </DialogActions>
                 </Box>
             }
@@ -192,7 +203,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                         <Button color='tertiary' type='submit'>
                             Send OTP
                         </Button>
-                        <Button color='tertiary' onClick={() => setOpen(false)}>Cancel</Button>
+                        <Button color='tertiary' onClick={() => setLoginDialog(false)}>Cancel</Button>
                     </DialogActions>
                 </Box>
             }
@@ -221,7 +232,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                         <Button color='tertiary' type='submit'>
                             Submit
                         </Button>
-                        <Button color='tertiary' onClick={() => setOpen(false)}>Cancel</Button>
+                        <Button color='tertiary' onClick={() => setLoginDialog(false)}>Cancel</Button>
                     </DialogActions>
                 </Box>
             }
@@ -263,7 +274,7 @@ export default function SignIn({ open, setOpen, status, setStatus, signInStatus,
                         <Button color='tertiary' type='submit'>
                             Submit
                         </Button>
-                        <Button color='tertiary' onClick={() => setOpen(false)}>Cancel</Button>
+                        <Button color='tertiary' onClick={() => setLoginDialog(false)}>Cancel</Button>
                     </DialogActions>
                 </Box>
             }

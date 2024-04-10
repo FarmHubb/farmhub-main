@@ -78,7 +78,7 @@ const customerSchema = new Schema({
     }],
 }, {
     virtuals: {
-        cartTotal: {
+        cartSubTotal: {
             get() {
                 if (!this.populated('cart.product'))
                     return null;
@@ -88,7 +88,7 @@ const customerSchema = new Schema({
                 return cartSubtotal;
             }
         },
-        cartItems: {
+        cartItemsCount: {
             get() {
                 if(!this.cart)
                     return null;

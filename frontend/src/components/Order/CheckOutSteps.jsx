@@ -8,21 +8,24 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ConfirmOrder from "./ConfirmOrder";
 import Payment from "./Payment";
 import Shipping from "./Shipping";
+import { UserAddressContext, UserCartContext } from '../../contexts/UserContexts';
+import { setActiveStepContext } from './setActiveStepContext';
 
-export default function CheckoutSteps({ user, setTrigger, setUserTab }) {
+export default function CheckoutSteps() {
 
-    const [addressIndex, setAddressIndex] = useState(null);
+    const { cartItems } = useContext(UserCartContext);
+    const userAddresses = useContext(UserAddressContext);
+
     const [activeStep, setActiveStep] = useState(0)
+    const [addressIndex, setAddressIndex] = useState(null);
     const [orderCharges, setOrderCharges] = useState(null);
 
     useEffect(() => {
-        if (!user) return;
-
-        let subtotal = user.cart.reduce((acc, item) =>
+        let subtotal = cartItems.reduce((acc, item) =>
             acc + item.quantity * item.product.price, 0
         );
         let shippingCharges = subtotal > 1500 ? 0 : 60;
@@ -35,7 +38,7 @@ export default function CheckoutSteps({ user, setTrigger, setUserTab }) {
             tax: tax,
             totalPrice: totalPrice
         })
-    }, [user]);
+    }, [cartItems]);
 
     return (
         <Container sx={{ mt: { xs: 7, sm: 11 } }}>
@@ -57,33 +60,27 @@ export default function CheckoutSteps({ user, setTrigger, setUserTab }) {
                     </Step>
                 ))}
             </Stepper>
-            {activeStep === 0 &&
-                <Shipping
-                    user={user}
-                    setActiveStep={setActiveStep}
-                    addressIndex={addressIndex}
-                    setAddressIndex={setAddressIndex}
-                    setUserTab={setUserTab}
-                />
-            }
-            {activeStep === 1 &&
-                <ConfirmOrder
-                    user={user}
-                    orderCharges={orderCharges}
-                    setActiveStep={setActiveStep}
-                    shippingAddress={user.addresses[addressIndex]}
-                />
-            }
-            {activeStep === 2 &&
-                <Payment
-                    user={user}
-                    orderCharges={orderCharges}
-                    setTrigger={setTrigger}
-                    setActiveStep={setActiveStep}
-                    addressIndex={addressIndex}
-                    shippingAddress={user.addresses[addressIndex]}
-                />
-            }
+            <setActiveStepContext.Provider value={setActiveStep}>
+                {activeStep === 0 &&
+                    <Shipping
+                        addressIndex={addressIndex}
+                        setAddressIndex={setAddressIndex}
+                    />
+                }
+                {activeStep === 1 &&
+                    <ConfirmOrder
+                        orderCharges={orderCharges}
+                        shippingAddress={userAddresses[addressIndex]}
+                    />
+                }
+                {activeStep === 2 &&
+                    <Payment
+                        totalCharges={orderCharges?.totalPrice}
+                        addressIndex={addressIndex}
+                        shippingAddress={userAddresses[addressIndex]}
+                    />
+                }
+            </setActiveStepContext.Provider>
         </Container>
     );
 };

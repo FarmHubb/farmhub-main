@@ -11,16 +11,15 @@ import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from "react-router-dom";
 
-export default function Orders({ user }) {
+export default function Orders() {
 
     const [orders, setOrders] = useState(null);
 
     useEffect(() => {
-        if (!user) return;
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders`, { withCredentials: true })
             .then(response => setOrders(response.data))
             .catch(error => console.log(error));
-    }, [user])
+    }, [])
 
     function statusColor(status) {
         if (status === "Not processed") return 'default';

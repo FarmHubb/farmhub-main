@@ -20,6 +20,7 @@ import {
     updateInCart,
     updateSeller,
     resetPassword,
+    checkAuthStatus,
 } from '../controllers/userController';
 import { upload } from '../middleware/imageUtils';
 
@@ -28,9 +29,11 @@ const userRoutes = (app) => {
     //-------------------------------- User Authentication --------------------------------
 
     app.route('/user/login')
-    .post(login);
+        .post(login);
     app.route('/user/logout')
-    .get(isAuth, logout);
+        .get(isAuth, logout);
+    app.route('/user/checkAuthStatus')
+        .get(checkAuthStatus)
     
     //-------------------------------- Manage and View Users --------------------------------
     

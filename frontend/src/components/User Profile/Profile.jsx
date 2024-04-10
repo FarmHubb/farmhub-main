@@ -1,38 +1,42 @@
-import { useState } from 'react';
-import { startCase } from 'lodash';
-import axios from 'axios';
-import { isEmail, isMobilePhone } from 'validator';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CircularProgress from '@mui/material/CircularProgress';
-import Badge from '@mui/material/Badge';
-import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { startCase } from 'lodash';
+import { useContext, useState } from 'react';
+import { isEmail, isMobilePhone } from 'validator';
+import { SetTriggerContext } from '../../contexts/SetTriggerContext';
+import { OPEN_SNACKBAR } from '../../hooks/useSnackbar';
+import { SnackbarDispatchContext } from '../../contexts/SnackbarContext';
 
 export default function Profile({
-    setTrigger,
-    user,
-    openSnackbar,
+    userProfile,
     profSec,
     setProfSec
 }) {
+
+    const dispatchSnackbar = useContext(SnackbarDispatchContext);
+    const setTrigger = useContext(SetTriggerContext);
     const [status, setStatus] = useState('success');
 
     const userFields = ['name', 'email', 'phoneNumber'];
 
     const [userValues, setUserValues] = useState({
         avatar: null,
-        avatarSrc: user.avatar ? user.avatar.data : null,
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
+        avatarSrc: userProfile.avatar ? userProfile.avatar.data : null,
+        name: userProfile.name,
+        email: userProfile.email,
+        phoneNumber: userProfile.phoneNumber,
     });
 
     const [userErrors, setUserErrors] = useState({
@@ -100,7 +104,10 @@ export default function Profile({
             { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true })
             .then((response) => {
                 if (response.data.errors) {
-                    openSnackbar('Changes could not be saved', 'error');
+                    dispatchSnackbar({
+                        type: OPEN_SNACKBAR,
+                        payload: { content: 'Changes could not be saved', severity: 'error' }
+                    });
                     setStatus('typing');
                     return;
                 }
@@ -115,13 +122,19 @@ export default function Profile({
                     return;
                 }
                 setTrigger(prevValue => !prevValue);
-                openSnackbar('Changes saved successfully', 'success');
+                dispatchSnackbar({
+                    type: OPEN_SNACKBAR,
+                    payload: { content: 'Changes saved successfully', severity: 'success' }
+                });
                 setStatus('success');
             })
             .catch((error) => {
                 console.log(error);
                 setStatus('typing')
-                openSnackbar('Changes could not be saved', 'error');
+                dispatchSnackbar({
+                    type: OPEN_SNACKBAR,
+                    payload: { content: 'Changes could not be saved', severity: 'error' }
+                });
             })
     }
 
@@ -180,7 +193,7 @@ export default function Profile({
             let newPassErrors = { ...passErrors };
             passFields.forEach(field => {
                 if (updatePass[field] === '')
-                newPassErrors[field] = 'Required';
+                    newPassErrors[field] = 'Required';
             });
             setPassErrors(newPassErrors);
             return;
@@ -195,14 +208,14 @@ export default function Profile({
 
         axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/password/change`, PassDetails, { withCredentials: true })
             .then((response) => {
-                if(response.data.message === 'Old password is incorrect') {
+                if (response.data.message === 'Old password is incorrect') {
                     setPassErrors(() => ({
                         ...passErrors,
                         oldPass: 'Old password is incorrect'
                     }));
                     return;
                 }
-                openSnackbar('Password changed successfully', 'success');
+                dispatchSnackbar('Password changed successfully', 'success');
             })
             .catch((error) => console.log(error));
     }
@@ -261,7 +274,7 @@ export default function Profile({
                                         }}
                                         overlap="circular">
                                         <Avatar
-                                            alt={user.name}
+                                            alt={userProfile.name}
                                             src={userValues.avatarSrc}
                                             sx={{ width: '5em', height: '5em' }}
                                         />
