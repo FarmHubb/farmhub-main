@@ -16,17 +16,23 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SetTriggerContext } from '../../contexts/SetTriggerContext';
+import { UserProfileContext } from '../../contexts/UserContexts';
+import { setActiveStepContext } from './setActiveStepContext';
 
-const Payments = ({ user, orderCharges, setTrigger, setActiveStep, addressIndex, shippingAddress }) => {
+const Payments = ({ totalCharges, addressIndex, shippingAddress }) => {
 
+    const userProfile = useContext(UserProfileContext);
+    const setActiveStep = useContext(setActiveStepContext);
     const navigate = useNavigate();
     const stripe = useStripe();
     const elements = useElements();
+    const setTrigger = useContext(SetTriggerContext);
 
     const paymentData = {
-        amount: Math.round(orderCharges.totalPrice * 100),
+        amount: Math.round(totalCharges * 100),
     };
 
     const submitHandler = async (e) => {
@@ -46,8 +52,8 @@ const Payments = ({ user, orderCharges, setTrigger, setActiveStep, addressIndex,
                 payment_method: {
                     card: elements.getElement(CardNumberElement),
                     billing_details: {
-                        name: user.name,
-                        email: user.email,
+                        name: userProfile.name,
+                        email: userProfile.email,
                         address: {
                             line1: shippingAddress.area,
                             city: shippingAddress.city,
@@ -139,7 +145,7 @@ const Payments = ({ user, orderCharges, setTrigger, setActiveStep, addressIndex,
                 variant='contained'
                 type='submit'
             >
-                Pay - ₹${orderCharges && orderCharges.totalPrice}
+                Pay - ₹${totalCharges}
             </Button>
 
         </Container>

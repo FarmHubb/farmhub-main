@@ -5,9 +5,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
+import { useWeather } from "../../hooks/useWeather";
 
+const Weather = () => {
 
-const Weather = ({ weatherDetails, setWeatherDetails, place, setPlace, weather }) => {
+    const [weatherDetails, place, setPlace, weather] = useWeather();
 
     return (
         <Container sx={{
@@ -19,7 +21,7 @@ const Weather = ({ weatherDetails, setWeatherDetails, place, setPlace, weather }
             alignItems: 'center',
             justifyContent: 'center'
         }}>
-            <Box display='flex' alignItems='center' justifyContent='center' m={4} mx='auto' 
+            <Box display='flex' alignItems='center' justifyContent='center' m={4} mx='auto'
                 sx={{ width: { xs: '100%', md: "50%" } }}>
                 <TextField
                     type="text"
@@ -45,7 +47,7 @@ const Weather = ({ weatherDetails, setWeatherDetails, place, setPlace, weather }
             <Card sx={{
                 display: weatherDetails === "" ? 'none' : 'block',
                 width: { xs: '100%', md: "50%" },
-                padding:"2rem",
+                padding: "2rem",
                 boxSizing: "border-box",
                 whiteSpace: 'wrap',
                 textOverflow: 'ellipsis',
@@ -75,6 +77,5 @@ const Weather = ({ weatherDetails, setWeatherDetails, place, setPlace, weather }
         </Container>
     );
 };
-
 
 export default Weather;

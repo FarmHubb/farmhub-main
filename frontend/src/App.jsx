@@ -1,349 +1,197 @@
-import { useState, useEffect, forwardRef } from "react";
-import axios from "axios";
-import "./App.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { Route, Outlet, Routes } from "react-router-dom";
-import Navbar from "./components/Layout/Navbar/Navbar";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { ThemeProvider } from "@mui/material/styles";
+import { forwardRef, useState } from "react";
+import { Outlet, Route, Routes } from "react-router-dom";
+import "./App.css";
+import { theme } from "./Theme";
+import AboutUs from "./components/About/AboutUs";
+import PrivacyPolicy from "./components/About/PrivacyPolicy";
+import TermsAndConditions from "./components/About/TermsAndConditions";
+import CropDetails from "./components/Crops/CropDetails";
+import Crops from "./components/Crops/Crops";
 import Home from "./components/Home";
 import Footer from "./components/Layout/Footer";
-import Crops from "./components/Crops/Crops";
-import DoseCalculator from "./components/Services/doseCalculater";
-import ProductList from "./components/Shop/ProductList";
-import ProductDetail from "./components/Shop/ProductDetail";
+import Navbar from "./components/Layout/Navbar/Navbar";
 import SignUp from "./components/Layout/Navbar/SignUp";
-import CropDetails from "./components/Crops/CropDetails";
-import ShopHome from "./components/Shop/ShopHome";
-import AboutUs from "./components/About/AboutUs";
-import TermsAndConditions from "./components/About/TermsAndConditions";
-import PrivacyPolicy from "./components/About/PrivacyPolicy";
-import User from "./components/User Profile/User";
-import Order from "./components/User Profile/Orders/Order";
 import CheckOutSteps from "./components/Order/CheckOutSteps";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import grey from "@mui/material/colors/grey";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import OrderSuccess from "./components/Order/OrderSuccess";
-import Weather from "./components/Services/weather";
-import bufferToString from "./bufferToString";
 import CropHome from "./components/Services/Home";
 import Crop from "./components/Services/crop";
 import Disease from "./components/Services/disease";
+import DoseCalculator from "./components/Services/doseCalculater";
 import Fertilizer from "./components/Services/fertilizer";
+import Weather from "./components/Services/weather";
+import ProductDetail from "./components/Shop/ProductDetail";
+import ProductList from "./components/Shop/ProductList";
+import ShopHome from "./components/Shop/ShopHome";
+import Order from "./components/User Profile/Orders/Order";
+import User from "./components/User Profile/User";
+import { LoginDialogContext } from "./contexts/LoginDialogContext";
+import { SetTriggerContext } from "./contexts/SetTriggerContext";
+import { SnackbarDispatchContext } from "./contexts/SnackbarContext";
+import { UserAddressContext, UserAvatarContext, UserCartContext, UserProfileContext } from './contexts/UserContexts';
+import { SetUserTabContext } from "./contexts/UserTabContext";
+import { useAuthStatus } from "./hooks/useAuthStatus";
+import { CLOSE_SNACKBAR, defaultSnackbar, useSnackbar } from "./hooks/useSnackbar";
+import { useUser } from "./hooks/useUser";
+import PrivateRoutes from './utils/PrivateRoutes';
 
 
 const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: grey[50],
-      contrastText: "#07412B",
-    },
-    secondary: {
-      main: "#609966",
-    },
-    tertiary: {
-      main: "#00635A",
-      contrastText: "#fff",
-    },
-    homeBtn: {
-      main: "#07412B",
-      contrastText: "#fff",
-    },
-    cropHeading: {
-      main: "#40513B",
-    },
-  },
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function App() {
-  // -------------------------------- User --------------------------------
 
-  const [user, setUser] = useState(null);
-  const [updateTrigger, setTrigger] = useState(false);
+    // -------------------------------- User --------------------------------
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/user`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        let res = response.data;
-        if (res.avatar) res.avatar.data = bufferToString(res.avatar);
-        res.cart.forEach((product) => {
-          product.product.images.forEach((image) => {
-            image.data = bufferToString(image);
-          });
-        });
-        if (response) setUser(res);
-        else setUser(null);
-      })
-      .catch((err) => console.log(err));
-  }, [updateTrigger]);
+    const {
+        userProfile,
+        userAvatar,
+        userAddresses,
+        userCart,
+        updateTrigger,
+        setTrigger
+    } = useUser();
 
-  const [loginDialog, setLoginDialog] = useState(false);
-  const [userTab, setUserTab] = useState(0);
-  const [profSec, setProfSec] = useState(true);
-  const [addressSec, setAddressSec] = useState("view");
+    const isAuth = useAuthStatus(updateTrigger);
+    const [loginDialog, setLoginDialog] = useState(false);
+    const [userTab, setUserTab] = useState(0);
 
-  // -------------------------------- Cart --------------------------------
+    // -------------------------------- Snackbar --------------------------------
 
-  async function updateInCart(productId, quantity) {
-    axios
-      .patch(
-        `${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`,
-        { quantity: quantity },
-        { withCredentials: true }
-      )
-      .then((response) => {
-        if (response) setTrigger((prevValue) => !prevValue);
-      })
-      .catch((error) => console.log(error));
-  }
+    const [snackbar, dispatchSnackbar] = useSnackbar(defaultSnackbar);
+    const { content, severity, open, vertical, horizontal } = snackbar;
 
-  async function removeFromCart(productId) {
-    axios
-      .delete(`${process.env.REACT_APP_BACKEND_URL}/user/cart/${productId}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        if (response) setTrigger((prevValue) => !prevValue);
-      })
-      .catch((error) => console.log(error));
-  }
+    // ----------------------------------------------------------------
 
-  // -------------------------------- Snackbar --------------------------------
+    return (
+        <ThemeProvider theme={theme}>
+            <SnackbarDispatchContext.Provider value={dispatchSnackbar}>
+                <SetTriggerContext.Provider value={setTrigger}>
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <>
+                                    <LoginDialogContext.Provider value={{ loginDialog, setLoginDialog }}>
+                                        <UserCartContext.Provider value={userCart}>
+                                            <Navbar
+                                                isAuth={isAuth}
+                                                userProfile={userProfile}
+                                                userAvatar={userAvatar}
+                                                setUserTab={setUserTab}
+                                            />
+                                        </UserCartContext.Provider>
+                                    </LoginDialogContext.Provider>
+                                    <Outlet />
+                                    <Footer />
+                                </>
+                            }
+                        >
+                            <Route index element={<Home setLoginDialog={setLoginDialog} />} />
+                            <Route path="crops" element={<Crops />} />
+                            <Route path="crops/:season" element={<CropDetails />} />
+                            <Route path="doseCalculator" element={<DoseCalculator />} />
+                            <Route path="weather" element={<Weather />} />
+                            <Route path="predict" element={<CropHome />} />
+                            <Route path="crop-prediction" element={<Crop />} />
+                            <Route path="fertilizer-prediction" element={<Fertilizer />} />
+                            <Route path="disease-detection" element={<Disease />} />
+                            <Route path="about-us" element={<AboutUs />} />
+                            <Route path="termsAndConditions" element={<TermsAndConditions />} />
+                            <Route path="privacyPolicy" element={<PrivacyPolicy />} />
 
-  const [snackbar, setSnackbar] = useState({
-    content: "",
-    severity: "",
-    open: false,
-    vertical: "bottom",
-    horizontal: "right",
-  });
-  const { vertical, horizontal, open, content, severity } = snackbar;
+                            <Route element={<PrivateRoutes />}>
+                                <Route
+                                    path="user"
+                                    element={
+                                        <UserProfileContext.Provider value={userProfile}>
+                                            <UserAddressContext.Provider value={userAddresses}>
+                                                <UserAvatarContext.Provider value={userAvatar}>
+                                                    <User
+                                                        userTab={userTab}
+                                                        setUserTab={setUserTab}
+                                                    />
+                                                </UserAvatarContext.Provider>
+                                            </UserAddressContext.Provider>
+                                        </UserProfileContext.Provider>
+                                    }
+                                />
+                                <Route
+                                    path="checkOut"
+                                    element={
+                                        <UserProfileContext.Provider value={userProfile}>
+                                            <UserAddressContext.Provider value={userAddresses}>
+                                                <UserCartContext.Provider value={userCart}>
+                                                    <SetUserTabContext.Provider value={setUserTab}>
+                                                        <CheckOutSteps />
+                                                    </SetUserTabContext.Provider>
+                                                </UserCartContext.Provider>
+                                            </UserAddressContext.Provider>
+                                        </UserProfileContext.Provider>
+                                    }
+                                />
 
-  const openSnackbar = (content, severity) => {
-    setSnackbar({
-      ...snackbar,
-      open: true,
-      content: content,
-      severity: severity,
-    });
-  };
+                                <Route
+                                    path="orderSuccess"
+                                    element={<OrderSuccess setUserTab={setUserTab} />}
+                                />
+                                <Route path="order/:orderId" element={<Order />} />
+                            </Route>
 
-  const closeSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
+                            <Route path="shop">
+                                <Route index element={<ShopHome />} />
+                                <Route
+                                    path="products"
+                                    element={<ProductList />}
+                                />
+                                <Route
+                                    path="product/:id"
+                                    element={
+                                        <ProductDetail
+                                            isAuth={isAuth}
+                                            userProfile={userProfile}
+                                            userCart={userCart}
+                                            updateTrigger={updateTrigger}
+                                            setLoginDialog={setLoginDialog}
+                                        />
+                                    }
+                                />
+                            </Route>
 
-  // -------------------------------- Weather --------------------------------
+                        </Route>
 
-  const [weatherDetails, setWeatherDetails] = useState("");
+                        <Route path="/signup" element={<SignUp setTrigger={setTrigger} />} />
 
-  const [place, setPlace] = useState(" ");
+                    </Routes>
 
-  let weather = {
-    apiKey: "0bff6234f35d3b5aef48e0dd8d8d27b9",
-    fetchWeather: function (city) {
-      fetch(
-        "https://api.openweathermap.org/data/2.5/weather?q=" +
-          city +
-          "&units=metric&appid=" +
-          this.apiKey
-      )
-        .then((response) => {
-          if (!response.ok) {
-            alert("No weather found.");
-            throw new Error("No weather found.");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          this.displayWeather(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    displayWeather: function (data) {
-      const { name } = data;
-      const { icon, description } = data.weather[0];
-      const { temp, humidity } = data.main;
-      const { speed } = data.wind;
-      setWeatherDetails(() => ({
-        city: name,
-        temp: temp + "°C",
-        icon: "https://openweathermap.org/img/wn/" + icon + ".png",
-        description: description,
-        humidity: humidity + "%",
-        wind: speed + " km/h",
-      }));
-    },
-    search: function () {
-      this.fetchWeather(place);
-    },
-  };
+                </SetTriggerContext.Provider>
+            </SnackbarDispatchContext.Provider>
 
-  useEffect(() => {
-    axios
-      .get("https://ipapi.co/json")
-      .then((response) => {
-        setPlace(response.data.city);
-        weather.fetchWeather(response.data.city);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+            <Snackbar
+                anchorOrigin={{
+                    vertical,
+                    horizontal,
+                }}
+                open={open}
+                autoHideDuration={3000}
+                onClose={() => dispatchSnackbar({ type: CLOSE_SNACKBAR })}
+            >
+                <Alert
+                    onClose={() => dispatchSnackbar({ type: CLOSE_SNACKBAR })}
+                    severity={severity}
+                    sx={{ width: "100%" }}
+                >
+                    {content}
+                </Alert>
+            </Snackbar>
 
-  //-------------------------------- Translate --------------------------------
-
-  const [marginTop, setMarginTop] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (document.documentElement.classList.contains("translated-ltr")) {
-        setMarginTop("2.5rem");
-      } else {
-        setMarginTop(0);
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Navbar
-                marginTop={marginTop}
-                setTrigger={setTrigger}
-                user={user}
-                loginDialog={loginDialog}
-                setLoginDialog={setLoginDialog}
-                updateInCart={updateInCart}
-                removeFromCart={removeFromCart}
-                setUserTab={setUserTab}
-                weatherDetails={weatherDetails}
-                setWeatherDetails={setWeatherDetails}
-              />
-              <Outlet />
-              <Footer />
-            </>
-          }
-        >
-          <Route index element={<Home />} />
-          <Route path="crops" element={<Crops />} />
-          <Route path="crops/:season" element={<CropDetails />} />
-          <Route path="doseCalculator" element={<DoseCalculator />} />
-          <Route
-            path="weather"
-            element={
-              <Weather
-                weatherDetails={weatherDetails}
-                setWeatherDetails={setWeatherDetails}
-                place={place}
-                setPlace={setPlace}
-                weather={weather}
-              />
-            }
-          />
-
-
-          <Route path="/predict" element={<CropHome />} />
-          <Route path="/crop-prediction" element={<Crop />} />
-          <Route path="/fertilizer-prediction" element={<Fertilizer />} />
-          <Route path="/disease-detection" element={<Disease />} />
-
-
-
-
-          <Route path="about-us" element={<AboutUs />} />
-          <Route path="termsAndConditions" element={<TermsAndConditions />} />
-          <Route path="privacyPolicy" element={<PrivacyPolicy />} />
-          <Route
-            path="user"
-            element={
-              <User
-                setTrigger={setTrigger}
-                user={user}
-                profSec={profSec}
-                setProfSec={setProfSec}
-                addressSec={addressSec}
-                setAddressSec={setAddressSec}
-                userTab={userTab}
-                setUserTab={setUserTab}
-                openSnackbar={openSnackbar}
-              />
-            }
-          />
-          <Route path="order/:orderId" element={<Order />} />
-          <Route
-            path="checkOut"
-            element={
-              <CheckOutSteps
-                user={user}
-                setTrigger={setTrigger}
-                setUserTab={setUserTab}
-              />
-            }
-          />
-          <Route
-            path="orderSuccess"
-            element={<OrderSuccess setUserTab={setUserTab} />}
-            S
-          />
-          <Route path="/shop">
-            <Route index element={<ShopHome />} />
-            <Route
-              path="products"
-              element={<ProductList updateTrigger={updateTrigger} />}
-            />
-            <Route
-              path="product/:id"
-              element={
-                <ProductDetail
-                  user={user}
-                  updateTrigger={updateTrigger}
-                  setTrigger={setTrigger}
-                  setLoginDialog={setLoginDialog}
-                  updateInCart={updateInCart}
-                />
-              }
-            />
-          </Route>
-        </Route>
-        <Route
-          path="/signup"
-          element={
-            <SignUp setTrigger={setTrigger} openSnackbar={openSnackbar} />
-          }
-        />
-      </Routes>
-      <Snackbar
-        anchorOrigin={{
-          vertical,
-          horizontal,
-        }}
-        open={open}
-        autoHideDuration={3000}
-        onClose={closeSnackbar}
-      >
-        <Alert
-          onClose={closeSnackbar}
-          severity={severity}
-          sx={{ width: "100%" }}
-        >
-          {content}
-        </Alert>
-      </Snackbar>
-    </ThemeProvider>
-  );
+        </ThemeProvider>
+    );
 }

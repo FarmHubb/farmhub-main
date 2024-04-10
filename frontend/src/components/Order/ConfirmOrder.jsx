@@ -8,11 +8,16 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { UserCartContext, UserProfileContext } from '../../contexts/UserContexts';
+import { setActiveStepContext } from './setActiveStepContext';
 
-export default function ConfirmOrder({ user, orderCharges, setActiveStep, shippingAddress }) {
+export default function ConfirmOrder({ orderCharges, shippingAddress }) {
 
+    const userProfile = useContext(UserProfileContext);
+    const { cartItems } = useContext(UserCartContext);
+    const setActiveStep = useContext(setActiveStepContext);
     if (!orderCharges) return null;
 
     return (
@@ -33,11 +38,11 @@ export default function ConfirmOrder({ user, orderCharges, setActiveStep, shippi
                         }}>
                         <Box ml={3} mb={2} mt={2} display='flex' alignItems='center'>
                             <Typography color="tertiary.main" fontWeight='bold'>Name:</Typography>
-                            <Typography ml={2}>{user.name}</Typography>
+                            <Typography ml={2}>{userProfile.name}</Typography>
                         </Box>
                         <Box ml={3} mb={2} display='flex' alignItems='center'>
                             <Typography color="tertiary.main" fontWeight='bold'>Phone:</Typography>
-                            <Typography ml={2}>{user.phoneNumber}</Typography>
+                            <Typography ml={2}>{userProfile.phoneNumber}</Typography>
                         </Box>
                         <Box ml={3} mb={2} display='flex' alignItems='flex-start'>
                             <Typography color="tertiary.main" fontWeight='bold'>Address:</Typography>
@@ -52,8 +57,8 @@ export default function ConfirmOrder({ user, orderCharges, setActiveStep, shippi
                     </Card>
 
                     <Typography variant="h5" mt={4} mb={2} color="cropHeading.main">Your Cart Items:</Typography>
-                    {user.cart &&
-                        user.cart.map((item) =>
+                    {cartItems &&
+                        cartItems.map((item) =>
                             <Link component={RouterLink} to={`/shop/product/${item.product._id}`} underline='none' key={item.product._id}>
                                 <Card
                                     sx={{

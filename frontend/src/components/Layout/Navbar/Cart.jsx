@@ -1,27 +1,30 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import IconButton from '@mui/material/IconButton';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import RemoveIcon from '@mui/icons-material/Remove';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import React, { useContext } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { SetTriggerContext } from '../../../contexts/SetTriggerContext';
+import { UserCartContext } from '../../../contexts/UserContexts';
+import { removeFromCart, updateInCart } from '../../../utils/Cart';
 
 export default function Cart({
-    user,
     cartDrawer,
-    setCartDrawer,
-    updateInCart,
-    removeFromCart,
+    setCartDrawer
 }) {
 
-    if (!user.cart)
+    const { cartItems, cartItemsCount, cartSubTotal } = useContext(UserCartContext);
+    const setTrigger = useContext(SetTriggerContext);
+
+    if (!cartItems)
         return;
 
     return (
@@ -43,7 +46,7 @@ export default function Cart({
                 >
                     <ShoppingCartIcon color='tertiary' fontSize='large' sx={{ pl: 0.5 }} />
                     <Typography variant='subtitle1' fontWeight='500' ml={2} mr='auto'>
-                        {user.cartItems} Items
+                        {cartItemsCount} Items
                     </Typography>
                     <IconButton
                         sx={{ mr: -1 }}
@@ -54,12 +57,12 @@ export default function Cart({
                     </IconButton>
                 </Stack>
                 <Box mt={6} mb={8}>
-                    {user.cart.map(item => (
+                    {cartItems.map(item => (
                         <Box display='flex' alignItems='center' key={item.product._id} mt={2}>
                             <Box>
                                 <IconButton
                                     color='tertiary'
-                                    onClick={() => updateInCart(item.product._id, item.quantity + 1)}
+                                    onClick={() => updateInCart(item.product._id, item.quantity + 1, setTrigger)}
                                 >
                                     <AddIcon />
                                 </IconButton>
@@ -68,7 +71,7 @@ export default function Cart({
                                 </Typography>
                                 <IconButton
                                     color='tertiary'
-                                    onClick={() => updateInCart(item.product._id, item.quantity - 1)}
+                                    onClick={() => updateInCart(item.product._id, item.quantity - 1, setTrigger)}
                                     disabled={item.quantity === 1 ? true : false}
                                 >
                                     <RemoveIcon />
@@ -96,7 +99,7 @@ export default function Cart({
                             </Link>
                             <IconButton
                                 color='tertiary'
-                                onClick={() => removeFromCart(item.product._id)}
+                                onClick={() => removeFromCart(item.product._id, setTrigger)}
                             >
                                 <DeleteOutlinedIcon />
                             </IconButton>
@@ -104,19 +107,19 @@ export default function Cart({
                     ))}
                 </Box>
                 <Box width='20em' bottom={0} py={2} position='fixed' backgroundColor='white'>
-                    {user.cart.length !== 0 ?
+                    {cartItems.length !== 0 ?
                         <Button
                             component={RouterLink}
                             to="/checkOut"
-                            onClick={() => setCartDrawer(false) }
+                            onClick={() => setCartDrawer(false)}
                             size='large'
                             fullWidth sx={{ textTransform: 'none' }}
                             color='tertiary'
                             variant='contained'
                         >
-                            Checkout Now (₹{(user.cartTotal).toLocaleString(undefined, { maximumFractionDigits: 2 })})
+                            Checkout Now (₹{(cartSubTotal).toLocaleString(undefined, { maximumFractionDigits: 2 })})
                         </Button>
-                        : 
+                        :
                         <Button
                             component={RouterLink}
                             to="/shop"

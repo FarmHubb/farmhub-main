@@ -53,6 +53,11 @@ export const isSeller = (req, res, next) => {
     res.status(403).json({ message: 'User is not a seller' });
 };
 
+// Check if user is authenticated (informatory only)
+export const checkAuthStatus = (req, res) => {
+    res.status(200).json({ message: `User is ${req.user ? '' : 'not '}logged in`, status: !!req.user });
+};
+
 // -------------------------------- Manage and View Users --------------------------------
 
 // Read user details

@@ -1,25 +1,29 @@
-import { useState } from 'react';
-import { startCase } from 'lodash';
-import axios from 'axios';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { startCase } from 'lodash';
+import { useContext, useState } from 'react';
+import { SetTriggerContext } from '../../contexts/SetTriggerContext';
+import { OPEN_SNACKBAR } from '../../hooks/useSnackbar';
+import { SnackbarDispatchContext } from '../../contexts/SnackbarContext';
 
 export default function Addresses({
-    setTrigger,
-    user,
-    openSnackbar,
+    userAddresses,
     addressSec,
     setAddressSec
 }) {
+
+    const dispatchSnackbar = useContext(SnackbarDispatchContext);
+    const setTrigger = useContext(SetTriggerContext);
     const [status, setStatus] = useState('success');
 
     const addressFields = ['area', 'city', 'state', 'country', 'pincode'];
@@ -49,7 +53,7 @@ export default function Addresses({
         setAddressValues(
             section === 'add'
                 ? addressFields.reduce((acc, field) => ({ ...acc, [field]: '' }), {})
-                : user.addresses[section]
+                : userAddresses[section]
         );
         setAddressSec(section);
     }
@@ -78,12 +82,12 @@ export default function Addresses({
         })
             .then((response) => {
                 if (response.data.errors) {
-                    openSnackbar('Changes could not be saved', 'error');
+                    dispatchSnackbar({ type: OPEN_SNACKBAR, payload: { content: 'Changes could not be saved', severity: 'error' } });
                     if (method !== 'delete') setStatus('typing');
                     return;
                 }
                 setTrigger(prevValue => !prevValue);
-                openSnackbar('Changes saved successfully', 'success');
+                dispatchSnackbar({ type: OPEN_SNACKBAR, payload: { content: 'Changes saved successfully', severity: 'success' } });
                 setAddressSec('view');
                 setStatus('success');
             })
@@ -116,7 +120,7 @@ export default function Addresses({
             </Grid>
             {addressSec === 'view' ?
                 <Grid container mt={2} spacing={2}>
-                    {user.addresses.map(address => (
+                    {userAddresses.map(address => (
                         <Grid item xs={12} sm={6} md={4} key={address._id}>
                             <Card elavation={2} sx={{ display: 'flex', flexDirection: 'column', height: '15em' }}>
                                 <CardContent sx={{ mb: 'auto' }}>
@@ -130,7 +134,7 @@ export default function Addresses({
                                 </CardContent>
                                 <CardActions>
                                     <IconButton onClick={() => {
-                                        handleAddressSec(user.addresses.indexOf(address));
+                                        handleAddressSec(userAddresses.indexOf(address));
                                     }}>
                                         <EditIcon />
                                     </IconButton>
@@ -154,7 +158,7 @@ export default function Addresses({
                     onSubmit={
                         (e) => addressSec === 'add'
                             ? updateAddresses(e, null, 'post')
-                            : updateAddresses(e, user.addresses[addressSec]._id, 'patch')
+                            : updateAddresses(e, userAddresses[addressSec]._id, 'patch')
                     }
                     sx={{ borderRadius: '0.5rem', mt: 2 }}
                 >
