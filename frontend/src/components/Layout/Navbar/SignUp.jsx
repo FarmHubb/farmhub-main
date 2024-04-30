@@ -13,6 +13,7 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import { SnackbarDispatchContext } from '../../../contexts/SnackbarContext';
+import { OPEN_SNACKBAR } from '../../../hooks/useSnackbar';
 
 function TextFieldx({ children, ...other }) {
     return (
@@ -35,7 +36,7 @@ function TextFieldx({ children, ...other }) {
 
 export default function SignUp({ setTrigger }) {
 
-    const openSnackbar = useContext(SnackbarDispatchContext);
+    const dispatchSnackbar = useContext(SnackbarDispatchContext);
     
     const fields = [
         { name: 'name', label: 'Enter your name' },
@@ -143,10 +144,16 @@ export default function SignUp({ setTrigger }) {
             { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true })
             .then((response) => {
                 if (response.data.errors) {
-                    openSnackbar('Account could not be created', 'error');
+                    dispatchSnackbar({
+                        type: OPEN_SNACKBAR,
+                        payload: { content: 'Account could not be created', severity: 'error' }
+                    });
                     return;
                 }
-                openSnackbar('Account created successfully', 'success');
+                dispatchSnackbar({
+                    type: OPEN_SNACKBAR,
+                    payload: { content: 'Account created successfully', severity: 'success' }
+                });
                 loginUser();
             })
             .catch((error) => console.log(error));
