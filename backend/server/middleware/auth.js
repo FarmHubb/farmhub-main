@@ -32,7 +32,7 @@ passport.deserializeUser(async (id, done) => {
         } else if (baseUser.role === 'Customer') {
             user = await Customer.findById(id, '-password').populate('cart.product', 'name images price');
         } else {
-            return res.status(400).json({ message: "Invalid user role" });
+            return done({ message: "Invalid user role" });
         }
         return done(null, user);
     } catch (err) {

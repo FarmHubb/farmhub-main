@@ -26,10 +26,10 @@ const Home = () => {
       <div className="flex items-center justify-center h-screen text-black">
         <div className="text-center  space-y-8">
           <h1 className="text-6xl font-bold">
-            Boost Your Crop Yield with AI-Powered Predictions
+            Boost Your Crop Yield with Surja Predictions
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 p-10 gap-10 text-4xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 p-10 gap-10 text-4xl">
             <FeatureCard
               to="/crop-prediction"
               imageSrc="/images/images/rice.jpg"
@@ -42,12 +42,12 @@ const Home = () => {
               title="Fertilizer Prediction"
               description="Get the recommended fertilizer for your crops based on your local conditions."
             />
-            <FeatureCard
+            {/* <FeatureCard
               to="/disease-detection"
               imageSrc="/images/images/disease.jpg"
               title="Disease Prediction"
               description="Identify potential diseases in your crops and learn how to cure them."
-            />
+            /> */}
           </div>
         </div>
       </div>

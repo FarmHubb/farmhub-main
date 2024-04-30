@@ -83,10 +83,7 @@ function Crops() {
                                 component="img"
                                 image={crop.image}
                                 alt={crop.name}
-                                width={250}
-                               
-                                height={380}
-                                sx={{ objectFit: "cover" }}
+                                sx={{ objectFit: "cover" , height:"20rem" }}
                             />
                             <CardContent sx={{
                                 

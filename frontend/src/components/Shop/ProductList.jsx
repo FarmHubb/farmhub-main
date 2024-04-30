@@ -151,6 +151,7 @@ export default function ProductList() {
                             </CardContent>
                         </Card>
                     </Grid>
+
                     <Grid item display={{ xs: 'none', md: 'block' }} md={3}>
                         <Card elevation={2}>
                             <CardContent>
@@ -167,15 +168,15 @@ export default function ProductList() {
                             <Filters {...filterProps} />
                         </Box>
                     </Drawer>
+
                     <Grid item xs={12} md={9} container rowSpacing={3} columnSpacing={3}>
                         {products.map(product => (
                                 <Grid item xs={12} sm={6} md={4} key={product._id}>
                                     <Link component={RouterLink} to={`/shop/product/${product._id}`} underline='none'>
                                         <Card elevation={2}>
                                             <CardMedia
-                                                sx={{ p: 2, boxSizing: 'border-box', objectFit: 'contain' }}
+                                                sx={{ p: 2, boxSizing: 'border-box', objectFit: 'contain' ,height:"20rem"}}
                                                 component="img"
-                                                height='250rem'
                                                 image={product.images[0].data}
                                                 alt={product.name}
                                             />

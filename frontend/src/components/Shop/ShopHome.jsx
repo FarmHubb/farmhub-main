@@ -56,6 +56,8 @@ export default function ShopHome() {
                 ))}
             </Carousel>
 
+
+
             {/* Top Products */}
 
             <Container sx={{ mt: { xs: 6, sm: 8 } }}>
@@ -71,6 +73,7 @@ export default function ShopHome() {
                     gutterBottom>
                     Top Products
                 </Typography>
+
                 <Grid container rowSpacing={3} columnSpacing={3}>
                     {topProducts.map((product, index) => (
                         <Grid item xs={12} sm={6} md={3} key={product ? product._id : index}>
@@ -79,11 +82,11 @@ export default function ShopHome() {
                                     <Box sx={{ height: '20rem' }}>
                                         {product ?
                                             <CardMedia
-                                                sx={{ p: 2, boxSizing: 'border-box', objectFit: 'contain' }}
+                                                sx={{ p: 2, boxSizing: 'border-box', objectFit: 'contain',height: '20rem' }}
                                                 component="img"
-                                                height='100%'
                                                 image={product.images[0].data}
                                                 alt={product.name}
+                                            
                                             /> :
                                             <Skeleton variant="rectangular" height='100%' />
                                         }

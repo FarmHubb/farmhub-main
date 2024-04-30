@@ -45,7 +45,7 @@ export function useWeather() {
                 }));
             },
             search: function () {
-                this.fetchWeather(place);
+                this.fetchWeather("bareilly");
             },
         };
     }, [place]);
@@ -54,7 +54,7 @@ export function useWeather() {
         axios.get("https://ipapi.co/json")
             .then((response) => {
                 setPlace(response.data.city);
-                weather.fetchWeather(response.data.city);
+                weather.fetchWeather("bareilly");
             })
             .catch((error) => console.log(error));
     }, [weather]);
